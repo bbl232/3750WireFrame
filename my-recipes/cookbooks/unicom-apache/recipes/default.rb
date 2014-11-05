@@ -17,13 +17,15 @@ end
 
 execute "a2ensite appleseed.conf" do
     user "root"
+    notifies :reload, "service[apache2]"
 end
 
 execute "a2dissite 000-default.conf" do
     user "root"
+    notifies :reload, "service[apache2]"
 end
 
-execute "service apache2 reload" do
-    user "root"
+service "apache2" do
+    supports :restart => true, :reload => true
+    action :nothing
 end
-

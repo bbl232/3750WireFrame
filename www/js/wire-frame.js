@@ -11,13 +11,23 @@ function getCookie(cname) {
 }
 
 function login(){
-    document.cookie = "User_id_appleseed="+document.getElementById('login-email').value;
-    window.location = window.location;
+    var uid = document.getElementById('login-email');
+    var upa = document.getElementById('login-password');
+    if(uid.value != "" && upa.value != ""){
+        document.cookie = "User_id_appleseed="+uid.value;
+        window.location = window.location;
+    }
 }
 
 function register(){
-    login();
-    //document.cookie = "User_id_appleseed="+document.getElementById('login-email').value;
+    var upa = document.getElementById('login-password');
+    var upc = document.getElementById('login-confirm_password');
+    if(upa.value == upc.value){
+        login();
+    }
+    else{
+        alert("Your passwords did not match!");
+    }
 }
 
 function logout(){
@@ -43,17 +53,25 @@ function setupNavbar(){
     if(user_id==""){
         div.innerHTML = '<li><form class="navbar-form" role="login"> \
           <div class="form-group"> \
-            <input type="text" class="form-control" placeholder="E-mail" id="login-email"> \
-            <input type="password" class="form-control" placeholder="Password" id="login-password"> \
+            <input type="text" class="form-control" placeholder="E-mail" id="login-email" required> \
+            <input type="password" class="form-control" placeholder="Password" id="login-password" required> \
           </div> \
           <button type="submit" class="btn btn-primary" onclick="login()">Log In</button> \
-          <button type="submit" class="btn btn-default" onclick="register()">Register</button> \
+          <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<div class=\'input-group\'><input size=\'10\' type=\'password\' placeholder=\'Confirm Password\' id=\'login-confirm_password\' class=\'form-control\'><span class=\'input-group-btn\'><button onclick=\'register()\' type=\'button\' class=\'form-control btn btn-default\'>Register</button></span></div>" data-html="true">Create Account</button> \
         </form></li>';
     }
     else{
         div.innerHTML = '<li><p class="navbar-text">Logged in as '+user_id+'</p></li><li><form class="navbar-form"><button class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
     }
 }
+
+$(function () {
+    $("[data-toggle='tooltip']").tooltip();
+});;
+/* To initialize BS3 popovers set this below */
+$(function () {
+    $("[data-toggle='popover']").popover();
+});
 
 makeImage();
 setupNavbar();

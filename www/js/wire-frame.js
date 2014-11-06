@@ -52,6 +52,7 @@ function makeImage()
 function setupNavbar(){
     var user_id = getCookie("User_id_appleseed");
     var div = document.getElementById("nav-right");
+    var div_left = document.getElementById("nav-left");
     if(user_id==""){
         div.innerHTML = '<li><form class="navbar-form" role="login"> \
           <div class="form-group"> \
@@ -63,6 +64,7 @@ function setupNavbar(){
         </form></li>';
     }
     else{
+        div_left.innerHTML = div_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.html'>Volunteer</a></li><li><a href='/trees.html'>Trees</a></li><li><a href='/myaccount.html'>My Account</a></li></ul></li>";
         div.innerHTML = '<li><p class="navbar-text">Logged in as '+user_id+'</p></li><li><form class="navbar-form"><button class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
     }
 }

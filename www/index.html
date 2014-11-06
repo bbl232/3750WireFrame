@@ -5,6 +5,33 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
 
 <!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
-<title>Test</title></head><body><h2>This is a test page.</h2><div>This is a test div.</div></body></html>
+
+
+<title>Appleseed Collective</title></head><body>
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <ul class="nav navbar-nav navbar-left">
+                <li><a class="navbar-brand" href="/">Appleseed Collective</a></li>
+
+            </ul>
+            <form class="navbar-form navbar-right" role="login">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="E-mail" id="login-email">
+                <input type="password" class="form-control" placeholder="Password" id="login-password">
+              </div>
+              <button type="button" class="btn btn-primary" onclick="login()">Log In</button>
+              <button type="button" class="btn btn-default" onclick="register()">Register</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>This is a test page.</h2><div>This is a test div.</div>
+    </div>
+    <div class="container" id='homepage_image'></div>
+
+</body>
+<script src="/js/wire-frame.js"></script>
+</html>

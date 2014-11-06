@@ -26,7 +26,8 @@ function register(){
         login();
     }
     else{
-        alert("Your passwords did not match!");
+        $('#popover-signup').popover('hide');
+        $('#passwordMismatchModal').modal('show');
     }
 }
 
@@ -58,7 +59,7 @@ function setupNavbar(){
             <input type="password" class="form-control" placeholder="Password" id="login-password" required> \
           </div> \
           <button type="submit" class="btn btn-primary" onclick="login()">Log In</button> \
-          <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<div class=\'input-group\'><input size=\'10\' type=\'password\' placeholder=\'Confirm Password\' id=\'login-confirm_password\' class=\'form-control\'><span class=\'input-group-btn\'><button onclick=\'register()\' type=\'button\' class=\'form-control btn btn-default\'>Register</button></span></div>" data-html="true">Create Account</button> \
+          <button type="button" class="btn btn-default" id="popover-signup" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div class=\'input-group\'><input size=\'10\' type=\'password\' placeholder=\'Confirm Password\' id=\'login-confirm_password\' class=\'form-control\'><span class=\'input-group-btn\'><button onclick=\'register()\' type=\'button\' class=\'form-control btn btn-default\'>Register</button></span></div>">Create Account</button> \
         </form></li>';
     }
     else{

@@ -15,7 +15,7 @@ function showAddTreeModal(){
 }
 
 function addTree() {
-	var table = $("#trees-table").DataTable();
+	var table = $('#trees-table').DataTable();
 	var name = document.getElementById("tree-name").value;
 	var type = document.getElementById("tree-type").value;
 	if (type == "other")
@@ -32,9 +32,27 @@ function enableOther() {
 	$('#tree-type-other').attr('disabled', false);
 }
 
-function editTree() {
+function showTreeInfoModal(tbody) {
+        var type = $('td', tbody).eq(0).text();
+        var name = $('td', tbody).eq(1).text();
+	var info = "<h4>Tree Name</h4>"
+	info = info.concat("<p>", name, "</p> \
+              <h4>Tree Type:</h4> \
+              <p>", type, "</p>");
+        var div = document.getElementById("tree-info_body");
+        $('#treeInfoModal').modal('show');
+	div.innerHTML = info;
+}
+
+function deleteTree() {
 
 }
+
+$(document).ready(function(){
+    $('#trees-table').dataTable();
+
+    $('#trees-table tbody').on('click', 'tr', function(){showTreeInfoModal(this);});
+});
 
 $('.modal').on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();

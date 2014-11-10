@@ -47,7 +47,7 @@ require("includes/header.php");
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
-</body>
-<script src="/js/wire-frame.js"></script>
-</html>
+<script type="text/javascript" src="js/index.js"></script>
+<?php
+    require("includes/footer.php");
+?>

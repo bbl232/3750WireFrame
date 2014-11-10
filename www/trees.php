@@ -1,32 +1,6 @@
-<html><head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-
-<!-- Datatable CSS -->
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.css">
-
-<link rel="stylesheet" href="/css/custom.css">
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-
-<!-- Datatable JS -->
-<script type="text/javascript" src="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-
-
-<title>Appleseed Collective</title></head><body>
-    <nav class="navbar navbar-default navbar-static-top" role="navigation">
-        <div class="container">
-            <ul class="nav navbar-nav navbar-left">
-                <li><a class="navbar-brand" href="/">Appleseed Collective</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" id="nav-right">
-            </ul>
-        </div>
-    </nav>
+<?php
+require("includes/header.php");
+?>
     <div class="container" id="top-content">
         <h2>Plant Management</h2>
     </div>
@@ -71,7 +45,7 @@
               <form class="form-inline" role="form">
                   <input type="text" class="form-control" placeholder="New Tree Name" id="tree-name" required>
                   <input type="text" class="form-control" placeholder="Location on Property" id="tree-location">
-                  
+
                   <div class="form-group">
                       <select class="form-control" id="tree-type">
                           <option value="Apple Tree" onclick="disableOther()">Apple Tree</option>
@@ -109,6 +83,6 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-</body>
-<script src="/js/trees.js"></script>
-</html>
+<?php
+    require("includes/footer.php");
+?>

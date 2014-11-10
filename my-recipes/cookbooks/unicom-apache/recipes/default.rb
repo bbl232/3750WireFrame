@@ -1,5 +1,7 @@
 package 'apt'
 package 'apache2'
+package 'php5'
+package 'libapache2-mod-php5'
 
 directory "/vagrant" do
     owner "vagrant"

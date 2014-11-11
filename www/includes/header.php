@@ -12,7 +12,6 @@
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -30,3 +29,4 @@
             </ul>
         </div>
     </nav>
+<script src="/js/wire-frame.js"></script>

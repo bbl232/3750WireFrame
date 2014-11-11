@@ -22,16 +22,17 @@ function setupAccDetails(){
   var jsonCookie=JSON.parse(userDetails);
   var bodyReg=document.getElementById('regularInfo');
   bodyReg.innerHTML="<table> \
-  <tr><td>Username:</td><td>"+jsonCookie['userID']+"</td></tr> \
-  <tr><td>Email:</td><td>"+jsonCookie['userEmail']+"</td></tr> \
-  <tr><td>Phone Number:</td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
-  <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button> \
-  <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Delete Account</button></tr></table><br>";
+  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'><span></td><td>"+jsonCookie['userID']+"</td></tr> \
+  <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+jsonCookie['userEmail']+"</td></tr> \
+  <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
+  <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Delete Account</button> \
+  <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
   var addresses=[];
   addresses=jsonCookie['userAddress'];
   //console.log(addresses);
   var addressHtml="";
+  addressHtml+="<h4>Addresses:</h4><hr>"
   for (var i=0;i<addresses.length;i++){
     addressHtml+=addresses[i]['name'];
     addressHtml+="<br>";
@@ -51,10 +52,10 @@ function editRegular(){
 
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML="<table> \
-  <tr><td>Username:</td><td><form><input type='text' name='userName' value='"+jsonCookie['userID']+"'></form></td></tr> \
-  <tr><td>Email:</td><td><form><input type='text' name='userEmail' value='"+jsonCookie['userEmail']+"'></form></td></tr> \
-  <tr><td>Phone Number:</td><td><form><input type='text' name='userPhone' value='"+jsonCookie['userPhone']+"'></form></td></tr> \
-  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Save</button></tr></table>";
+  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td><form><input type='text' name='userName' id='userName' value='"+jsonCookie['userID']+"'></form></td></tr> \
+  <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td><form><input type='text' name='userEmail' id='userEmail' value='"+jsonCookie['userEmail']+"'></form></td></tr> \
+  <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td><form><input type='text' name='userPhone' id='userPhone' value='"+jsonCookie['userPhone']+"'></form></td></tr> \
+  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveRegInfo()'>Save</button></tr></table>";
 
   $('#editDetailsModal').modal('show');
 
@@ -69,8 +70,8 @@ function editAddress(index){
 
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML="<table> \
-  <tr><td>Name:</td><td><form><input type='text' name='userName' value='"+addName+"'></form></td></tr> \
-  <tr><td>Address:</td><td><form><input type='text' name='userEmail' value='"+addLoc+"'></form></td></tr> \
+  <tr><td>Name:</td><td><form><input type='text' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
+  <tr><td>Address:</td><td><form><input type='text' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
   <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Save</button></tr></table>";
   $('#editDetailsModal').modal('show');
 
@@ -80,17 +81,8 @@ function returnHome(){
   document.location="index.php";
 }
 
-function checkInput(){
-  //alert("in");
-  if($("#verify1").val()==$("#verify2").val()){
-    //success, they equal
-    document.cookie="User_id_appleseed=checked";
-    document.location=document.location;
+function saveRegInfo(){
 
-  }
-  else{
-
-  }
 
 
 }

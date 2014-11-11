@@ -31,6 +31,10 @@ function login(){
 
         account_details['userAddress'][1]['name']="Work";
         account_details['userAddress'][1]['location']="123 Billy St.";
+        account_details['userAddress'][2]={};
+
+        account_details['userAddress'][2]['name']="Cell";
+        account_details['userAddress'][2]['location']="123 Ryan St.";
 
         account_details['userPhone']="519-123-1234";
         document.cookie="account_details_appleseed="+JSON.stringify(account_details)

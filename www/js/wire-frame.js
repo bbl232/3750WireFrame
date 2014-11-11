@@ -33,7 +33,7 @@ function register(){
 
 function logout(){
     document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    window.location = window.location;
+    window.location = "/index.php";
 }
 
 function setupNavbar(){

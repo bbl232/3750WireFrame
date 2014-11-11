@@ -92,5 +92,8 @@ function addEvent(name,address, date, time, duration, numVol, trees){
     document.cookie = "Appleseed_events="+JSON.stringify(eventsList);
 }
 
+function addFeedback(){
+    
+}
 
 setupNavbar();

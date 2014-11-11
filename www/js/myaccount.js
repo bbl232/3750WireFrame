@@ -13,56 +13,67 @@ function getCookie(cname) {
 function setupAccDetails(){
   var userName=document.getElementById("userName");
   var email=document.getElementById("email");
-  var address=document.getElementById("address");
+  //var address=document.getElementById("address");
   var phone=document.getElementById("phone");
 
-  //make values equal to set cookies here
-  userName.innerHTML=getCookie("User_id_appleseed");
-  email.innerHTML=getCookie("Email_appleseed");
-  address.innerHTML=getCookie("Address_appleseed");
-  phone.innerHTML=getCookie("Phone_appleseed");
 
-}
-
-function editDetails(){
   var userDetails=getCookie("account_details_appleseed");
 
   var jsonCookie=JSON.parse(userDetails);
-
-  var modalBody=document.getElementById('regularInfo');
-  modalBody.innerHTML="<table> \
+  var bodyReg=document.getElementById('regularInfo');
+  bodyReg.innerHTML="<table> \
   <tr><td>Username:</td><td>"+jsonCookie['userID']+"</td></tr> \
   <tr><td>Email:</td><td>"+jsonCookie['userEmail']+"</td></tr> \
-  <tr><td>Phone Number:</td>"+jsonCookie['userPhone']+"<td></td></tr></table>";
+  <tr><td>Phone Number:</td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
+  <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button> \
+  <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Delete Account</button></tr></table><br>";
+
+  var addresses=[];
+  addresses=jsonCookie['userAddress'];
+  //console.log(addresses);
+  var addressHtml="";
+  for (var i=0;i<addresses.length;i++){
+    addressHtml+=addresses[i]['name'];
+    addressHtml+="<br>";
+    addressHtml+=addresses[i]['location'];
+    //pass in i for onclick so we know which to edit
+    addressHtml+="<button type='button' class='btn btn-default' style='float:right' onclick='editAddress("+i+")'>Edit</button>";
+    addressHtml+="<hr>";
+  }
+  var modalBodyAddress=document.getElementById('addressInfo');
+  modalBodyAddress.innerHTML=addressHtml;
+
+}
+
+function editRegular(){
+  var userDetails=getCookie("account_details_appleseed");
+  var jsonCookie=JSON.parse(userDetails);
+
+  var bodyReg=document.getElementById('message-modal_body');
+  bodyReg.innerHTML="<table> \
+  <tr><td>Username:</td><td><form><input type='text' name='userName' value='"+jsonCookie['userID']+"'></form></td></tr> \
+  <tr><td>Email:</td><td><form><input type='text' name='userEmail' value='"+jsonCookie['userEmail']+"'></form></td></tr> \
+  <tr><td>Phone Number:</td><td><form><input type='text' name='userPhone' value='"+jsonCookie['userPhone']+"'></form></td></tr> \
+  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Save</button></tr></table>";
+
   $('#editDetailsModal').modal('show');
 
 }
-function editEmail(){
-  var email=getCookie("Email_appleseed");
-  var modalBody=document.getElementById('message-modal_body');
-  modalBody.innerHTML="<table> \
-  <tr><td>Current Email:</td><td>"+email+"</td></tr> \
-  <tr><td>New Email:</td><td><input type='text' id='verify1'></td></tr> \
-  <tr><td>Confirm Email:</td><td><input type='text' id='verify2'></td></tr>";
+function editAddress(index){
+  var userDetails=getCookie("account_details_appleseed");
+  var jsonCookie=JSON.parse(userDetails);
+  var addresses=[];
+  addresses=jsonCookie['userAddress'];
+  var addName=addresses[index]['name'];
+  var addLoc=addresses[index]['location'];
+
+  var bodyReg=document.getElementById('message-modal_body');
+  bodyReg.innerHTML="<table> \
+  <tr><td>Name:</td><td><form><input type='text' name='userName' value='"+addName+"'></form></td></tr> \
+  <tr><td>Address:</td><td><form><input type='text' name='userEmail' value='"+addLoc+"'></form></td></tr> \
+  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Save</button></tr></table>";
   $('#editDetailsModal').modal('show');
-}
-function editAddress(){
-  var address=getCookie("Address_appleseed");
-  var modalBody=document.getElementById('message-modal_body');
-  modalBody.innerHTML="<table> \
-  <tr><td>Current Address:</td><td>"+address+"</td></tr> \
-  <tr><td>New Address:</td><td><input type='text' id='verify1'></td></tr> \
-  <tr><td>Confirm Address:</td><td><input type='text' id='verify2'></td></tr>";
-  $('#editDetailsModal').modal('show');
-}
-function editPhone(){
-  var phone=getCookie("Phone_appleseed");
-  var modalBody=document.getElementById('message-modal_body');
-  modalBody.innerHTML="<table> \
-  <tr><td>Current Phone Number:</td><td>"+phone+"</td></tr> \
-  <tr><td>New Phone Number:</td><td><input type='text' id='verify1'></td></tr> \
-  <tr><td>Confirm Phone Number:</td><td><input type='text' id='verify2'></td></tr>";
-  $('#editDetailsModal').modal('show');
+
 }
 
 function returnHome(){

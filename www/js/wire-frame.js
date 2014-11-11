@@ -15,6 +15,26 @@ function login(){
     var upa = document.getElementById('login-password');
     if(uid.value != "" && upa.value != ""){
         document.cookie = "User_id_appleseed="+uid.value;
+        //here we will pull data set cookies for account details
+        //document.cookie = "Email_appleseed=testEmail";
+        //document.cookie = "Address_appleseed=rmarcott@uoguelph.ca";
+        //document.cookie = "Phone_appleseed=519-249-9220";
+
+        account_details={};
+        account_details['userID']=uid.value;
+        account_details['userEmail']="testEmail@google.ca";
+        account_details['userAddress']=[];
+        account_details['userAddress'][0]={};
+        account_details['userAddress'][0]['name']="Home";
+        account_details['userAddress'][0]['location']="123 Fake St.";
+        account_details['userAddress'][1]={};
+
+        account_details['userAddress'][1]['name']="Work";
+        account_details['userAddress'][1]['location']="123 Billy St.";
+
+        account_details['userPhone']="519-123-1234";
+        document.cookie="account_details_appleseed="+JSON.stringify(account_details)
+
         window.location = window.location;
     }
 }

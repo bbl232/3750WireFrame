@@ -13,7 +13,7 @@ require("includes/header.php");
             </div>
             <div class='panel-body'>
 
-                  <table>
+                  <!--<table>
                     <tr>
                       <td>
                         <div>
@@ -40,19 +40,6 @@ require("includes/header.php");
 
                   </tr>
 
-
-                  <tr>
-                    <td>
-                      <div>
-                        Address:
-                      </div>
-                    </td>
-                    <td>
-                    <div id="address">
-                      </div>
-                    </td>
-                  </tr>
-
                   <tr>
                     <td>
                       <div>
@@ -66,11 +53,14 @@ require("includes/header.php");
 
                   </tr>
 
-                </table>
+                </table>-->
+                <div id="regularInfo"></div>
+                <hr>
+                <div id="addressInfo"></div>
                   <!--<div class="updateField">
                     <input type="text" placeholder="519-123-2134">
                   </div>-->
-                  <button type="button" class="btn btn-default" onclick="editDetails()">Edit Data</button>
+                  <!--<button type="button" class="btn btn-default" onclick="editDetails()">Edit Data</button>-->
                   <br>
                   <button type="button" class="btn btn-default" onclick="returnHome()">Ok</button>
                   <button type="button" class="btn btn-default" onclick="returnHome()">Cancel</button>
@@ -88,13 +78,14 @@ require("includes/header.php");
             <h4 class="modal-title" id="message-modal_header">Edit <div id="editModalPopup"></div></h4>
           </div>
           <div class="modal-body" id="message-modal_body">
-            <div id="regularInfo"></div>
-            <div id="addressInfo"></div>
+            <!--<div id="regularInfo"></div>
+            <hr>
+            <div id="addressInfo"></div>-->
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="checkInput()">Edit Changes</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal" onclick="checkInput()">Edit Changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

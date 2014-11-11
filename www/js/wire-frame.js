@@ -17,6 +17,8 @@ function login(){
         document.cookie = "User_id_appleseed="+uid.value;
         window.location = window.location;
     }
+
+    addEvent('wvandenb','123 Fake St','2014-11-11','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
 }
 
 function register(){
@@ -33,6 +35,7 @@ function register(){
 
 function logout(){
     document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     window.location = "/index.php";
 }
 
@@ -63,5 +66,31 @@ $(function () {
 $(function () {
     $("[data-toggle='popover']").popover();
 });
+
+
+
+function addEvent(name,address, date, time, duration, numVol, trees){
+
+    var eventsListText = getCookie('Appleseed_events');
+    if(eventsListText == ""){
+        var eventsList=[];
+    }
+    else{
+        var eventsList=JSON.parse(eventsListText);
+    }
+    var newEvent = {};
+    newEvent['creator'] = name;
+    newEvent['address'] = address;
+    newEvent['date'] = date;
+    newEvent['time'] = time;
+    newEvent['duration'] = duration;
+    newEvent['numVolunteers'] = numVol;
+    newEvent['numRegVolunteers'] = 0;
+    newEvent['trees'] = trees;
+
+    eventsList.push(newEvent);
+    document.cookie = "Appleseed_events="+JSON.stringify(eventsList);
+}
+
 
 setupNavbar();

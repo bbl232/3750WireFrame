@@ -1,8 +1,8 @@
 function showEvents(){
     var table = document.getElementById("events_table");
     var eventsListText = getCookie("Appleseed_events");
-    var eventsList = JSON.parse(getCookie("Appleseed_events"));
-    if (eventsList != ""){
+    if (eventsListText != ""){
+        var eventsList = JSON.parse(eventsListText);
         eventsList.forEach(function (event){
             //NameOfCreator
             //Address
@@ -11,8 +11,8 @@ function showEvents(){
             //Duration
             //NumberOfVolunteersNeeded
             //Trees
-            var tr = "<tr>";
-            tr += "<td>Producer: "+event.creator+"</td>";
+            var tr = "<tr>"; //table row
+            tr += "<td>Producer: "+event.creator+"</td>"; // td= table cell
             tr += "<td>Date: "+event.date+"</td>";
             tr += "<td>Address: "+event.address+"</td>";
             tr += "</tr>";

@@ -72,7 +72,7 @@ function editAddress(index){
   bodyReg.innerHTML="<table> \
   <tr><td>Name:</td><td><form><input type='text' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
   <tr><td>Address:</td><td><form><input type='text' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
-  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right'>Save</button></tr></table>";
+  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button></tr></table>";
   $('#editDetailsModal').modal('show');
 
 }
@@ -82,7 +82,34 @@ function returnHome(){
 }
 
 function saveRegInfo(){
+  var userName=$('#userName').val();
+  var userEmail=$('#userEmail').val();
+  var userPhone=$('#userPhone').val();
 
+  var userDetails=getCookie("account_details_appleseed");
+  var jsonCookie=JSON.parse(userDetails);
+
+  jsonCookie['userID']=userName;
+  jsonCookie['userEmail']=userEmail;
+  jsonCookie['userPhone']=userPhone;
+  document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+  //we need to build the cookie here
+  //alert(userName);
+
+  window.location = window.location;
+
+}
+
+function saveAdrInfo(index){
+  var adrName=$('#adrName').val();
+  var userAdr=$('#userAdr').val();
+  var userDetails=getCookie("account_details_appleseed");
+  var jsonCookie=JSON.parse(userDetails);
+
+  jsonCookie['userAddress'][index]['name']=adrName;
+  jsonCookie['userAddress'][index]['location']=userAdr;
+  document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+  window.location = window.location;
 
 
 }

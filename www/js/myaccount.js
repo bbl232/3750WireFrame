@@ -43,7 +43,7 @@ function setupAccDetails(){
     <button type='button' class='btn btn-default' style='float:right' onclick='deleteAdr("+i+")'>Delete</button>";
     addressHtml+="<hr>";
   }
-  addressHtml+="<button type='button' class='btn btn-default' style='float:right' onclick='addAddressModal()'>Add Address</button>";
+  addressHtml+="<button type='button' class='btn btn-default' style='float:right' onclick='addAddressModal()'>Add</button>";
   var modalBodyAddress=document.getElementById('addressInfo');
   modalBodyAddress.innerHTML=addressHtml;
 
@@ -55,9 +55,9 @@ function editRegular(){
 
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML="<table> \
-  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td><form><input type='text' name='userName' id='userName' value='"+jsonCookie['userID']+"'></form></td></tr> \
-  <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td><form><input type='text' name='userEmail' id='userEmail' value='"+jsonCookie['userEmail']+"'></form></td></tr> \
-  <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td><form><input type='text' name='userPhone' id='userPhone' value='"+jsonCookie['userPhone']+"'></form></td></tr> \
+  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td><form><input type='text' class='form-control' name='userName' id='userName' value='"+jsonCookie['userID']+"'></form></td></tr> \
+  <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td><form><input type='text' class='form-control' name='userEmail' id='userEmail' value='"+jsonCookie['userEmail']+"'></form></td></tr> \
+  <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td><form><input type='text' class='form-control' name='userPhone' id='userPhone' value='"+jsonCookie['userPhone']+"'></form></td></tr> \
   <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveRegInfo()'>Save</button></tr></table>";
 
   $('#editDetailsModal').modal('show');
@@ -73,8 +73,8 @@ function editAddress(index){
 
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML="<table> \
-  <tr><td>Name:</td><td><form><input type='text' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
-  <tr><td>Address:</td><td><form><input type='text' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
+  <tr><td>Name:</td><td><form><input type='text' class='form-control' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
+  <tr><td>Address:</td><td><form><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
   <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button></tr></table>";
   $('#editDetailsModal').modal('show');
 
@@ -85,8 +85,8 @@ function addAddressModal(){
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML="<table> \
   <h5>New Address</h5> \
-  <tr><td>Address Type:</td><td><form><input type='text' name='adrType' id='adrType' value='Ex. Cell, Home...'></form></td></tr> \
-  <tr><td>Address:</td><td><form><input type='text' name='userLoc' id='userLoc' value=''></form></td></tr> \
+  <tr><td>Address Type:</td><td><form><input type='text' class='form-control' name='adrType' id='adrType' value='Ex. Cell, Home...'></form></td></tr> \
+  <tr><td>Address:</td><td><form><input type='text' class='form-control' name='userLoc' id='userLoc' value=''></form></td></tr> \
   <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='addAddress()'>Add Address</button></tr></table>";
   $('#editDetailsModal').modal('show');
 

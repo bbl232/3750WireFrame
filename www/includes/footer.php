@@ -14,16 +14,16 @@
           <form id="feedback-form">
               <div class="input-group">
                   <span class="input-group-addon">Name</span>
-                  <input type="text" class="form-control" id=""></input>
+                  <input type="text" class="form-control" id="feedback-name"></input>
               </div>
               <br>
               <div class="input-group">
                   <span class="input-group-addon">E-mail</span>
-                  <input type="text" class="form-control" id=""></input>
+                  <input type="text" class="form-control" id="feedback-email"></input>
               </div>
               <div class="checkbox form-control">
                   <label>
-                      <input type="checkbox" id="feedback-conatact_me"> Please contact me about this feedback.
+                      <input type="checkbox" id="feedback-contact_me"> Please contact me about this feedback.
                   </label>
               </div>
         </td></tr>
@@ -34,7 +34,7 @@
       </td></tr>
       </table>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" onclick="addFeedback()" data-dismiss="modal">Send</button>
+        <button type="button" class="btn btn-default" onclick="sendFeedback()" data-dismiss="modal">Send</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

@@ -73,7 +73,7 @@ function staffLogin(){
         account_details['userAddress'][2]['location']="123 Ryan St.";
 
         account_details['userPhone']="519-123-1234";
-        document.cookie="account_details_appleseed="+JSON.stringify(account_details)
+        document.cookie = "account_details_appleseed="+JSON.stringify(account_details);
 
         window.location.href = "/";
     }
@@ -94,6 +94,7 @@ function register(){
 function logout(){
     document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     window.location.href = "/index.php";
 }

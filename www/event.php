@@ -15,9 +15,9 @@
 		</div>
 		<div class="modal-body" id="add-event_body">
 				<form class="form-inline" role="form">
-					<p>Enter Location:<input id="location" type="text" ></p>
+					<div id="location-input"></div>
+					<p>Enter Date:<input id="datepicker" type="text" /></p>
 					<p>Enter Number of volunteers:<input id="volunteers" type="text" ></p>
-					<p>Enter Date:<span class="innerdp"><input id="datepicker" type="text" /></span></p>
 					<!--<p>Enter time:<span class="innerdp"><input id="time" type="text" /></span></p>-->
 				</form>
 			</div>

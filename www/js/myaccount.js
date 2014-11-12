@@ -95,7 +95,7 @@ function editAddress(index){
       <span class='input-group-addon'>Name</span><input type='text' class='form-control' name='adrName' id='adrName' value='"+addName+"'> \
     </div><br> \
     <div class='input-group'> \
-      <span class='input-group-addon'><span class='glyphicon glyphicon-envelope'></span> Address</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'> \
+      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'> \
     </div><br> \
     <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button><br> \
   </form>";
@@ -222,7 +222,6 @@ function deleteAdr(index){
 function deleteAccount(){
 
   document.cookie = 'User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-  document.cookie = 'Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
 
   document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
   document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";

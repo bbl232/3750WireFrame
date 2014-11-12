@@ -26,9 +26,9 @@ showEvents();
 					<!-- TODO: add tree -->
 				</form>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer" id="footer">
 				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addNewEvent()">Create</button>
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

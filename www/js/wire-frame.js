@@ -15,6 +15,42 @@ function login(){
     var upa = document.getElementById('login-password');
     if(uid.value != "" && upa.value != ""){
         document.cookie = "User_id_appleseed="+uid.value;
+        //here we will pull data set cookies for account details
+        //document.cookie = "Email_appleseed=testEmail";
+        //document.cookie = "Address_appleseed=rmarcott@uoguelph.ca";
+        //document.cookie = "Phone_appleseed=519-249-9220";
+
+        account_details={};
+        account_details['userID']=uid.value;
+        account_details['userEmail']="testEmail@google.ca";
+        account_details['userAddress']=[];
+        account_details['userAddress'][0]={};
+        account_details['userAddress'][0]['name']="Home";
+        account_details['userAddress'][0]['location']="123 Fake St.";
+        account_details['userAddress'][1]={};
+
+        account_details['userAddress'][1]['name']="Work";
+        account_details['userAddress'][1]['location']="123 Billy St.";
+        account_details['userAddress'][2]={};
+
+        account_details['userAddress'][2]['name']="Cell";
+        account_details['userAddress'][2]['location']="123 Ryan St.";
+
+        account_details['userPhone']="519-123-1234";
+        document.cookie="account_details_appleseed="+JSON.stringify(account_details)
+
+        window.location = window.location;
+    }
+
+    addEvent('wvandenb','123 Fake St','2014-11-11','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+}
+
+function staffLogin(){
+    var sid = document.getElementById('staff-login-email');
+    var spa = document.getElementById('staff-login-password');
+    if(sid.value != "" && spa.value != ""){
+        document.cookie = "User_id_appleseed="+sid.value;
+        document.cookie = "Staff_id_appleseed=staff";
         window.location = window.location;
     }
 }
@@ -33,14 +69,17 @@ function register(){
 
 function logout(){
     document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     window.location = "/index.php";
 }
 
 function setupNavbar(){
     var user_id = getCookie("User_id_appleseed");
+    var staff_id = getCookie("Staff_id_appleseed");
     var div = document.getElementById("nav-right");
     var div_left = document.getElementById("nav-left");
-    if(user_id==""){
+    if(user_id=="" && staff_id==""){
         div.innerHTML = '<li><form class="navbar-form" role="login"> \
           <div class="form-group"> \
             <input type="text" class="form-control" placeholder="E-mail" id="login-email" required> \
@@ -49,6 +88,10 @@ function setupNavbar(){
           <button type="submit" class="btn btn-primary" onclick="login()">Log In</button> \
           <button type="button" class="btn btn-default" id="popover-signup" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div class=\'input-group\'><input size=\'10\' type=\'password\' placeholder=\'Confirm Password\' id=\'login-confirm_password\' class=\'form-control\'><span class=\'input-group-btn\'><button onclick=\'register()\' type=\'button\' class=\'form-control btn btn-default\'>Register</button></span></div>">Create Account</button> \
         </form></li>';
+    }
+    else if(staff_id=="staff"){
+        div_left.innerHTML = div_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li><li><a href='/viewFeedback.php'>View Feedback</a></li></ul></li>";
+        div.innerHTML = '<li><p class="navbar-text">Logged in as Staff '+user_id+'</p></li><li><form class="navbar-form"><button class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
     }
     else{
         div_left.innerHTML = div_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/event.php'>Event Management</a></li><li><a href='/myaccount.php'>My Account</a></li></ul></li>";
@@ -63,5 +106,34 @@ $(function () {
 $(function () {
     $("[data-toggle='popover']").popover();
 });
+
+
+
+function addEvent(name,address, date, time, duration, numVol, trees){
+
+    var eventsListText = getCookie('Appleseed_events');
+    if(eventsListText == ""){
+        var eventsList=[];
+    }
+    else{
+        var eventsList=JSON.parse(eventsListText);
+    }
+    var newEvent = {};
+    newEvent['creator'] = name;
+    newEvent['address'] = address;
+    newEvent['date'] = date;
+    newEvent['time'] = time;
+    newEvent['duration'] = duration;
+    newEvent['numVolunteers'] = numVol;
+    newEvent['numRegVolunteers'] = 0;
+    newEvent['trees'] = trees;
+
+    eventsList.push(newEvent);
+    document.cookie = "Appleseed_events="+JSON.stringify(eventsList);
+}
+
+function addFeedback(){
+    
+}
 
 setupNavbar();

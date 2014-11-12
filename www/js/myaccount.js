@@ -73,8 +73,8 @@ function editAddress(index){
 
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML="<table> \
-  <tr><td>Name:</td><td><form><input type='text' class='form-control' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
-  <tr><td>Address:</td><td><form><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
+  <tr><td><label>Name:</label></td><td><form><input type='text' class='form-control' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
+  <tr><td><label>Address:</label></td><td><form><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
   <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button></tr></table>";
   $('#editDetailsModal').modal('show');
 
@@ -96,14 +96,25 @@ function addAddress(){
   var userDetails=getCookie("account_details_appleseed");
   var jsonCookie=JSON.parse(userDetails);
   var addresses=[];
-  addresses=jsonCookie['userAddress'];
-  var adrLength=addresses.length;
-  jsonCookie['userAddress'][adrLength]={};
-  jsonCookie['userAddress'][adrLength]['name']=$('#adrType').val();
-  jsonCookie['userAddress'][adrLength]['location']=$('#userLoc').val();
-  document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
-  window.location = window.location;
+  var adrType=$('#adrType').val();
+  var userLoc=$('#userLoc').val();
+  if(adrType !=""&&userLoc!=""){
+    addresses=jsonCookie['userAddress'];
+    var adrLength=addresses.length;
+    jsonCookie['userAddress'][adrLength]={};
+    jsonCookie['userAddress'][adrLength]['name']=adrType;
+    jsonCookie['userAddress'][adrLength]['location']=userLoc;
+    document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+    window.location = window.location;
+  }
+  else{
+    //$('#editDetailsModal').modal('hide');
+    var bodyReg=document.getElementById('message-modal_body');
+    bodyReg.innerHTML="Error! Please enter something in each box. \
+    <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='addAddressModal()'>Ok</button>";
+    $('#editDetailsModal').modal('show');
 
+  }
 
 }
 
@@ -116,33 +127,46 @@ function saveRegInfo(){
   var userEmail=$('#userEmail').val();
   var userPhone=$('#userPhone').val();
 
-  var userDetails=getCookie("account_details_appleseed");
-  var jsonCookie=JSON.parse(userDetails);
+  if(userName !=""&&userEmail!="" && userPhone!=""){
 
-  jsonCookie['userID']=userName;
-  jsonCookie['userEmail']=userEmail;
-  jsonCookie['userPhone']=userPhone;
-  document.cookie = "User_id_appleseed="+userName;
-
-  document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
-  //we need to build the cookie here
-  //alert(userName);
-
-  window.location = window.location;
+    var userDetails=getCookie("account_details_appleseed");
+    var jsonCookie=JSON.parse(userDetails);
+    jsonCookie['userID']=userName;
+    jsonCookie['userEmail']=userEmail;
+    jsonCookie['userPhone']=userPhone;
+    document.cookie = "User_id_appleseed="+userName;
+    document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+    window.location = window.location;
+  }
+  else{
+    var bodyReg=document.getElementById('message-modal_body');
+    bodyReg.innerHTML="Error! Please enter something in each box. \
+    <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='editRegular()'>Ok</button>";
+    $('#editDetailsModal').modal('show');
+  }
 
 }
 
 function saveAdrInfo(index){
   var adrName=$('#adrName').val();
   var userAdr=$('#userAdr').val();
-  var userDetails=getCookie("account_details_appleseed");
-  var jsonCookie=JSON.parse(userDetails);
+  if(adrName !=""&&userAdr!=""){
 
-  jsonCookie['userAddress'][index]['name']=adrName;
-  jsonCookie['userAddress'][index]['location']=userAdr;
+    var userDetails=getCookie("account_details_appleseed");
+    var jsonCookie=JSON.parse(userDetails);
 
-  document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
-  window.location = window.location;
+    jsonCookie['userAddress'][index]['name']=adrName;
+    jsonCookie['userAddress'][index]['location']=userAdr;
+
+    document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+    window.location = window.location;
+  }
+  else{
+    var bodyReg=document.getElementById('message-modal_body');
+    bodyReg.innerHTML="Error! Please enter something in each box. \
+    <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='editAddress("+index+")'>Ok</button>";
+    $('#editDetailsModal').modal('show');
+  }
 
 
 }

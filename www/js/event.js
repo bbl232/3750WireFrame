@@ -30,12 +30,12 @@ function newEvent() {
 
 function addNewEvent(){
 	var user_id = getCookie("User_id_appleseed");
-	var location = document.getElementById("location").value;
+	var address = document.getElementById("location").value;
 	var date = document.getElementById("datepicker").value;
-	alert(""+user_id+" "+location+" "+date);
-	//addEvent(user_id, address, date, time, duration, numVol, trees);
+	var time = document.getElementById("time").value;
+	var duration = document.getElementById("duration").value;
+	var numVol = document.getElementById("volunteers").value;
+	var trees = [{'Apple':2}, {'Cherry':1}];
+	addEvent(user_id, address, date, time, duration, numVol, trees);
+	window.location.reload();
 }
-
-$(function() {
-	$( "#datepicker" ).datepicker();
-})

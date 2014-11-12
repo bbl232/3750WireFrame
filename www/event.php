@@ -2,6 +2,9 @@
 	require("includes/header.php");
 	require("eventsList.php");
 ?>
+<script>
+showEvents();
+</script>
 
 <div class='pull-right'>
 	<button type="button" class="btn btn-success" onclick="newEvent()">Add New Event</button>
@@ -17,8 +20,10 @@
 				<form class="form-inline" role="form">
 					<div id="location-input"></div>
 					<p>Enter Date:<input id="datepicker" type="text" /></p>
+					<p>Enter Time:<input id="time" type="text" class="time ui-timepicker-input" /></p>
+					<p>Enter Duration:<input id="duration" type="text" ></p>
 					<p>Enter Number of volunteers:<input id="volunteers" type="text" ></p>
-					<!--<p>Enter time:<span class="innerdp"><input id="time" type="text" /></span></p>-->
+					<!-- TODO: add tree -->
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -32,6 +37,7 @@
 <script type="text/javascript" src="js/event.js"></script>
 <script>
 $( "#datepicker" ).datepicker();
+$( "#time" ).timepicker();
 </script>
 <?php
 	require("includes/footer.php");

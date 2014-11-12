@@ -40,9 +40,7 @@ function login(){
         account_details['userAddress'][2]['location']="123 Ryan St.";
 
         account_details['userPhone']="519-123-1234";
-        document.cookie="account_details_appleseed="+JSON.stringify(account_details)
-
-        window.location = window.location;
+        document.cookie="account_details_appleseed="+JSON.stringify(account_details);
     }
 
     addEvent('wvandenb','123 Fake St','2014/11/11','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);

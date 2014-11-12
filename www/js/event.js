@@ -8,7 +8,7 @@ function newEvent() {
 }
 
 function addNewEvent() {
-	
+
 }
 
 $(function() {

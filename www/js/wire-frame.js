@@ -90,11 +90,11 @@ function setupNavbar(){
         </form></li>';
     }
     else if(staff_id=="staff"){
-        div_left.innerHTML = div_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li><li><a href='/viewFeedback.php'>View Feedback</a></li></ul></li>";
+        div_left.innerHTML = div_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/event.php'>Event Management</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li><li><a href='/viewFeedback.php'>View Feedback</a></li></ul></li>";
         div.innerHTML = '<li><p class="navbar-text">Logged in as Staff '+user_id+'</p></li><li><form class="navbar-form"><button class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
     }
     else{
-        div_left.innerHTML = div_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li></ul></li>";
+        div_left.innerHTML = div_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/event.php'>Event Management</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li></ul></li>";
         div.innerHTML = '<li><p class="navbar-text">Logged in as '+user_id+'</p></li><li><form class="navbar-form"><button class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
     }
 }
@@ -133,7 +133,7 @@ function addEvent(name,address, date, time, duration, numVol, trees){
 }
 
 function addFeedback(){
-    
+
 }
 
 setupNavbar();

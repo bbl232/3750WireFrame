@@ -22,7 +22,7 @@ function setupAccDetails(){
   var jsonCookie=JSON.parse(userDetails);
   var bodyReg=document.getElementById('regularInfo');
   bodyReg.innerHTML="<table> \
-  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'><span></td><td>"+jsonCookie['userID']+"</td></tr> \
+  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+jsonCookie['userID']+"</td></tr> \
   <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+jsonCookie['userEmail']+"</td></tr> \
   <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
   <button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='deleteAccount()'>Delete Account</button> \
@@ -34,6 +34,7 @@ function setupAccDetails(){
   var addressHtml="";
   addressHtml+="<h4>Addresses:</h4><hr>"
   for (var i=0;i<addresses.length;i++){
+    addressHtml+="<span class='glyphicon glyphicon-map-marker' style='padding:10px'></span>";
     addressHtml+=addresses[i]['name'];
     addressHtml+="<br>";
     addressHtml+=addresses[i]['location'];

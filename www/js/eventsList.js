@@ -30,7 +30,7 @@ function showEvents(){
                 if(url.indexOf("volunteer.php") > -1) {
                     tr+='<td><button type="button" class="btn btn-success" onclick="volunteerEvent('+id+')">Register</button></td>';
                 } else if(url.indexOf("event.php") > -1) {
-                    tr+='<td><button type="button" class="btn btn-primary" onclick="volunteerEvent('+id+')">Modify</button></td>';
+                    tr+='<td><button type="button" class="btn btn-primary" onclick="modifyEvent('+id+')">Modify</button></td>';
                 }
                 tr += "</tr>";
                 table.innerHTML +=tr;
@@ -96,6 +96,7 @@ function filter_list(field) {
     }
 }
 
+/*
 function volunteerEvent(){
     var date = document.getElementById("datepicker").value;
     var eventsListText = getCookie("Appleseed_events");
@@ -123,4 +124,4 @@ function volunteerEvent(){
             //fail
         }
 
-}
+}*/

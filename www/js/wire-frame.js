@@ -51,7 +51,7 @@ function staffLogin(){
     if(sid.value != "" && spa.value != ""){
         document.cookie = "User_id_appleseed="+sid.value;
         document.cookie = "Staff_id_appleseed=staff";
-        window.location = window.location;
+        window.location.href = "/";
     }
 }
 
@@ -75,12 +75,14 @@ function logout(){
 }
 
 function setupNavbar(){
+    /*Set up header*/
     var user_id = getCookie("User_id_appleseed");
     var staff_id = getCookie("Staff_id_appleseed");
-    var div = document.getElementById("nav-right");
-    var div_left = document.getElementById("nav-left");
+    var nav_right = document.getElementById("nav-right");
+    var nav_left = document.getElementById("nav-left");
+
     if(user_id=="" && staff_id==""){
-        div.innerHTML = '<li><form class="navbar-form" role="login"> \
+        nav_right.innerHTML = '<li><form class="navbar-form" role="login"> \
           <div class="form-group"> \
             <input type="text" class="form-control" placeholder="E-mail" id="login-email" required> \
             <input type="password" class="form-control" placeholder="Password" id="login-password" required> \
@@ -106,8 +108,6 @@ $(function () {
 $(function () {
     $("[data-toggle='popover']").popover();
 });
-
-
 
 function addEvent(name,address, date, time, duration, numVol, trees){
 
@@ -136,4 +136,4 @@ function addFeedback(){
 
 }
 
-setupNavbar();
+$(document).load(setupNavbar());

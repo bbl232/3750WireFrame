@@ -8,11 +8,11 @@
     <div class="container">
        <form role = "login">
            <div class = "col-xs-4">
-               <input type="text" class="form-control input-normal" placeholder="E-mail" id="staff-login-email" required> 
+               <input type="text" class="form-control input-normal" placeholder="E-mail" id="staff-login-email" required>
 	       <br>
-               <input type="password" class="form-control" placeholder="Password" id="staff-login-password" required>  	
+               <input type="password" class="form-control" placeholder="Password" id="staff-login-password" required>
 	       <br>
-	       <button type="submit" class="btn btn-primary" onclick="staffLogin()">Log In</button>
+	       <button type="button" class="btn btn-primary" onclick="staffLogin()">Log In</button>
 	   </div>
        </form>
     </div>

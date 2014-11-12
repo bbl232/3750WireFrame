@@ -1,4 +1,5 @@
 function showEvents(){
+    console.log("show");
     var table = document.getElementById("events_table");
     var eventsListText = getCookie("Appleseed_events");
     if (eventsListText != ""){
@@ -26,10 +27,12 @@ function showEvents(){
 //filter by date 11/11/14
 function filter_list(field) {
     var table = document.getElementById("events_table");
+
     var data;
     if(field=="date"){
         var date = document.getElementById("datepicker").value;
-        date.replace('/','-');
+        //date.replace('\/','-');
+        //date.trim
         data=date;
     }
     
@@ -45,17 +48,20 @@ function filter_list(field) {
             //NumberOfVolunteersNeeded
             //Trees
             tr="";
-            if (eventsListText[field] == data) {//filter by data
+            if (event[field]==data) {//filter by data
                 var tr = "<tr>"; //table row
                 tr += "<td>Producer: " + event.creator + "</td>"; // td= table cell
                 tr += "<td>Date: " + event.date + "</td>";
                 tr += "<td>Address: " + event.address + "</td>";
                 tr += "</tr>";
                 table.innerHTML = tr;
+            }else{
+                console.log(data +" "+event[field]+" "+date);
             }
         });
 
+    }else{
     }
 
-    showEvents();
+    //showEvents();
 }

@@ -45,7 +45,7 @@ function login(){
         window.location = window.location;
     }
 
-    addEvent('wvandenb','123 Fake St','2014-11-11','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+    addEvent('wvandenb','123 Fake St','2014/11/11','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
 }
 
 function staffLogin(){
@@ -95,7 +95,7 @@ function logout(){
     document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    window.location = "/index.php";
+    window.location.href = "/index.php";
 }
 
 function setupNavbar(){
@@ -116,12 +116,12 @@ function setupNavbar(){
         </form></li>';
     }
     else if(staff_id=="staff"){
-        nav_left.innerHTML = nav_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/event.php'>Event Management</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li><li><a href='/viewFeedback.php'>View Feedback</a></li></ul></li>";
-        nav_right.innerHTML = '<li><p class="navbar-text">Staff logged in as '+user_id+'</p></li><li><form class="navbar-form"><button class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
+        nav_left.innerHTML = nav_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Menu <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/event.php'>Event Management</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li><li><a href='/viewFeedback.php'>View Feedback</a></li></ul></li>";
+        nav_right.innerHTML = '<li><p class="navbar-text">Staff logged in as '+user_id+'</p></li><li><form class="navbar-form"><button type="button" class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
     }
     else{
-        nav_left.innerHTML = nav_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Actions <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/event.php'>Event Management</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li></ul></li>";
-        nav_right.innerHTML = '<li><p class="navbar-text">Logged in as '+user_id+'</p></li><li><form class="navbar-form"><button class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
+        nav_left.innerHTML = nav_left.innerHTML + "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Menu <span class='caret'></span></a><ul class='dropdown-menu' role='menu'><li><a href='/volunteer.php'>Volunteer</a></li><li><a href='/event.php'>Event Management</a></li><li><a href='/trees.php'>Trees</a></li><li><a href='/myaccount.php'>My Account</a></li></ul></li>";
+        nav_right.innerHTML = '<li><p class="navbar-text">Logged in as '+user_id+'</p></li><li><form class="navbar-form"><button type = "button" class="btn btn-default" onclick="logout()">Log Out</button></form></li>';
     }
 }
 
@@ -156,8 +156,33 @@ function addEvent(name,address, date, time, duration, numVol, trees){
     document.cookie = "Appleseed_events="+JSON.stringify(eventsList);
 }
 
-function addFeedback(){
+function sendFeedback(){
+    var name = document.getElementById("feedback-name").value;
+    var email = document.getElementById("feedback-email").value;
+    var contact = document.getElementById("feedback-contact_me").checked;
+    var feedback = document.getElementById("feedback-text").value;
 
+    addFeedback(name,email,contact,feedback);
+}
+
+function addFeedback(name, email, contact, feedback){
+    var newFeedback={};
+
+    var feedbackListText = getCookie('Appleseed_feedback');
+    if(feedbackListText == ""){
+        var feedbackList=[];
+    }
+    else{
+        var feedbackList=JSON.parse(feedbackListText);
+    }
+
+    newFeedback['name'] = name;
+    newFeedback['email'] = email;
+    newFeedback['contact'] = contact;
+    newFeedback['feedback'] = feedback;
+
+    feedbackList.push(newFeedback);
+    document.cookie = "Appleseed_feedback="+JSON.stringify(feedbackList);
 }
 
 $(document).load(setupNavbar());

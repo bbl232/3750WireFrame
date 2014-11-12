@@ -62,7 +62,7 @@ require("includes/header.php");
                   </div>-->
                   <!--<button type="button" class="btn btn-default" onclick="editDetails()">Edit Data</button>-->
                   <br>
-                  <button type="button" class="btn btn-default" onclick="returnHome()">Ok</button>
+                  <button type="button" class="btn btn-primary" onclick="returnHome()">Ok</button>
 
             </div>
         </div>

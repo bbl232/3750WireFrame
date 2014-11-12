@@ -30,7 +30,9 @@ function showEvents(){
                 if(url.indexOf("volunteer.php") > -1) {
                     tr+='<td><button type="button" class="btn btn-success" onclick="volunteerEvent('+id+')">Register</button></td>';
                 } else if(url.indexOf("event.php") > -1) {
-                    tr+='<td><button type="button" class="btn btn-primary" onclick="modifyEvent('+id+')">Modify</button></td>';
+                    if (event.creator == getCookie("User_id_appleseed")){
+                        tr+='<td><button type="button" class="btn btn-primary" onclick="modifyEvent('+id+')">Modify</button></td>';
+                    }
                 }
                 tr += "</tr>";
                 table.innerHTML +=tr;

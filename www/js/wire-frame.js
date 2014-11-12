@@ -22,25 +22,7 @@ function login(){
 
 
         //Theses cookies are here till we have backend
-
-        account_details={};
-        account_details['userID']=uid.value;
-        account_details['userEmail']="testEmail@google.ca";
-        account_details['userAddress']=[];
-        account_details['userAddress'][0]={};
-        account_details['userAddress'][0]['name']="Home";
-        account_details['userAddress'][0]['location']="123 Fake St.";
-        account_details['userAddress'][1]={};
-
-        account_details['userAddress'][1]['name']="Work";
-        account_details['userAddress'][1]['location']="123 Billy St.";
-        account_details['userAddress'][2]={};
-
-        account_details['userAddress'][2]['name']="Cell";
-        account_details['userAddress'][2]['location']="123 Ryan St.";
-
-        account_details['userPhone']="519-123-1234";
-        document.cookie="account_details_appleseed="+JSON.stringify(account_details);
+        setAccountCookie(uid);
     }
 
     addEvent('wvandenb','123 Fake St','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
@@ -54,24 +36,7 @@ function staffLogin(){
         document.cookie = "Staff_id_appleseed=staff";
 
         //Theses cookies are here till we have backend
-        account_details={};
-        account_details['userID']=sid.value;
-        account_details['userEmail']="testEmail@google.ca";
-        account_details['userAddress']=[];
-        account_details['userAddress'][0]={};
-        account_details['userAddress'][0]['name']="Home";
-        account_details['userAddress'][0]['location']="123 Fake St.";
-        account_details['userAddress'][1]={};
-
-        account_details['userAddress'][1]['name']="Work";
-        account_details['userAddress'][1]['location']="123 Billy St.";
-        account_details['userAddress'][2]={};
-
-        account_details['userAddress'][2]['name']="Cell";
-        account_details['userAddress'][2]['location']="123 Ryan St.";
-
-        account_details['userPhone']="519-123-1234";
-        document.cookie = "account_details_appleseed="+JSON.stringify(account_details);
+        setAccountCookie(sid);
 
         window.location.href = "/";
     }
@@ -162,6 +127,27 @@ function sendFeedback(){
     var feedback = document.getElementById("feedback-text").value;
 
     addFeedback(name,email,contact,feedback);
+}
+
+function setAccountCookie(sid){
+    account_details={};
+    account_details['userID']=sid.value;
+    account_details['userEmail']="testEmail@google.ca";
+    account_details['userAddress']=[];
+    account_details['userAddress'][0]={};
+    account_details['userAddress'][0]['name']="Home";
+    account_details['userAddress'][0]['location']="123 Fake St.";
+    account_details['userAddress'][1]={};
+
+    account_details['userAddress'][1]['name']="Work";
+    account_details['userAddress'][1]['location']="123 Billy St.";
+    account_details['userAddress'][2]={};
+
+    account_details['userAddress'][2]['name']="Cell";
+    account_details['userAddress'][2]['location']="123 Ryan St.";
+
+    account_details['userPhone']="519-123-1234";
+    document.cookie = "account_details_appleseed="+JSON.stringify(account_details);
 }
 
 function addFeedback(name, email, contact, feedback){

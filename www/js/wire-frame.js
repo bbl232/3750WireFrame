@@ -132,8 +132,33 @@ function addEvent(name,address, date, time, duration, numVol, trees){
     document.cookie = "Appleseed_events="+JSON.stringify(eventsList);
 }
 
-function addFeedback(){
+function sendFeedback(){
+    var name = document.getElementById("feedback-name").value;
+    var email = document.getElementById("feedback-email").value;
+    var contact = document.getElementById("feedback-contact_me").checked;
+    var feedback = document.getElementById("feedback-text").value;
 
+    addFeedback(name,email,contact,feedback);
+}
+
+function addFeedback(name, email, contact, feedback){
+    var newFeedback={};
+
+    var feedbackListText = getCookie('Appleseed_feedback');
+    if(feedbackListText == ""){
+        var feedbackList=[];
+    }
+    else{
+        var feedbackList=JSON.parse(feedbackListText);
+    }
+
+    newFeedback['name'] = name;
+    newFeedback['email'] = email;
+    newFeedback['contact'] = contact;
+    newFeedback['feedback'] = feedback;
+
+    feedbackList.push(newFeedback);
+    document.cookie = "Appleseed_feedback="+JSON.stringify(feedbackList);
 }
 
 $(document).load(setupNavbar());

@@ -59,9 +59,5 @@ function filter_list(field) {
                 console.log(data +" "+event[field]+" "+date);
             }
         });
-
-    }else{
     }
-
-    //showEvents();
 }

@@ -58,3 +58,21 @@ function deleteEvent(eventID) {
 	//document.cookie="Appleseed_events="+JSON.stringify(jsonCookie);
 	window.location.reload();
 }
+
+function disableOther() {
+	$('#tree-type-other').val('');
+	$('#tree-type-other').attr('disabled', true);
+}
+
+function enableOther() {
+	$('#tree-type-other').attr('disabled', false);
+}
+
+$('#other-check').mousedown(function() {
+	if (!$(this).is(':checked'))
+		$('#tree-type-other').attr('disabled', false);
+	else {
+		$('#tree-type-other').val('');
+		$('#tree-type-other').attr('disabled', true);
+	}
+});

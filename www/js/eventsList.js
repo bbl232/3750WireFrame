@@ -65,7 +65,7 @@ function filter_list(field) {
             //NumberOfVolunteersNeeded
             //Trees
             tr="";
-            if (event[field]==data) {//filter by data
+            if (event[field]==data || data=="") {//filter by data
                 var tr = "<tr>"; //table row
                 tr += "<td>Producer: " + event.creator + "</td>"; // td= table cell
                 tr += "<td>Date: " + event.date + "</td>";

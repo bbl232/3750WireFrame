@@ -7,6 +7,6 @@ function volunteerEvent(eventID) {
 		document.cookie="Appleseed_events="+JSON.stringify(eventsList);
 		window.location.reload();
 	} else {
-		alert("Can't register to this event, no space available.");
+		alert("Can't register for this event, no space available.");
 	}
 }

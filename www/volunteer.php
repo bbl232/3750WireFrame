@@ -1,5 +1,8 @@
 <?php
 require("includes/header.php");
+?>
+<div class="container">
+<?php
 require("eventsList.php");
 ?>
 <script>
@@ -11,6 +14,7 @@ showEvents();
 <script>
  $( "#datepicker" ).datepicker();
 </script>
+</div>
 <?php
     require("includes/footer.php");
 ?>

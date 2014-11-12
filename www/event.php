@@ -20,14 +20,16 @@ showEvents();
 			<h4 class="modal-title" id="message-modal_header">Create New Event</h4>
 		</div>
 		<div class="modal-body" id="add-event_body">
-				<form class="form-inline" role="form">
+				<form role="form">
 					<div id="location-input"></div>
-					<p>Enter Date:<input id="datepicker" type="text" /></p>
-					<p>Enter Time:<input id="time" type="text" class="time ui-timepicker-input" /></p>
-					<p>Enter Duration:<input id="duration" type="text" ></p>
-					<p>Enter Number of volunteers:<input id="volunteers" type="text" ></p>
+					<label>Enter Date:</label><input class="form-control" id="datepicker" type="text" /><br>
+					<label>Enter Time:</label><input class="form-control" id="time" type="text" class="time ui-timepicker-input" /><br>
+					<label>Enter Duration:</label><input class="form-control" id="duration" type="text" ><br>
+					<label>Enter Number of volunteers required:</label><input class="form-control" id="volunteers" type="text" ><br>
+					<label>Please describe the type and number of plants to be picked.</label><br><textarea rows="7" id="tree-text" class="form-control"></textarea><br>
 					<!-- TODO: add tree -->
 				</form>
+				<div class="alert alert-danger" role="alert"><p><b>Please Note</b> that this form is not yet functional.</p></div>
 			</div>
 			<div class="modal-footer" id="footer">
 				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addNewEvent()">Create</button>

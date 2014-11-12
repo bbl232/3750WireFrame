@@ -8,9 +8,9 @@ function setLocationInput() {
 	addresses=jsonCookie['userAddress'];
 	locationInputHTML+='<div class="form-group">Choose a location:<select class="form-control" id="location">';
 	for (var i=0;i<addresses.length;i++){
-		locationInputHTML+='<option value=';
+		locationInputHTML+='<option value="';
 		locationInputHTML+=addresses[i]['location'];
-		locationInputHTML+=">";
+		locationInputHTML+="\">";
 		locationInputHTML+=addresses[i]['location'];
 		locationInputHTML+="</option>";
 	}

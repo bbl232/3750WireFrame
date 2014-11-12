@@ -222,6 +222,7 @@ function deleteAdr(index){
 function deleteAccount(){
 
   document.cookie = 'User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+  document.cookie = 'Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
 
   document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
   document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";

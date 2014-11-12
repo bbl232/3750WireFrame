@@ -42,7 +42,7 @@ function login(){
         window.location = window.location;
     }
 
-    addEvent('wvandenb','123 Fake St','2014-11-11','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+    addEvent('wvandenb','123 Fake St','2014/11/11','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
 }
 
 function staffLogin(){

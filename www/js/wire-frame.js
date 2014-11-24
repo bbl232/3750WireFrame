@@ -10,14 +10,24 @@ function getCookie(cname) {
     return "";
 }
 
+function hexFromAscii(hexx) {
+    var hex = hexx.toString();//force conversion
+    var str = '';
+    for (var i = 0; i < hex.length; i += 2)
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    return str;
+}
+
 function login(){
     var uid = document.getElementById('login-email');
     var upa = document.getElementById('login-password');
+    var hashed = sjcl.hash.sha256.hash(upa.value);
+    var hex = sjcl.codec.hex.fromBits(hashed);
     if(uid.value != "" && upa.value != ""){
         document.cookie = "User_id_appleseed="+uid.value;
         //here we will pull data set cookies for account details
         //document.cookie = "Email_appleseed=testEmail";
-        //document.cookie = "Address_appleseed=rmarcott@uoguelph.ca";
+        //document.cookie = "eAddress_appleseed=rmarcott@uoguelph.ca";
         //document.cookie = "Phone_appleseed=519-249-9220";
 
 
@@ -25,7 +35,7 @@ function login(){
         setAccountCookie(uid);
     }
 
-    addEvent('wvandenb','123 Fake St','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+    addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
 }
 
 function staffLogin(){

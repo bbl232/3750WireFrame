@@ -31,11 +31,20 @@ function login(){
         //document.cookie = "Phone_appleseed=519-249-9220";
 
 
-        //Theses cookies are here till we have backend
+        //Theses cookies are here till we have backend - to be removed
         setAccountCookie(uid);
-    }
 
-    addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+        //I have no idea what I'm doing here, if you can't tell already
+        var auth = {};
+        auth['email'] = uid.value;
+        auth['passwordHash'] = hex.toString();
+        post("localhost:8080/users/authenticate", auth, function(data, status) {
+            if (status == 200)
+                addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+            else if (status == 403)
+                alert("Invalid password or email.");
+        });
+    }
 }
 
 function staffLogin(){
@@ -55,8 +64,35 @@ function staffLogin(){
 function register(){
     var upa = document.getElementById('login-password');
     var upc = document.getElementById('login-confirm_password');
+    var hashed = sjcl.hash.sha256.hash(upa.value);
+    var hex = sjcl.codec.hex.fromBits(hashed);
     if(upa.value == upc.value){
-        login();
+        var uinfo = {};
+        uinfo['user'] = {};
+        uinfo['user']['firstname'] = "John";
+        uinfo['user']['lastname'] = "Doe";
+        uinfo['user']['email'] = "john@example.com";
+        uinfo['user']['roles'] = ["staff"];
+        uinfo['user']['phone'] = 9052435432;
+        uinfo['user']['passwordHash'] = hex.toString();
+        uinfo['user']['locations'] = {};
+        uinfo['user']['locations']['description'] = "Home";
+        uinfo['user']['locations']['address1'] = "41 Old Rd";
+        uinfo['user']['locations']['address2'] = "";
+        uinfo['user']['locations']['city'] = "Guelph";
+        uinfo['user']['locations']['postal'] = "N1G 0A0";
+        uinfo['user']['locations']['country'] = "Canada";
+        uinfo['user']['locations']['latitude'] = "43.530766";
+        uinfo['user']['locations']['longitude'] = "-80.229016";
+        uinfo['user']['userNotes'] = "";
+	uinfo['user']['company'] = "";
+	uinfo['user']['emailEnabled'] = false;
+        post("localhost:8080/users", uinfo, function(data, status) {
+            if (status == 201)
+                login();
+            else if (status == 400)
+                alert("Error: " + data.errors[1]);
+        });
     }
     else{
         $('#popover-signup').popover('hide');

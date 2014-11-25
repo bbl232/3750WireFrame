@@ -109,7 +109,7 @@ function register(){
         uinfo['user']['roles'] = ["normal"];
         uinfo['user']['phone'] = parseInt(document.getElementById('register-phone').value);
         uinfo['user']['passwordHash'] = hex.toString();
-        uinfo['user']['locations'] = {};
+        uinfo['user']['locations'] = [];
         uinfo['user']['locations']['description'] = "Home";
         uinfo['user']['locations']['address1'] = document.getElementById('register-address').value;
         uinfo['user']['locations']['address2'] = "";

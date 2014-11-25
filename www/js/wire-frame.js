@@ -137,7 +137,7 @@ function login(uid, upa, hex) {
 			dataType: "json",
 			success: function(json) {
 				setAccountCookie(uid);
-		        	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+                window.location.reload();
 			},
 			statusCode: {
 				403: function(json) {
@@ -190,7 +190,7 @@ function staffLogin() {
 			dataType: "json",
 			success: function(json) {
 				setAccountCookie(sid);
-				addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+				window.location.reload();
 			},
 			statusCode: {
 				403: function(json) {

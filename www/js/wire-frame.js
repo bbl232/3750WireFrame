@@ -10,14 +10,6 @@ function getCookie(cname) {
     return "";
 }
 
-function hexFromAscii(hexx) {
-    var hex = hexx.toString();//force conversion
-    var str = '';
-    for (var i = 0; i < hex.length; i += 2)
-        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-    return str;
-}
-
 function login(){
     var uid = document.getElementById('login-email');
     var upa = document.getElementById('login-password');
@@ -42,6 +34,9 @@ function login(){
 	$.ajax({
 		type: "POST",
 		url: "127.0.0.1:3000/users/authenticate",
+		headers: {
+			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
+		},
 		data: auth,
 		dataType: "json",
 		success: function(json) {
@@ -76,8 +71,11 @@ function staffLogin(){
         auth['passwordHash'] = hex.toString();
 
 	$.ajax({
-		type: "GET",
+		type: "POST",
 		url: "127.0.0.1:3000/users/authenticate",
+		headers: {
+			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
+		},
 		data: auth,
 		dataType: "json",
 		success: function(json) {
@@ -109,7 +107,7 @@ function register(){
         uinfo['user']['lastname'] = document.getElementById('register-last').value;
         uinfo['user']['email'] = document.getElementById('register-email').value;
         uinfo['user']['roles'] = ["normal"];
-        uinfo['user']['phone'] = document.getElementById('register-phone').value;
+        uinfo['user']['phone'] = parseInt(document.getElementById('register-phone').value);
         uinfo['user']['passwordHash'] = hex.toString();
         uinfo['user']['locations'] = {};
         uinfo['user']['locations']['description'] = "Home";
@@ -125,17 +123,21 @@ function register(){
 	uinfo['user']['emailEnabled'] = false;
 
 	$.ajax({
-		type: "GET",
-		url: "127.0.0.1:3000/users",
-		data: uinfo,
+		type: "POST",
+		url: "http://127.0.0.1:3000/users",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		data: JSON.stringify(uinfo),
 		dataType: "json",
 		success: function(json) {
+			alert("Success!");
                 	login();
 		},
 		statusCode: {
 			400: function(json) {
-				parsed = JSON.parse(json);
-				alert(parsed["message"]);
+				//parsed = JSON.parse(json);
+				alert("Error 400");
 			}
 		},
 		error: function() {

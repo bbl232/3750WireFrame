@@ -40,6 +40,7 @@ function login(){
         auth['passwordHash'] = hex.toString();
 
 	$.ajax({
+		type: "POST",
 		url: "127.0.0.1:3000/users/authenticate",
 		data: auth,
 		dataType: "json",
@@ -75,6 +76,7 @@ function staffLogin(){
         auth['passwordHash'] = hex.toString();
 
 	$.ajax({
+		type: "GET",
 		url: "127.0.0.1:3000/users/authenticate",
 		data: auth,
 		dataType: "json",
@@ -96,33 +98,34 @@ function staffLogin(){
 }
 
 function register(){
-    var upa = document.getElementById('login-password');
-    var upc = document.getElementById('login-confirm_password');
+    var upa = document.getElementById('register-password');
+    var upc = document.getElementById('register-confirm');
     var hashed = sjcl.hash.sha256.hash(upa.value);
     var hex = sjcl.codec.hex.fromBits(hashed);
     if(upa.value == upc.value){
         var uinfo = {};
         uinfo['user'] = {};
-        uinfo['user']['firstname'] = "John";
-        uinfo['user']['lastname'] = "Doe";
-        uinfo['user']['email'] = "john@example.com";
-        uinfo['user']['roles'] = ["staff"];
-        uinfo['user']['phone'] = 9052435432;
+        uinfo['user']['firstname'] = document.getElementById('register-first').value;
+        uinfo['user']['lastname'] = document.getElementById('register-last').value;
+        uinfo['user']['email'] = document.getElementById('register-email').value;
+        uinfo['user']['roles'] = ["normal"];
+        uinfo['user']['phone'] = document.getElementById('register-phone').value;
         uinfo['user']['passwordHash'] = hex.toString();
         uinfo['user']['locations'] = {};
         uinfo['user']['locations']['description'] = "Home";
-        uinfo['user']['locations']['address1'] = "41 Old Rd";
+        uinfo['user']['locations']['address1'] = document.getElementById('register-address').value;
         uinfo['user']['locations']['address2'] = "";
-        uinfo['user']['locations']['city'] = "Guelph";
-        uinfo['user']['locations']['postal'] = "N1G 0A0";
-        uinfo['user']['locations']['country'] = "Canada";
-        uinfo['user']['locations']['latitude'] = "43.530766";
-        uinfo['user']['locations']['longitude'] = "-80.229016";
+        uinfo['user']['locations']['city'] = document.getElementById('register-city').value;
+        uinfo['user']['locations']['postal'] = document.getElementById('register-postal').value;
+        uinfo['user']['locations']['country'] = document.getElementById('register-country').value;
+        uinfo['user']['locations']['latitude'] = "";
+        uinfo['user']['locations']['longitude'] = "";
         uinfo['user']['userNotes'] = "";
 	uinfo['user']['company'] = "";
 	uinfo['user']['emailEnabled'] = false;
 
 	$.ajax({
+		type: "GET",
 		url: "127.0.0.1:3000/users",
 		data: uinfo,
 		dataType: "json",
@@ -140,10 +143,8 @@ function register(){
 		}
 	});
     }
-    else{
-        $('#popover-signup').popover('hide');
-        $('#passwordMismatchModal').modal('show');
-    }
+    else
+        $('#passwordMismatchModal').modal('show');	//Apparently this doesn't exist
 }
 
 function logout(){
@@ -152,6 +153,14 @@ function logout(){
     document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     window.location.href = "/index.php";
+}
+
+function showLoginModal(){
+	$('#loginModal').modal('show');
+}
+
+function showRegisterModal(){
+	$('#registerModal').modal('show');
 }
 
 function setupNavbar(){
@@ -163,12 +172,8 @@ function setupNavbar(){
 
     if(user_id=="" && staff_id==""){
         nav_right.innerHTML = '<li><form class="navbar-form" role="login"> \
-          <div class="form-group"> \
-            <input type="text" class="form-control" placeholder="E-mail" id="login-email" required> \
-            <input type="password" class="form-control" placeholder="Password" id="login-password" required> \
-          </div> \
-          <button type="submit" class="btn btn-primary" onclick="login()">Log In</button> \
-          <button type="button" class="btn btn-default" id="popover-signup" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div class=\'input-group\'><input size=\'10\' type=\'password\' placeholder=\'Confirm Password\' id=\'login-confirm_password\' class=\'form-control\'><span class=\'input-group-btn\'><button onclick=\'register()\' type=\'button\' class=\'form-control btn btn-default\'>Register</button></span></div>">Create Account</button> \
+          <button type="button" class="btn btn-primary" onclick="showLoginModal()">Log In</button> \
+          <button type="button" class="btn btn-default" onclick="showRegisterModal()">Create Account</button> \
         </form></li>';
     }
     else if(staff_id=="staff"){

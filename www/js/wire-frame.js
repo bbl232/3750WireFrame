@@ -10,19 +10,64 @@ function getCookie(cname) {
     return "";
 }
 
-function hexFromAscii(hexx) {
-    var hex = hexx.toString();//force conversion
-    var str = '';
-    for (var i = 0; i < hex.length; i += 2)
-        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-    return str;
+function getCurrentUser() {
+    var user;
+    var message;
+
+    $.ajax({
+        url: "127.0.0.1:3000/users/current",
+        dataType: "json",
+        success: function(json) {
+            user = JSON.parse(json);
+            return user["user"];
+        },
+        statusCode: {
+            401: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            }
+        },
+        error: function() {
+            alert("Ajax request failed");
+        }
+    });
 }
 
-function login(){
-    var uid = document.getElementById('login-email');
-    var upa = document.getElementById('login-password');
-    var hashed = sjcl.hash.sha256.hash(upa.value);
-    var hex = sjcl.codec.hex.fromBits(hashed);
+function getUserLocations() {
+    var user = getCurrentUser();
+    var userId = user['id'];
+    var message;
+
+    $.ajax({
+        url: "127.0.0.1:3000/user/"+ userId +"/locations",
+        dataType: "json",
+        /*headers:{
+            "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
+        },*/
+        success: function(json) {
+            return JSON.parse(json);
+        },
+        statusCode: {
+            401: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            403: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            404: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            }
+        },
+        error: function() {
+            alert("Ajax request failed");
+        }
+    });
+}
+
+function login(uid, upa, hex){
     if(uid.value != "" && upa.value != ""){
         document.cookie = "User_id_appleseed="+uid.value;
         //here we will pull data set cookies for account details
@@ -32,18 +77,21 @@ function login(){
 
 
         //Theses cookies are here till we have backend - to be removed
-        setAccountCookie(uid);
 
         //I have no idea what I'm doing here, if you can't tell already
         var auth = {};
         auth['email'] = uid.value;
         auth['passwordHash'] = hex.toString();
 
+	var data = JSON.stringify(auth);
+
 	$.ajax({
-		url: "127.0.0.1:3000/users/authenticate",
-		data: auth,
+		type: "POST",
+		url: "http://127.0.0.1:3000/users/authenticate",
+		data: data,
 		dataType: "json",
 		success: function(json) {
+		        setAccountCookie(uid);
                 	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
 		},
 		statusCode: {
@@ -58,58 +106,100 @@ function login(){
     }
 }
 
+function loginButton(){
+    var uid = document.getElementById('login-email');
+    var upa = document.getElementById('login-password');
+    var hashed = sjcl.hash.sha256.hash(upa.value);
+    var hex = sjcl.codec.hex.fromBits(hashed);
+    login(uid, upa, hex);
+}
+
 function staffLogin(){
     var sid = document.getElementById('staff-login-email');
     var spa = document.getElementById('staff-login-password');
+    var hashed = sjcl.hash.sha256.hash(spa.value);
+    var hex = sjcl.codec.hex.fromBits(hashed);
     if(sid.value != "" && spa.value != ""){
         document.cookie = "User_id_appleseed="+sid.value;
         document.cookie = "Staff_id_appleseed=staff";
 
-        //Theses cookies are here till we have backend
+        //Theses cookies are here till we have backend - to be removed
         setAccountCookie(sid);
+
+        var auth = {};
+        auth['email'] = sid.value;
+        auth['passwordHash'] = hex.toString();
+
+	var data = JSON.stringify(auth);
+
+	$.ajax({
+		type: "POST",
+		url: "http://127.0.0.1:3000/users/authenticate",
+		data: data,
+		dataType: "json",
+		success: function(json) {
+                	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+		},
+		statusCode: {
+			403: function(json) {
+				alert("Invalid password or email.");
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
 
         window.location.href = "/";
     }
 }
 
 function register(){
-    var upa = document.getElementById('login-password');
-    var upc = document.getElementById('login-confirm_password');
+    var uid = document.getElementById('register-email')
+    var upa = document.getElementById('register-password');
+    var upc = document.getElementById('register-confirm');
     var hashed = sjcl.hash.sha256.hash(upa.value);
     var hex = sjcl.codec.hex.fromBits(hashed);
     if(upa.value == upc.value){
         var uinfo = {};
         uinfo['user'] = {};
-        uinfo['user']['firstname'] = "John";
-        uinfo['user']['lastname'] = "Doe";
-        uinfo['user']['email'] = "john@example.com";
-        uinfo['user']['roles'] = ["staff"];
-        uinfo['user']['phone'] = 9052435432;
+        uinfo['user']['firstname'] = document.getElementById('register-first').value;
+        uinfo['user']['lastname'] = document.getElementById('register-last').value;
+        uinfo['user']['email'] = uid.value;
+        uinfo['user']['roles'] = [];
+	uinfo['user']['roles'].push("normal");
+        uinfo['user']['phone'] = parseInt(document.getElementById('register-phone').value);
         uinfo['user']['passwordHash'] = hex.toString();
-        uinfo['user']['locations'] = {};
-        uinfo['user']['locations']['description'] = "Home";
-        uinfo['user']['locations']['address1'] = "41 Old Rd";
-        uinfo['user']['locations']['address2'] = "";
-        uinfo['user']['locations']['city'] = "Guelph";
-        uinfo['user']['locations']['postal'] = "N1G 0A0";
-        uinfo['user']['locations']['country'] = "Canada";
-        uinfo['user']['locations']['latitude'] = "43.530766";
-        uinfo['user']['locations']['longitude'] = "-80.229016";
+        uinfo['user']['locations'] = [];
+	var loc = {};
+        loc['description'] = "Home";
+        loc['address1'] = document.getElementById('register-address').value;
+        loc['address2'] = "";
+        loc['city'] = document.getElementById('register-city').value;
+        loc['postal'] = document.getElementById('register-postal').value;
+        loc['country'] = document.getElementById('register-country').value;
+        loc['latitude'] = "";
+        loc['longitude'] = "";
+	uinfo['user']['locations'].push(loc);
         uinfo['user']['userNotes'] = "";
 	uinfo['user']['company'] = "";
 	uinfo['user']['emailEnabled'] = false;
 
+	var data = JSON.stringify(uinfo);
+
 	$.ajax({
-		url: "127.0.0.1:3000/users",
-		data: uinfo,
+		type: "POST",
+		url: "http://127.0.0.1:3000/users",
+		data: data,
 		dataType: "json",
 		success: function(json) {
-                	login();
+			alert("Success!");
+                	login(uid, upa, hex);
 		},
 		statusCode: {
 			400: function(json) {
-				parsed = JSON.parse(json);
-				alert(parsed["message"]);
+				//parsed = JSON.parse(json);
+				alert("Error 400");
 			}
 		},
 		error: function() {
@@ -117,10 +207,8 @@ function register(){
 		}
 	});
     }
-    else{
-        $('#popover-signup').popover('hide');
-        $('#passwordMismatchModal').modal('show');
-    }
+    else
+        $('#passwordMismatchModal').modal('show');	//Apparently this doesn't exist
 }
 
 function logout(){
@@ -129,6 +217,14 @@ function logout(){
     document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     window.location.href = "/index.php";
+}
+
+function showLoginModal(){
+	$('#loginModal').modal('show');
+}
+
+function showRegisterModal(){
+	$('#registerModal').modal('show');
 }
 
 function setupNavbar(){
@@ -140,12 +236,8 @@ function setupNavbar(){
 
     if(user_id=="" && staff_id==""){
         nav_right.innerHTML = '<li><form class="navbar-form" role="login"> \
-          <div class="form-group"> \
-            <input type="text" class="form-control" placeholder="E-mail" id="login-email" required> \
-            <input type="password" class="form-control" placeholder="Password" id="login-password" required> \
-          </div> \
-          <button type="submit" class="btn btn-primary" onclick="login()">Log In</button> \
-          <button type="button" class="btn btn-default" id="popover-signup" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div class=\'input-group\'><input size=\'10\' type=\'password\' placeholder=\'Confirm Password\' id=\'login-confirm_password\' class=\'form-control\'><span class=\'input-group-btn\'><button onclick=\'register()\' type=\'button\' class=\'form-control btn btn-default\'>Register</button></span></div>">Create Account</button> \
+          <button type="button" class="btn btn-primary" onclick="showLoginModal()">Log In</button> \
+          <button type="button" class="btn btn-default" onclick="showRegisterModal()">Create Account</button> \
         </form></li>';
     }
     else if(staff_id=="staff"){

@@ -30,6 +30,54 @@ require("includes/header.php");
             </table>
         </div>
     </div>
+
+<div class="modal fade" id="loginModal">
+    <div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title">Login</h4>
+		</div>
+		<div class="modal-body" id="login_body">
+			<form class="form-inline" role="form">
+				<label>Email Address:</label><input class="form-control" id="login-email" type="text" /><br>
+				<label>Password:</label><input class="form-control" id="login-password" type="text" /><br>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="loginButton()">Login</button>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+		</div>
+	</div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="registerModal">
+    <div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title">Register</h4>
+		</div>
+			<div class="modal-body" id="register_body">
+				<form class="form-inline" role="form">
+					<label>First Name:</label><input class="form-control" id="register-first" type="text" /><br>
+					<label>Last Name:</label><input class="form-control" id="register-last" type="text" /><br>
+					<label>Email Address:</label><input class="form-control" id="register-email" type="text" /><br>
+					<label>Phone Number:</label><input class="form-control" id="register-phone" type="text" /><br>
+					<label>Street Address:</label><input class="form-control" id="register-address" type="text" /><br>
+					<label>City:</label><input class="form-control" id="register-city" type="text" /><br>
+					<label>Postal Code:</label><input class="form-control" id="register-postal" type="text" /><br>
+					<label>Country:</label><input class="form-control" id="register-country" type="text" /><br>
+					<label>Password:</label><input class="form-control" id="register-password" type="text" /><br>
+					<label>Confrim Password:</label><input class="form-control" id="register-confirm" type="text" /><br>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="register()">Register</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div><!-- /.modal-content --
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script type="text/javascript" src="js/index.js"></script>
 <?php
     require("includes/footer.php");

@@ -15,30 +15,82 @@ function setupAccDetails(){
   var email=document.getElementById("email");
   //var address=document.getElementById("address");
   var phone=document.getElementById("phone");
+  var userInfo;
+  var message;
+
+  //first we get current user information
+  $.ajax({
+    url: "127.0.0.1:3000/users/current",
+    dataType: "json",
+    success: function(json) {
+      userInfo = JSON.parse(json);
+      //return user["id"];
+    },
+    statusCode: {
+      401: function(json) {
+        parsed = JSON.parse(json);
+        alert(parsed["message"]);
+      }
+    },
+    error: function() {
+      alert("Ajax request failed");
+    }
+  });
 
 
-  var userDetails=getCookie("account_details_appleseed");
+
+  var userID=userInfo['user']['id'];
+  var userFirst=userInfo['user']['firstname'];
+  var userLast=userInfo['user']['lastname'];
+  var userEmail=userInfo['user']['email'];
+  var userPhone=userInfo['user']['phone'];
+  var userLocations=[];
+  userLocations=userInfo['user']['locations'];
+
+
+
+  //var userDetails=getCookie("account_details_appleseed");
 
   var jsonCookie=JSON.parse(userDetails);
   var bodyReg=document.getElementById('regularInfo');
+  //bodyReg.innerHTML="<table> \
+  //<tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+jsonCookie['userID']+"</td></tr> \
+  //<tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+jsonCookie['userEmail']+"</td></tr> \
+  //<tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
+  //<button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount()'>Delete Account</button> \
+  //<button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
+
   bodyReg.innerHTML="<table> \
-  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+jsonCookie['userID']+"</td></tr> \
-  <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+jsonCookie['userEmail']+"</td></tr> \
-  <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
+  <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+userEmail+"</td></tr> \
+  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+userFirst+" "+userLast+"</td></tr> \
+  <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+userPhone+"</td></tr><tr> \
   <button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount()'>Delete Account</button> \
   <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
-  var addresses=[];
-  addresses=jsonCookie['userAddress'];
+
+  //var addresses=[];
+  //addresses=jsonCookie['userAddress'];
   //console.log(addresses);
   var addressHtml="";
   addressHtml+="<h4>Addresses:</h4><hr>"
-  for (var i=0;i<addresses.length;i++){
+  for (var i=0;i<userLocations.length;i++){
     addressHtml+="<span class='glyphicon glyphicon-map-marker' style='padding:10px'></span><b>";
-    addressHtml+=addresses[i]['name'];
+    addressHtml+=userLocations[i]['description'];//ex 'home'
     addressHtml+="</b><br>";
-    addressHtml+=addresses[i]['location'];
+    addressHtml+=userLocations[i]['address1'];
+
+    addressHtml+="</b><br>";
+    addressHtml+=userLocations[i]['city'];
+
+    addressHtml+="</b><br>";
+    addressHtml+=userLocations[i]['postal'];
+
+    addressHtml+="</b><br>";
+    addressHtml+=userLocations[i]['country'];
+
     //pass in i for onclick so we know which to edit
+
+    //////////// instead of passing in i, pass in location id so we know which to edit
     addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='editAddress("+i+")'>Edit</button><br><br> \
     <button type='button' class='btn btn-danger' style='float:right' onclick='deleteAdr("+i+")'>Delete</button><br>";
     addressHtml+="<hr>";

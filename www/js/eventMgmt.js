@@ -1,59 +1,3 @@
-function getCurrentUserID() {
-	var user;
-	var message;
-
-	$.ajax({
-		url: "/users/current",
-		dataType: "json",
-		success: function(json) {
-			user = JSON.parse(json);
-			return user["id"];
-		},
-		statusCode: {
-			401: function(json) {
-				parsed = JSON.parse(json);
-				alert(parsed["message"]);
-			}
-		},
-		error: function() {
-			alert("Ajax request failed");
-		}
-	});
-}
-
-function getUserLocations() {
-	var userId = getCurrentUserID();
-	var message;
-
-	$.ajax({
-		url: "/user/"+ userId +"/locations",
-		dataType: "json",
-		headers:{
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
-		success: function(json) {
-			return JSON.parse(json);
-		},
-		statusCode: {
-			401: function(json) {
-				parsed = JSON.parse(json);
-				alert(parsed["message"]);
-			},
-			403: function(json) {
-				parsed = JSON.parse(json);
-				alert(parsed["message"]);
-			},
-			404: function(json) {
-				parsed = JSON.parse(json);
-				alert(parsed["message"]);
-			}
-		},
-		error: function() {
-			alert("Ajax request failed");
-		}
-	});
-}
-
 function setLocationInput() {
 	var locationInputHTML="";
 	var locationInput = document.getElementById("location-input");
@@ -131,7 +75,7 @@ function modifyEvent(eventID) {
 	var treesHTML = '<div id="trees">';
 	var i;
 	for (i=0;i<trees.length;i++){
-		treesHTML += '<input class="form-control" id="tree'+i+'type" value="'trees[i]["type"]'" type="text"> <input class="form-control" id="tree'+i+'num" value="'trees[i]["quantity"]'" type="text">'
+		treesHTML += '<input class="form-control" id="tree'+i+'type" value="'+trees[i]["type"]+'" type="text"> <input class="form-control" id="tree'+i+'num" value="'+trees[i]["quantity"]+'" type="text">'
 	}
 	treesHTML += '</div><button type="button" class="btn btn-link" onclick="addEventTree('+i+')">+ Add Type</button><br>'
 	document.getElementById("treesForm").innerHTML = treesHTML;
@@ -257,7 +201,7 @@ function addNewEvent(numberTrees){
 	$.ajax({
 		url: "/events",
 		type: "POST",
-		data: bodyRequest;
+		data: bodyRequest,
 		dataType: "json",
 		headers:{
 			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"

@@ -10,6 +10,63 @@ function getCookie(cname) {
     return "";
 }
 
+function getCurrentUser() {
+    var user;
+    var message;
+
+    $.ajax({
+        url: "127.0.0.1:3000/users/current",
+        dataType: "json",
+        success: function(json) {
+            user = JSON.parse(json);
+            return user["user"];
+        },
+        statusCode: {
+            401: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            }
+        },
+        error: function() {
+            alert("Ajax request failed");
+        }
+    });
+}
+
+function getUserLocations() {
+    var user = getCurrentUser();
+    var userId = user['id'];
+    var message;
+
+    $.ajax({
+        url: "127.0.0.1:3000/user/"+ userId +"/locations",
+        dataType: "json",
+        headers:{
+            "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
+        },
+        success: function(json) {
+            return JSON.parse(json);
+        },
+        statusCode: {
+            401: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            403: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            404: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            }
+        },
+        error: function() {
+            alert("Ajax request failed");
+        }
+    });
+}
+
 function hexFromAscii(hexx) {
     var hex = hexx.toString();//force conversion
     var str = '';

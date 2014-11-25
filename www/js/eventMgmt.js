@@ -32,9 +32,9 @@ function getEvent(eventID) {
 	$.ajax({
 		url: "/events/"+eventID,
 		dataType: "json",
-		headers:{
+		/*headers:{
 			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
+		},*/
 		success: function(json) {
 			parsed = JSON.parse(json);
 			return parsed;
@@ -126,9 +126,9 @@ function saveEvent(eventID, numberTrees) {
 		type: "PUT",
 		data: eventData,
 		dataType: "json",
-		headers:{
+		/*headers:{
 			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
+		},*/
 		success: function(json) {
 			window.location.reload();
 		},
@@ -203,9 +203,9 @@ function addNewEvent(numberTrees){
 		type: "POST",
 		data: bodyRequest,
 		dataType: "json",
-		headers:{
+		/*headers:{
 			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
+		},*/
 		success: function(json) {
 			window.location.reload();
 		},
@@ -234,9 +234,9 @@ function deleteEvent(eventID) {
 		url: "/events/"+eventID,
 		type: "DELETE",
 		dataType: "json",
-		headers:{
+		/*headers:{
 			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
+		},*/
 		success: function(json) {
 			parsed = JSON.parse(json);
 			alert(parsed["message"]);

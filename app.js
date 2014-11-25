@@ -30,7 +30,7 @@ server.del("/user/:uid/locations/:id", user.delLocation) //delete a location fro
 //special endpoints
 server.post("/users/current/changePassword", user.updatePassword) //update user's password
 server.post("/users/current/logout", user.logout) //remove users token
-server.post("/users/current/authenticate", user.login) //generate a token for user
+server.post("/users/authenticate", user.login) //generate a token for user
 
 //Events API
 

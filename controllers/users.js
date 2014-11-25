@@ -130,14 +130,38 @@ exports.updateLocation = function(req, res, next){
     res.send(201,new Message("updateLocation"));
 }
 
+/*
+    Working
+    Author: Bill Vandenberk
+*/
 exports.delUser = function(req, res, next){
-    res.send(201,new Message("delUser"))
+    userModel.User.remove({_id:req.params.id},function(err){
+        if(err) res.send(404, new Message("User not found"))
+        res.send(200,new Message("User deleted"))
+    })
 }
 
+/*
+    Works
+    Author: Bill Vandenberk
+*/
 exports.delLocation = function(req, res, next){
-    res.send(201,new Message("delLocation"))
+    userModel.User.findOne({_id:req.params.uid},function(err,user){
+        if(err) res.send(404, new Message("Location not found"))
+            var index = user.locations.indexOf(req.params.id)
+            user.locations.splice(index,1);
+            user.save(function(err){
+                if(err) res.send(400, new Message("Could not update user."))
+                res.send(200,new Message("Location deleted."))
+            })
+        })
 }
 
+/*
+
+THE REST OF THIS STUFF NEEDS AUTH IMPLEMENTED
+
+*/
 exports.updatePassword = function(req, res, next){
     res.send(201,new Message("updatePassword"))
 }

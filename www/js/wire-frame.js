@@ -41,9 +41,9 @@ function getUserLocations() {
     $.ajax({
         url: "127.0.0.1:3000/user/"+ userId +"/locations",
         dataType: "json",
-        headers:{
+        /*headers:{
             "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
-        },
+        },*/
         success: function(json) {
             return JSON.parse(json);
         },
@@ -67,11 +67,7 @@ function getUserLocations() {
     });
 }
 
-function login(){
-    var uid = document.getElementById('login-email');
-    var upa = document.getElementById('login-password');
-    var hashed = sjcl.hash.sha256.hash(upa.value);
-    var hex = sjcl.codec.hex.fromBits(hashed);
+function login(uid, upa, hex){
     if(uid.value != "" && upa.value != ""){
         document.cookie = "User_id_appleseed="+uid.value;
         //here we will pull data set cookies for account details
@@ -81,22 +77,21 @@ function login(){
 
 
         //Theses cookies are here till we have backend - to be removed
-        setAccountCookie(uid);
 
         //I have no idea what I'm doing here, if you can't tell already
         var auth = {};
         auth['email'] = uid.value;
         auth['passwordHash'] = hex.toString();
 
+	var data = JSON.stringify(auth);
+
 	$.ajax({
 		type: "POST",
-		url: "127.0.0.1:3000/users/authenticate",
-		headers: {
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
-		data: auth,
+		url: "http://127.0.0.1:3000/users/authenticate",
+		data: data,
 		dataType: "json",
 		success: function(json) {
+		        setAccountCookie(uid);
                 	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
 		},
 		statusCode: {
@@ -109,6 +104,14 @@ function login(){
 		}
 	});
     }
+}
+
+function loginButton(){
+    var uid = document.getElementById('login-email');
+    var upa = document.getElementById('login-password');
+    var hashed = sjcl.hash.sha256.hash(upa.value);
+    var hex = sjcl.codec.hex.fromBits(hashed);
+    login(uid, upa, hex);
 }
 
 function staffLogin(){
@@ -127,13 +130,12 @@ function staffLogin(){
         auth['email'] = sid.value;
         auth['passwordHash'] = hex.toString();
 
+	var data = JSON.stringify(auth);
+
 	$.ajax({
 		type: "POST",
-		url: "127.0.0.1:3000/users/authenticate",
-		headers: {
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
-		data: auth,
+		url: "http://127.0.0.1:3000/users/authenticate",
+		data: data,
 		dataType: "json",
 		success: function(json) {
                 	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
@@ -153,6 +155,7 @@ function staffLogin(){
 }
 
 function register(){
+    var uid = document.getElementById('register-email')
     var upa = document.getElementById('register-password');
     var upc = document.getElementById('register-confirm');
     var hashed = sjcl.hash.sha256.hash(upa.value);
@@ -162,7 +165,7 @@ function register(){
         uinfo['user'] = {};
         uinfo['user']['firstname'] = document.getElementById('register-first').value;
         uinfo['user']['lastname'] = document.getElementById('register-last').value;
-        uinfo['user']['email'] = document.getElementById('register-email').value;
+        uinfo['user']['email'] = uid.value;
         uinfo['user']['roles'] = [];
 	uinfo['user']['roles'].push("normal");
         uinfo['user']['phone'] = parseInt(document.getElementById('register-phone').value);
@@ -182,19 +185,16 @@ function register(){
 	uinfo['user']['company'] = "";
 	uinfo['user']['emailEnabled'] = false;
 
-	alert(JSON.stringify(uinfo));
+	var data = JSON.stringify(uinfo);
 
 	$.ajax({
 		type: "POST",
 		url: "http://127.0.0.1:3000/users",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		data: JSON.stringify(uinfo),
+		data: data,
 		dataType: "json",
 		success: function(json) {
 			alert("Success!");
-                	login();
+                	login(uid, upa, hex);
 		},
 		statusCode: {
 			400: function(json) {

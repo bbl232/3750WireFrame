@@ -29,7 +29,7 @@ function showEvents(){
                 tr+="<td>Number of registered volunteers "+event.numRegVolunteers+"</td>";
                 if(url.indexOf("volunteer.php") > -1) {
                     tr+='<td><button type="button" class="btn btn-success" onclick="volunteerEvent('+id+')">Register</button></td>';
-                } else if(url.indexOf("event.php") > -1) {
+                } else if(url.indexOf("eventMgmt.php") > -1) {
                     if (event.creator == getCookie("User_id_appleseed")){
                         tr+='<td><button type="button" class="btn btn-primary" onclick="modifyEvent('+id+')">Modify</button></td>';
                     }

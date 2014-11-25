@@ -52,7 +52,7 @@ showEvents();
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<script type="text/javascript" src="js/event.js"></script>
+<script type="text/javascript" src="js/eventMgmt.js"></script>
 <script>
 $( "#datepicker" ).datepicker();
 $('#timepicker').timepicker({

@@ -38,12 +38,23 @@ function login(){
         var auth = {};
         auth['email'] = uid.value;
         auth['passwordHash'] = hex.toString();
-        post("localhost:8080/users/authenticate", auth, function(data, status) {
-            if (status == 200)
-                addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
-            else if (status == 403)
-                alert("Invalid password or email.");
-        });
+
+	$.ajax({
+		url: "127.0.0.1:3000/users/authenticate",
+		data: auth,
+		dataType: "json",
+		success: function(json) {
+                	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+		},
+		statusCode: {
+			403: function(json) {
+				alert("Invalid password or email.");
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
     }
 }
 
@@ -87,12 +98,24 @@ function register(){
         uinfo['user']['userNotes'] = "";
 	uinfo['user']['company'] = "";
 	uinfo['user']['emailEnabled'] = false;
-        post("localhost:8080/users", uinfo, function(data, status) {
-            if (status == 201)
-                login();
-            else if (status == 400)
-                alert("Error: " + data.errors[1]);
-        });
+
+	$.ajax({
+		url: "127.0.0.1:3000/users",
+		data: uinfo,
+		dataType: "json",
+		success: function(json) {
+                	login();
+		},
+		statusCode: {
+			400: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
     }
     else{
         $('#popover-signup').popover('hide');

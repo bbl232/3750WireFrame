@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="/css/dataTables.bootstrap.css">
 <link rel="stylesheet" href="/css/jquery-ui.css">
 <link rel="stylesheet" href="/css/jquery.timepicker.css">
+<link rel="stylesheet" href="/css/bootstrap-timepicker.min.css">
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="/js/jquery-2.1.1.min.js"></script>
@@ -13,6 +14,7 @@
 <script src="/js/jquery-ui.js"></script>
 <script src="/js/jquery.timepicker.js"></script>
 <script src="/js/sjcl.js"></script>
+<script src="/js/bootstrap-timepicker.min.js"></script>
 
 <title>Appleseed Collective</title></head><body>
     <nav class="navbar navbar-default navbar-static-top" role="navigation">

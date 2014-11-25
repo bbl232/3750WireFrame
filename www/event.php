@@ -22,21 +22,26 @@ showEvents();
 		<div class="modal-body" id="add-event_body">
 				<form class="form-inline" role="form">
 					<div id="location-input"></div>
-					<p>Enter Date:<input id="datepicker" type="text" /></p>
-					<p>Enter Time:<input id="time" type="text" class="time ui-timepicker-input" /></p>
-					<p>Enter Duration:<input id="duration" type="text" ></p>
-					<p>Enter Number of volunteers:<input id="volunteers" type="text" ></p>
-					<form class="form-horizontal" role="form">
-						<p>Check All Applicable Tree Types:</p>
-						<div class="checkbox">
-							<label><input type="checkbox" id="apple-check"> Apple</label>
-							<label><input type="checkbox" id="orange-check"> Orange</label>
-							<label><input type="checkbox" id="pear-check"> Pear</label>
-							<label><input type="checkbox" id="cherry-check"> Cherry</label>
-							<label><input type="checkbox" id="other-check"> other</label>
+					<label>Enter Date:</label><input class="form-control" id="datepicker" type="text" /><br>
+					<div class="bootstrap-timepicker">
+						<label>Enter Start Time:</label>
+						<input id="timepicker" type="text" value="10:30 AM" class="form-control">
+						<i class="icon-time"></i>
+					</div>
+					<div class="bootstrap-timepicker">
+						<label>Enter End Time:</label>
+						<input id="timepicker2" type="text" value="11:30 AM" class="form-control">
+						<i class="icon-time"></i>
+					</div>
+					<label>Enter Number of volunteers required:</label><input class="form-control" id="volunteers" type="text" ><br>
+					<label>Enter Tree Types and Numbers:</label><br>
+					<div id="treesForm">
+						<div id="trees">
+							<input class="form-control" id="tree1type" placeholder="Type" type="text">
+							<input class="form-control" id="tree1num" placeholder="Number" type="text">
 						</div>
-									<input type="text" class="form-control" placeholder="If &quot;other&quot;, please enter here" id="tree-type-other" disabled>
-					</form>
+						<button type="button" class="btn btn-link" onclick="addEventTree(1)">+ Add Type</button><br>
+					</div>
 					<label>Please describe the event:</label><br><textarea rows="7" id="tree-text" class="form-control"></textarea><br>
 				</form>
 			</div>
@@ -51,7 +56,18 @@ showEvents();
 <script type="text/javascript" src="js/event.js"></script>
 <script>
 $( "#datepicker" ).datepicker();
-$( "#time" ).timepicker();
+$('#timepicker').timepicker({
+				minuteStep: 15,
+				showInputs: false,
+				template: 'modal',
+				showMeridian: true
+			});
+$('#timepicker2').timepicker({
+				minuteStep: 15,
+				showInputs: false,
+				template: 'modal',
+				showMeridian: true
+			});
 </script>
 </div>
 <?php

@@ -163,21 +163,26 @@ function register(){
         uinfo['user']['firstname'] = document.getElementById('register-first').value;
         uinfo['user']['lastname'] = document.getElementById('register-last').value;
         uinfo['user']['email'] = document.getElementById('register-email').value;
-        uinfo['user']['roles'] = ["normal"];
+        uinfo['user']['roles'] = [];
+	uinfo['user']['roles'].push("normal");
         uinfo['user']['phone'] = parseInt(document.getElementById('register-phone').value);
         uinfo['user']['passwordHash'] = hex.toString();
         uinfo['user']['locations'] = [];
-        uinfo['user']['locations']['description'] = "Home";
-        uinfo['user']['locations']['address1'] = document.getElementById('register-address').value;
-        uinfo['user']['locations']['address2'] = "";
-        uinfo['user']['locations']['city'] = document.getElementById('register-city').value;
-        uinfo['user']['locations']['postal'] = document.getElementById('register-postal').value;
-        uinfo['user']['locations']['country'] = document.getElementById('register-country').value;
-        uinfo['user']['locations']['latitude'] = "";
-        uinfo['user']['locations']['longitude'] = "";
+	var loc = {};
+        loc['description'] = "Home";
+        loc['address1'] = document.getElementById('register-address').value;
+        loc['address2'] = "";
+        loc['city'] = document.getElementById('register-city').value;
+        loc['postal'] = document.getElementById('register-postal').value;
+        loc['country'] = document.getElementById('register-country').value;
+        loc['latitude'] = "";
+        loc['longitude'] = "";
+	uinfo['user']['locations'].push(loc);
         uinfo['user']['userNotes'] = "";
 	uinfo['user']['company'] = "";
 	uinfo['user']['emailEnabled'] = false;
+
+	alert(JSON.stringify(uinfo));
 
 	$.ajax({
 		type: "POST",

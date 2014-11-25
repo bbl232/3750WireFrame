@@ -75,7 +75,7 @@ require("includes/header.php");
 				<button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="register()">Register</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
-		</div><!-- /.modal-content --
+		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script type="text/javascript" src="js/index.js"></script>

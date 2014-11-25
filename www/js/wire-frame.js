@@ -41,9 +41,9 @@ function getUserLocations() {
     $.ajax({
         url: "127.0.0.1:3000/user/"+ userId +"/locations",
         dataType: "json",
-        headers:{
+        /*headers:{
             "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
-        },
+        },*/
         success: function(json) {
             return JSON.parse(json);
         },

@@ -15,7 +15,7 @@ function getCurrentUser() {
     var message;
 
     $.ajax({
-        url: "127.0.0.1:3000/users/current",
+        url: "http://127.0.0.1:3000/users/current",
         dataType: "json",
         success: function(json) {
             user = JSON.parse(json);
@@ -33,13 +33,45 @@ function getCurrentUser() {
     });
 }
 
-function getUserLocations() {
-    var user = getCurrentUser();
-    var userId = user['id'];
+function getEvent(eventID) {
+    $.ajax({
+        url: "http://127.0.0.1:3000/events/"+eventID,
+        dataType: "json",
+        /*headers:{
+            "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
+        },*/
+        success: function(json) {
+            return JSON.parse(json);
+        },
+        statusCode: {
+            201: function(json) {
+                parsed = JSON.parse(json);
+                return parsed;
+            },
+            404: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            401: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            403: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            }
+        },
+        error: function() {
+            alert("Ajax request failed");
+        }
+    });
+}
+
+function getUserLocations(userId) {
     var message;
 
     $.ajax({
-        url: "127.0.0.1:3000/user/"+ userId +"/locations",
+        url: "http://127.0.0.1:3000/user/"+ userId +"/locations",
         dataType: "json",
         /*headers:{
             "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token

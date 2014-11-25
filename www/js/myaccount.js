@@ -10,6 +10,8 @@ function getCookie(cname) {
     return "";
 }
 
+/*This function will initially setup the Account Details page
+and put the current users information on screen available for edit*/
 function setupAccDetails(){
   var userName=document.getElementById("userName");
   var email=document.getElementById("email");
@@ -18,8 +20,9 @@ function setupAccDetails(){
   var userInfo;
   var message;
 
-  //first we get current user information
+  //first we get current user information, this function can be replaced to function call in wireframe
   $.ajax({
+    type:"GET",
     url: "127.0.0.1:3000/users/current",
     dataType: "json",
     success: function(json) {
@@ -38,7 +41,7 @@ function setupAccDetails(){
   });
 
 
-
+  //parse json data
   var userID=userInfo['user']['id'];
   var userFirst=userInfo['user']['firstname'];
   var userLast=userInfo['user']['lastname'];
@@ -47,19 +50,10 @@ function setupAccDetails(){
   var userLocations=[];
   userLocations=userInfo['user']['locations'];
 
-
-
-  //var userDetails=getCookie("account_details_appleseed");
-
-  var jsonCookie=JSON.parse(userDetails);
+  //get element for user regular info from myaccount.php
   var bodyReg=document.getElementById('regularInfo');
-  //bodyReg.innerHTML="<table> \
-  //<tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+jsonCookie['userID']+"</td></tr> \
-  //<tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+jsonCookie['userEmail']+"</td></tr> \
-  //<tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
-  //<button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount()'>Delete Account</button> \
-  //<button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
+  //Populate user info page without locations
   bodyReg.innerHTML="<table> \
   <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+userEmail+"</td></tr> \
   <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+userFirst+" "+userLast+"</td></tr> \
@@ -68,9 +62,7 @@ function setupAccDetails(){
   <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
 
-  //var addresses=[];
-  //addresses=jsonCookie['userAddress'];
-  //console.log(addresses);
+  //display list of locations below user info
   var addressHtml="";
   addressHtml+="<h4>Addresses:</h4><hr>"
   for (var i=0;i<userLocations.length;i++){
@@ -102,11 +94,38 @@ function setupAccDetails(){
 }
 
 function editRegular(){
-  var userDetails=getCookie("account_details_appleseed");
-  var jsonCookie=JSON.parse(userDetails);
+  //var userDetails=getCookie("account_details_appleseed");
+  //var jsonCookie=JSON.parse(userDetails);
+  //first we get current user information, this function can be replaced to function call in wireframe
+  $.ajax({
+    type:"GET",
+    url: "127.0.0.1:3000/users/current",
+    dataType: "json",
+    success: function(json) {
+      userInfo = JSON.parse(json);
+      //return user["id"];
+    },
+    statusCode: {
+      401: function(json) {
+        parsed = JSON.parse(json);
+        alert(parsed["message"]);
+      }
+    },
+    error: function() {
+      alert("Ajax request failed");
+    }
+  });
+
+
+
+  var userID=userInfo['user']['id'];
+  var userFirst=userInfo['user']['firstname'];
+  var userLast=userInfo['user']['lastname'];
+  var userEmail=userInfo['user']['email'];
+  var userPhone=userInfo['user']['phone'];
 
   var bodyReg=document.getElementById('message-modal_body');
-  bodyReg.innerHTML=" \
+  /*bodyReg.innerHTML=" \
   <form id='editRegular-form'> \
     <div class='input-group'> \
       <span class='glyphicon glyphicon-user' style='padding:10px'></span><input type='text' class='form-control' name='userName' id='userName' value='"+jsonCookie['userID']+"'> \
@@ -120,8 +139,25 @@ function editRegular(){
     <div class='input-group'> \
     <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveRegInfo()'>Save</button><br> \
     </div> \
+  </form>";*/
+  bodyReg.innerHTML=" \
+  <form id='editRegular-form'> \
+    <div class='input-group'> \
+      <span class='glyphicon glyphicon-envelope' style='padding:10px'></span><input type='text' class='form-control' name='userEmail' id='userEmail' value='"+userEmail+"'> \
+    </div><br> \
+    <div class='input-group'> \
+      <span class='glyphicon glyphicon-user' style='padding:10px'></span><input type='text' class='form-control' name='userFirst' id='userFirst' value='"+userFirst+"'> \
+    </div><br> \
+    <div class='input-group'> \
+      <span class='glyphicon glyphicon-user' style='padding:10px'></span><input type='text' class='form-control' name='userLast' id='userLast' value='"+userLast+"'> \
+    </div><br> \
+    <div class='input-group'> \
+      <span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span><input type='text' class='form-control' name='userPhone' id='userPhone' value='"+userPhone+"'> \
+    </div><br> \
+    <div class='input-group'> \
+    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveRegInfo("+userID+")'>Save</button><br> \
+    </div> \
   </form>";
-
 
   /*<table> \
   <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td><input type='text' class='form-control' name='userName' id='userName' value='"+jsonCookie['userID']+"'></form></td></tr> \
@@ -213,20 +249,49 @@ function returnHome(){
   document.location="index.php";
 }
 
-function saveRegInfo(){
-  var userName=$('#userName').val();
+function saveRegInfo(userID){
   var userEmail=$('#userEmail').val();
   var userPhone=$('#userPhone').val();
+  var userFirst=$('#userFirst').val();
+  var userLast=$('#userLast').val();
 
-  if(userName !=""&&userEmail!="" && userPhone!=""){
+  if(userEmail!="" && userPhone!=""&&userFirst !=""&&userLast!=""){
 
-    var userDetails=getCookie("account_details_appleseed");
-    var jsonCookie=JSON.parse(userDetails);
-    jsonCookie['userID']=userName;
-    jsonCookie['userEmail']=userEmail;
-    jsonCookie['userPhone']=userPhone;
-    document.cookie = "User_id_appleseed="+userName;
-    document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+  //build json object to edit user details
+  var jsonObj={};
+  jsonObj['user']={};
+  jsonObj['user']['phone']=userPhone;
+  jsonObj['user']['firstname']=userFirst;
+  jsonObj['user']['lastname']=userLast;
+
+  var data=JSON.stringify(jsonObj);
+
+  $.ajax({
+    type:"PUT",
+    url: "127.0.0.1:3000/user/"+userID,
+    data: data,
+    dataType: "json",
+    success: function(json) {
+      userInfo = JSON.parse(json);
+      //return user["id"];
+    },
+    statusCode: {
+      401: function(json) {
+        parsed = JSON.parse(json);
+        alert(parsed["message"]);
+      }
+    },
+    error: function() {
+      alert("Ajax request failed");
+    }
+  });
+    //var userDetails=getCookie("account_details_appleseed");
+    //var jsonCookie=JSON.parse(userDetails);
+    //jsonCookie['userID']=userName;
+    //jsonCookie['userEmail']=userEmail;
+    //jsonCookie['userPhone']=userPhone;
+    //document.cookie = "User_id_appleseed="+userName;
+    //document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
     window.location = window.location;
   }
   else{

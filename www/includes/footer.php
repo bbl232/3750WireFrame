@@ -46,6 +46,5 @@
     <ul class="nav navbar-nav navbar-left" id="footer-left"></ul>
   </div>
 </nav>
-<script src="/js/trees.js"></script>
 <script src="/js/footer.js"></script>
 </html>

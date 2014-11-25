@@ -81,6 +81,7 @@ function addEventTree(numberTrees) {
 	var trees = document.getElementById("trees").innerHTML;
 	trees += '<br><input class="form-control" id="tree'+ numberTrees +'type" placeholder="Type" type="text"> <input class="form-control" id="tree'+ numberTrees +'num" placeholder="Number" type="text">';
 	document.getElementById("treesForm").innerHTML = '<div id="trees">'+ trees +'</div><button type="button" class="btn btn-link" onclick="addEventTree('+ numberTrees +')">+ Add Type</button><br>';
+	document.getElementById("addEvent").onclick = "addNewEvent("+ numberTrees +")";
 }
 
 function modifyEvent(eventID) {
@@ -99,54 +100,88 @@ function modifyEvent(eventID) {
 	$('#addEventModal').modal('show');
 }
 
-function builBodyRequest(numberTrees) {
-	var idOwner = getCurrentUserID();
-	var description = document.getElementById("tree-text").value;
-	var location; // TODO get owner's location id
+function getLocation(description) {
+	var addresses = getUserLocations();
 
+	for (var i=0;i<addresses.length;i++){
+		if(addresses[i]['description'].localCompare(description) == 0) {
+			return addresses[i]['id'];
+		}
+	}
 
-	return {"event": {
-		"owner": {
-			"id": idOwner,
-		},
-		"description": description,
-		"location": {
-			"id": idLocation,
-		},
-		"datetime": date,
-		"endtime": end,
-		"trees": [
-            {
-                "type": "Apple",
-                "quantity": 2,
-            }
-        ],
-        "attendees": [
-            {
-                "id": 2
-            },
-            {
-                "id": 3
-            }
-        ],
-        "staffNotes": ""
-    }
+	return -1;
+}
 
+function getTrees(numberTrees) {
+	var trees = [];
+
+	for(var i=0;i<numberTrees;i++) {
+		trees[i] = {
+				"type": document.getElementById("tree"+i+"type").value,
+				"quantity": document.getElementById("tree"+i+"num").value
+			}
 	}
 }
 
-function addNewEvent(){
-	//var user_id = getCookie("User_id_appleseed");
-	//var address = document.getElementById("location").value;
-	//var date = document.getElementById("datepicker").value;
-	//var time = document.getElementById("timepicker").value;
-	//var duration = document.getElementById("duration").value;
-	//var numVol = document.getElementById("volunteers").value;
-	//var trees = [{'Apple':2}, {'Cherry':1}];
-	//addEvent(user_id, address, date, time, duration, numVol, trees);
-	//window.location.reload();
-	//alert(time);
-	getCurrentUserID();
+function builBodyRequest(numberTrees) {
+	var idOwner = getCurrentUserID();
+	var description = document.getElementById("tree-text").value;
+	var idLocation = getLocation(document.getElementById("location").value);
+	var date = document.getElementById("datepicker").value;
+	var time = document.getElementById("timepicker").value;
+	var end = document.getElementById("timepicker2").value;
+	var dateTime = new Date(date, time);
+	var endTime = new Date(date, end);
+	var trees = getTrees();
+
+	return {
+		"event": {
+			"owner": {
+				"id": idOwner,
+			},
+			"description": description,
+			"location": {
+				"id": idLocation,
+			},
+			"datetime": dateTime.toISOString(),
+			"endtime": endTime.toISOString(),
+			"trees": trees
+		}
+	};
+}
+
+function addNewEvent(numberTrees){
+	var bodyRequest = builBodyRequest(numberTrees);
+
+	$.ajax({
+		url: "/events",
+		type: "POST",
+		data: bodyRequest;
+		dataType: "json",
+		headers:{
+			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
+		},
+		success: function(json) {
+			window.location.reload();
+		},
+		statusCode: {
+			400: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]+"<br>"+parsed["errors"]);
+			},
+			401: function(json) {
+				message = JSON.parse(json);
+				alert(message);
+			},
+			403: function(json) {
+				message = JSON.parse(json);
+				alert(message);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
 }
 
 function deleteEvent(eventID) {

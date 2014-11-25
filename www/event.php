@@ -1,16 +1,27 @@
 <?php
 	require("includes/header.php");
-	?>
-	<div class="container">
-	<?php
-	require("eventsList.php");
 ?>
-<script>
-showEvents();
-</script>
 
-<div class='pull-right'>
-	<button type="button" class="btn btn-success" onclick="newEvent()">Add New Event</button>
+<div class="container">
+	<div class="row">
+		<div class='pull-left'>
+			<h1 class='page-header'>Event Management</h1>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='pull-right'>
+			<button type="button" class="btn btn-success" onclick="newEvent()">Add New Event</button>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<?php
+			require("eventsList.php");
+		?>
+	</div>
+	<script>
+		showEvents();
+	</script>
 </div>
 
 <div class="modal fade" id="addEventModal">
@@ -68,7 +79,6 @@ $('#timepicker2').timepicker({
 				showMeridian: false
 			});
 </script>
-</div>
 <?php
 	require("includes/footer.php");
 ?>

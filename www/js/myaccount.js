@@ -10,6 +10,8 @@ function getCookie(cname) {
     return "";
 }
 
+/*This function will initially setup the Account Details page
+and put the current users information on screen available for edit*/
 function setupAccDetails(){
   var userName=document.getElementById("userName");
   var email=document.getElementById("email");
@@ -39,7 +41,7 @@ function setupAccDetails(){
   });
 
 
-
+  //parse json data
   var userID=userInfo['user']['id'];
   var userFirst=userInfo['user']['firstname'];
   var userLast=userInfo['user']['lastname'];
@@ -48,19 +50,10 @@ function setupAccDetails(){
   var userLocations=[];
   userLocations=userInfo['user']['locations'];
 
-
-
-  //var userDetails=getCookie("account_details_appleseed");
-
-  var jsonCookie=JSON.parse(userDetails);
+  //get element for user regular info from myaccount.php
   var bodyReg=document.getElementById('regularInfo');
-  //bodyReg.innerHTML="<table> \
-  //<tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+jsonCookie['userID']+"</td></tr> \
-  //<tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+jsonCookie['userEmail']+"</td></tr> \
-  //<tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+jsonCookie['userPhone']+"</td></tr><tr> \
-  //<button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount()'>Delete Account</button> \
-  //<button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
+  //Populate user info page without locations
   bodyReg.innerHTML="<table> \
   <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+userEmail+"</td></tr> \
   <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+userFirst+" "+userLast+"</td></tr> \
@@ -69,9 +62,7 @@ function setupAccDetails(){
   <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
 
-  //var addresses=[];
-  //addresses=jsonCookie['userAddress'];
-  //console.log(addresses);
+  //display list of locations below user info
   var addressHtml="";
   addressHtml+="<h4>Addresses:</h4><hr>"
   for (var i=0;i<userLocations.length;i++){
@@ -266,6 +257,7 @@ function saveRegInfo(userID){
 
   if(userEmail!="" && userPhone!=""&&userFirst !=""&&userLast!=""){
 
+  //build json object to edit user details
   var jsonObj={};
   jsonObj['user']={};
   jsonObj['user']['phone']=userPhone;

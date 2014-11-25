@@ -10,6 +10,9 @@ function getCookie(cname) {
     return "";
 }
 
+/*
+	getCurrentUser() - return the current logged in user
+*/
 function getCurrentUser() {
     var user;
     var message;
@@ -33,6 +36,9 @@ function getCurrentUser() {
     });
 }
 
+/*
+	getCurrentUser() - return the locations for the current user
+*/
 function getUserLocations() {
     var user = getCurrentUser();
     var userId = user['id'];
@@ -67,6 +73,12 @@ function getUserLocations() {
     });
 }
 
+/*
+	login() - log the user in.
+		uid - the object returned from the email field
+		upa - the object returned from the password field
+		hex - the hex string of the password hash
+*/
 function login(uid, upa, hex){
     if(uid.value != "" && upa.value != ""){
         document.cookie = "User_id_appleseed="+uid.value;
@@ -74,9 +86,6 @@ function login(uid, upa, hex){
         //document.cookie = "Email_appleseed=testEmail";
         //document.cookie = "eAddress_appleseed=rmarcott@uoguelph.ca";
         //document.cookie = "Phone_appleseed=519-249-9220";
-
-
-        //Theses cookies are here till we have backend - to be removed
 
         //I have no idea what I'm doing here, if you can't tell already
         var auth = {};
@@ -106,6 +115,11 @@ function login(uid, upa, hex){
     }
 }
 
+/*
+	loginButton() - collect the information from the login fields and
+	pass it to login(). This function exists solely so that register()
+	can call the login() function and pass data to the 
+*/
 function loginButton(){
     var uid = document.getElementById('login-email');
     var upa = document.getElementById('login-password');

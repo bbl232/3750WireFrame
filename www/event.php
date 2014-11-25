@@ -33,7 +33,6 @@ showEvents();
 						<input id="timepicker2" type="text" value="11:30 AM" class="form-control">
 						<i class="icon-time"></i>
 					</div>
-					<label>Enter Number of volunteers required:</label><input class="form-control" id="volunteers" type="text" ><br>
 					<label>Enter Tree Types and Numbers:</label><br>
 					<div id="treesForm">
 						<div id="trees">
@@ -60,13 +59,13 @@ $('#timepicker').timepicker({
 				minuteStep: 15,
 				showInputs: false,
 				template: 'modal',
-				showMeridian: true
+				showMeridian: false
 			});
 $('#timepicker2').timepicker({
 				minuteStep: 15,
 				showInputs: false,
 				template: 'modal',
-				showMeridian: true
+				showMeridian: false
 			});
 </script>
 </div>

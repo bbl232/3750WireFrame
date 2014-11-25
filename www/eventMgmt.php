@@ -57,7 +57,7 @@
 				</form>
 			</div>
 			<div class="modal-footer" id="footerModal">
-				<button type="button" class="btn btn-primary" id="addEvent" data-dismiss="modal" onclick="addNewEvent(1)">Create</button>
+				<button type="button" class="btn btn-primary" id="addEvent" data-dismiss="modal" onclick="addNewEvent()">Create</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div><!-- /.modal-content -->

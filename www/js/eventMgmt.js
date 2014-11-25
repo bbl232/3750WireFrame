@@ -1,3 +1,9 @@
+/*
+	setLocationInput() - creates an input with all the current user's locations
+	It uses getCurrentUser to get the current user.
+	Then it uses getUserLocations to get all the user's locations.
+	Finaly it parses all the locations into select option input
+*/
 function setLocationInput() {
 	var locationInputHTML="";
 	var locationInput = document.getElementById("location-input");
@@ -7,8 +13,8 @@ function setLocationInput() {
 	locationInputHTML+='<div class="form-group"><label>Choose a location:</label><select class="form-control" id="location">';
 	for (var i=0;i<addresses.length;i++){
 		locationInputHTML+='<option value=';
-		locationInputHTML+=addresses[i]['description'];
-		locationInputHTML+=">";
+		locationInputHTML+=addresses[i]['id'];
+		locationInputHTML+="'>";
 		locationInputHTML+=addresses[i]['description'];
 		locationInputHTML+="</option>";
 	}
@@ -16,11 +22,21 @@ function setLocationInput() {
 	locationInput.innerHTML=locationInputHTML;
 }
 
+/*
+	newEvent - shows the modal to create an event
+	calls setLocationInput to set all the user's locations into input
+*/
 function newEvent() {
 	setLocationInput();
 	$('#addEventModal').modal('show');
 }
 
+/*
+	addEventTree() - adds a new tree input field
+		numberTrees - the actual number of fields
+	it adds the new field to the actual number of fields
+	and updates the number of fields store in the hidden input "trees-number"
+*/
 function addEventTree(numberTrees) {
 	var trees = document.getElementById("trees").innerHTML;
 	trees += '<br><input class="form-control" id="tree'+ numberTrees +'type" placeholder="Type" type="text"> <input class="form-control" id="tree'+ numberTrees +'num" placeholder="Number" type="text">';
@@ -28,6 +44,13 @@ function addEventTree(numberTrees) {
 	document.getElementById("treesForm").innerHTML = '<div id="trees">'+ trees +'</div><input id="trees-number" type="hidden" value="'+ numberTrees +'"><button type="button" class="btn btn-link" onclick="addEventTree('+ numberTrees +')">+ Add Type</button><br>';
 }
 
+/*
+	modifyEvent() - shows the modal with the events value
+		eventID - the ID of the event to show
+	The modifiation of an event uses the same modal as the vent creation.
+	The user can only change the end time, the trees and the description.
+	A staff can add a note. TODO
+*/
 function modifyEvent(eventID) {
 	var myEvent = getEvent(eventID);
 
@@ -55,6 +78,10 @@ function modifyEvent(eventID) {
 	$('#addEventModal').modal('show');
 }
 
+/*
+	getTrees() - gets all the trees values from the fields
+		numberTrees - number of fields
+*/
 function getTrees(numberTrees) {
 	var trees = [];
 	var type;
@@ -73,6 +100,10 @@ function getTrees(numberTrees) {
 	return trees;
 }
 
+/*
+	saveRequest() - creates a JSON string to modify an event
+		eventID - the ID of the event to modify
+*/
 function saveRequest(eventID) {
 	var description = document.getElementById("tree-text").value;
 	var date = document.getElementById("datepicker").value;
@@ -91,6 +122,10 @@ function saveRequest(eventID) {
 	return JSON.stringify(bodyEvent);
 }
 
+/*
+	saveEvent - saves the event modification to the database
+		eventID - the ID of the event to modify
+*/
 function saveEvent(eventID) {
 	var eventData = saveRequest(eventID);
 
@@ -129,26 +164,15 @@ function saveEvent(eventID) {
 	});
 }
 
-function getLocation(description) {
-	var user = getCurrentUser();
-	var userId = user['id'];
-	var addresses = getUserLocations(userId);
-
-	for (var i=0;i<addresses.length;i++){
-		if(addresses[i]['description'].localCompare(description) == 0) {
-			return parseInt(addresses[i]['id']);
-		}
-	}
-
-	return -1;
-}
-
+/*
+	buildBodyRequest() - build a JSON string to create an event
+*/
 function builBodyRequest() {
 	var numberTrees = parseInt(document.getElementById("trees-number").value);
 	var user = getCurrentUser();
 	var idOwner = user['id'];
 	var description = document.getElementById("tree-text").value;
-	var idLocation = getLocation(document.getElementById("location").value);
+	var idLocation = parseInt(document.getElementById("location").value);
 	var date = document.getElementById("datepicker").value;
 	var time = document.getElementById("timepicker").value;
 	var end = document.getElementById("timepicker2").value;
@@ -172,8 +196,11 @@ function builBodyRequest() {
 	return JSON.stringify(bodyEvent);
 }
 
-function addNewEvent(numberTrees){
-	var bodyRequest = builBodyRequest(numberTrees);
+/*
+	addNewEvent() - add a new event to the database
+*/
+function addNewEvent(){
+	var bodyRequest = builBodyRequest();
 
 	$.ajax({
 		url: "http://127.0.0.1:3000/events",
@@ -206,6 +233,10 @@ function addNewEvent(numberTrees){
 	});
 }
 
+/*
+	deleteEvent() - delete an event from the database
+		eventID - the id of the event to delete
+*/
 function deleteEvent(eventID) {
 	$.ajax({
 		url: "http://127.0.0.1:3000/events/"+eventID,

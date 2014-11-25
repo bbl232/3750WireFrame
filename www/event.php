@@ -26,17 +26,18 @@ showEvents();
 					<p>Enter Time:<input id="time" type="text" class="time ui-timepicker-input" /></p>
 					<p>Enter Duration:<input id="duration" type="text" ></p>
 					<p>Enter Number of volunteers:<input id="volunteers" type="text" ></p>
-				</form>
-				<form class="form-horizontal" role="form">
-					<p>Check All Applicable Tree Types:</p>
-					<div class="checkbox">
-						<label><input type="checkbox" id="apple-check"> Apple</label>
-						<label><input type="checkbox" id="orange-check"> Orange</label>
-						<label><input type="checkbox" id="pear-check"> Pear</label>
-						<label><input type="checkbox" id="cherry-check"> Cherry</label>
-						<label><input type="checkbox" id="other-check"> other</label>
-					</div>
-                      			<input type="text" class="form-control" placeholder="If &quot;other&quot;, please enter here" id="tree-type-other" disabled>
+					<form class="form-horizontal" role="form">
+						<p>Check All Applicable Tree Types:</p>
+						<div class="checkbox">
+							<label><input type="checkbox" id="apple-check"> Apple</label>
+							<label><input type="checkbox" id="orange-check"> Orange</label>
+							<label><input type="checkbox" id="pear-check"> Pear</label>
+							<label><input type="checkbox" id="cherry-check"> Cherry</label>
+							<label><input type="checkbox" id="other-check"> other</label>
+						</div>
+									<input type="text" class="form-control" placeholder="If &quot;other&quot;, please enter here" id="tree-type-other" disabled>
+					</form>
+					<label>Please describe the event:</label><br><textarea rows="7" id="tree-text" class="form-control"></textarea><br>
 				</form>
 			</div>
 			<div class="modal-footer" id="footer">

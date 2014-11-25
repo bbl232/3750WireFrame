@@ -14,167 +14,81 @@ function getCookie(cname) {
 	getCurrentUser() - return the current logged in user
 */
 function getCurrentUser() {
-    var user;
-    var message;
-
-    $.ajax({
-        url: "http://127.0.0.1:3000/users/current",
-        dataType: "json",
-        success: function(json) {
-            user = JSON.parse(json);
-            return user["user"];
-        },
-        statusCode: {
-            401: function(json) {
-                parsed = JSON.parse(json);
-                alert(parsed["message"]);
-            }
-        },
-        error: function() {
-            alert("Ajax request failed");
-        }
-    });
-}
-
-function getEvent(eventID) {
-    $.ajax({
-        url: "http://127.0.0.1:3000/events/"+eventID,
-        dataType: "json",
-        /*headers:{
-            "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-        },*/
-        success: function(json) {
-            return JSON.parse(json);
-        },
-        statusCode: {
-            201: function(json) {
-                parsed = JSON.parse(json);
-                return parsed;
-            },
-            404: function(json) {
-                parsed = JSON.parse(json);
-                alert(parsed["message"]);
-            },
-            401: function(json) {
-                parsed = JSON.parse(json);
-                alert(parsed["message"]);
-            },
-            403: function(json) {
-                parsed = JSON.parse(json);
-                alert(parsed["message"]);
-            }
-        },
-        error: function() {
-            alert("Ajax request failed");
-        }
-    });
-}
-
-function getUserLocations(userId) {
-    var message;
-
-    $.ajax({
-        url: "http://127.0.0.1:3000/user/"+ userId +"/locations",
-        dataType: "json",
-        /*headers:{
-            "Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
-        },*/
-        success: function(json) {
-            return JSON.parse(json);
-        },
-        statusCode: {
-            401: function(json) {
-                parsed = JSON.parse(json);
-                alert(parsed["message"]);
-            },
-            403: function(json) {
-                parsed = JSON.parse(json);
-                alert(parsed["message"]);
-            },
-            404: function(json) {
-                parsed = JSON.parse(json);
-                alert(parsed["message"]);
-            }
-        },
-        error: function() {
-            alert("Ajax request failed");
-        }
-    });
-}
-
-function login(){
-    var uid = document.getElementById('login-email');
-    var upa = document.getElementById('login-password');
-    var hashed = sjcl.hash.sha256.hash(upa.value);
-    var hex = sjcl.codec.hex.fromBits(hashed);
-    if(uid.value != "" && upa.value != ""){
-        document.cookie = "User_id_appleseed="+uid.value;
-        //here we will pull data set cookies for account details
-        //document.cookie = "Email_appleseed=testEmail";
-        //document.cookie = "eAddress_appleseed=rmarcott@uoguelph.ca";
-        //document.cookie = "Phone_appleseed=519-249-9220";
-
-
-        //Theses cookies are here till we have backend - to be removed
-        setAccountCookie(uid);
-
-        //I have no idea what I'm doing here, if you can't tell already
-        var auth = {};
-        auth['email'] = uid.value;
-        auth['passwordHash'] = hex.toString();
+	var user;
+	var message;
 
 	$.ajax({
-		type: "POST",
-		url: "127.0.0.1:3000/users/authenticate",
-		headers: {
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
-		data: auth,
+		url: "127.0.0.1:3000/users/current",
 		dataType: "json",
 		success: function(json) {
-                	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+			user = JSON.parse(json);
+			return user["user"];
 		},
 		statusCode: {
-			403: function(json) {
-				alert("Invalid password or email.");
+			401: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
 			}
 		},
 		error: function() {
 			alert("Ajax request failed");
 		}
 	});
-    }
 }
 
-function staffLogin(){
-    var sid = document.getElementById('staff-login-email');
-    var spa = document.getElementById('staff-login-password');
-    var hashed = sjcl.hash.sha256.hash(spa.value);
-    var hex = sjcl.codec.hex.fromBits(hashed);
-    if(sid.value != "" && spa.value != ""){
-        document.cookie = "User_id_appleseed="+sid.value;
-        document.cookie = "Staff_id_appleseed=staff";
-
-        //Theses cookies are here till we have backend - to be removed
-        setAccountCookie(sid);
-
-        var auth = {};
-        auth['email'] = sid.value;
-        auth['passwordHash'] = hex.toString();
-
+/*
+	getEvent - return an event object
+		eventID - the ID of the event to look up
+*/
+function getEvent(eventID) {
 	$.ajax({
-		type: "POST",
-		url: "127.0.0.1:3000/users/authenticate",
-		headers: {
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},
-		data: auth,
+		url: "http://127.0.0.1:3000/events/"+eventID,
 		dataType: "json",
 		/*headers:{
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
+		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
 		},*/
 		success: function(json) {
-                	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+			return JSON.parse(json);
+		},
+		statusCode: {
+			201: function(json) {
+				parsed = JSON.parse(json);
+				return parsed;
+			},
+			404: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			401: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			403: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
+}
+
+/*
+	getUserLocations() - return the locations for the specified user
+		userID - the ID of the user
+*/
+function getUserLocations(userId) {
+	var message;
+
+	$.ajax({
+		url: "http://127.0.0.1:3000/user/"+ userId +"/locations",
+		dataType: "json",
+		/*headers:{
+		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
+		},*/
+		success: function(json) {
+			return JSON.parse(json);
 		},
 		statusCode: {
 			401: function(json) {
@@ -182,7 +96,12 @@ function staffLogin(){
 				alert(parsed["message"]);
 			},
 			403: function(json) {
-				alert("Invalid password or email.");
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			404: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
 			}
 		},
 		error: function() {
@@ -191,8 +110,45 @@ function staffLogin(){
 	});
 }
 
-        window.location.href = "/";
-    }
+/*
+	login() - log the user in.
+		uid - the object returned from the email field
+		upa - the object returned from the password field
+		hex - the hex string of the password hash
+*/
+function login(uid, upa, hex) {
+	if (uid.value != "" && upa.value != ""){
+		document.cookie = "User_id_appleseed="+uid.value;
+		//here we will pull data set cookies for account details
+		//document.cookie = "Email_appleseed=testEmail";
+		//document.cookie = "eAddress_appleseed=rmarcott@uoguelph.ca";
+		//document.cookie = "Phone_appleseed=519-249-9220";
+
+		var auth = {};
+		auth['email'] = uid.value;
+		auth['passwordHash'] = hex.toString();
+
+		var data = JSON.stringify(auth);
+
+		$.ajax({
+			type: "POST",
+			url: "http://127.0.0.1:3000/users/authenticate",
+			data: data,
+			dataType: "json",
+			success: function(json) {
+				setAccountCookie(uid);
+		        	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+			},
+			statusCode: {
+				403: function(json) {
+					alert("Invalid password or email.");
+				}
+			},
+			error: function() {
+				alert("Ajax request failed");
+			}
+		});
+	}
 }
 
 /*
@@ -319,22 +275,16 @@ function logout(){
 		type: "POST",
 		url: "http://127.0.0.1:3000/users/current/logout",
 		success: function(json) {
-			alert("Success!");
-                	login();
-		},
-		statusCode: {
-			400: function(json) {
-				//parsed = JSON.parse(json);
-				alert("Error 400");
-			}
+			document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+			document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+			document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+			document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+			window.location.href = "/index.php";
 		},
 		error: function() {
 			alert("Ajax request failed");
 		}
 	});
-    }
-    else
-        $('#passwordMismatchModal').modal('show');	//Apparently this doesn't exist
 }
 
 /*

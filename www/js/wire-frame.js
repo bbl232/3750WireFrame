@@ -61,12 +61,35 @@ function login(){
 function staffLogin(){
     var sid = document.getElementById('staff-login-email');
     var spa = document.getElementById('staff-login-password');
+    var hashed = sjcl.hash.sha256.hash(spa.value);
+    var hex = sjcl.codec.hex.fromBits(hashed);
     if(sid.value != "" && spa.value != ""){
         document.cookie = "User_id_appleseed="+sid.value;
         document.cookie = "Staff_id_appleseed=staff";
 
-        //Theses cookies are here till we have backend
+        //Theses cookies are here till we have backend - to be removed
         setAccountCookie(sid);
+
+        var auth = {};
+        auth['email'] = sid.value;
+        auth['passwordHash'] = hex.toString();
+
+	$.ajax({
+		url: "127.0.0.1:3000/users/authenticate",
+		data: auth,
+		dataType: "json",
+		success: function(json) {
+                	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+		},
+		statusCode: {
+			403: function(json) {
+				alert("Invalid password or email.");
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
 
         window.location.href = "/";
     }

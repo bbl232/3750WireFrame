@@ -26,13 +26,13 @@ var userModel = require('../models/users.js')(mongoose,autoIncrement)
 exports.getUsers = function(req, res, next){
     if(req.params.id){
         userModel.User.findOne({_id:req.params.id}).populate('locations').exec(function(err,user){
-            if(err) res.send(400,err);
+            if(err || user==null) res.send(404,new Message("User not found"));
             res.send(200,user)
         })
     }
     else{
         userModel.User.find().populate('locations').exec(function(err,user){
-            if(err) res.send(400,err);
+            if(err || user==null) res.send(400,err);
             res.send(200,new UserList(user))
         })
     }
@@ -44,14 +44,21 @@ exports.getUsers = function(req, res, next){
 */
 exports.getLocations = function(req, res, next){
     if(req.params.id){
-        userModel.Location.findOne({_id:req.params.id},function(err,location){
-            if(err) res.send(400,err);
-            res.send(201,new LocationList([].concat(location)))
+        userModel.User.findOne({_id:req.params.uid},function(err,user){
+            if(err || null==user) res.send(404,new Message("User not found."))
+
+            if(user.locations.indexOf(req.params.id)==-1){
+                res.send(404,new Message("Location not found"))
+            }
+            userModel.Location.findOne({_id:req.params.id},function(err,location){
+                if(err) res.send(400,err);
+                res.send(201,new LocationList([].concat(location)))
+            })
         })
     }
     else{
         userModel.User.findOne({_id:req.params.uid}).populate('locations').exec(function(err,user){
-            if(err) res.send(400,err)
+            if(err || user==null) res.send(400,err)
             res.send(201,new LocationList(user.locations))
         })
     }
@@ -123,11 +130,47 @@ exports.newLocation = function(req, res, next){
     })
 }
 
+
 exports.updateUser = function(req, res, next){
-    res.send(201,new Message("updateUser"));
+    userModel.User.findOne({_id:req.params.id}).populate('locations').exec(function(err,user){
+        if(err || user==null) res.send(404, new Message("User not found."))
+
+        var body = JSON.parse(req.body)
+        var postUser = body.user;
+        user.firstname = postUser.firstname || user.firstname;
+        user.lastname = postUser.lastname || user.lastname;
+        user.roles = postUser.roles || user.roles;
+        user.phone = postUser.phone || user.phone;
+        user.emailEnabled = postUser.emailEnabled || user.emailEnabled;
+        user.userNotes = postUser.userNotes || user.userNotes;
+        user.company = postUser.company || user.company;
+        user.emailVerified = postUser.emailVerified || user.emailVerified;
+
+        user.save(function(err){
+            if(err) res.send(404, new Message("Could not save changes."))
+
+            res.send(200,new UserList(user))
+        })
+    })
 }
 exports.updateLocation = function(req, res, next){
-    res.send(201,new Message("updateLocation"));
+    userModel.User.findOne({_id:req.params.uid},function(err,user){
+        if(err || null==user) res.send(404,new Message("User not found."))
+
+            if(user.locations.indexOf(req.params.id)==-1){
+                res.send(404,new Message("Location not found"))
+            }
+            userModel.Location.findOne({_id:req.params.id},function(err,location){
+                if(err) res.send(400,err);
+                var body = JSON.parse(req.body)
+                var postLocation = body.location;
+                location.description = postLocation.description || location.description;
+                location.save(function(err){
+                    if(err) res.send(400,new Message("Could not update location."))
+                    res.send(200, new LocationList(location))
+                })
+            })
+        })
 }
 
 /*

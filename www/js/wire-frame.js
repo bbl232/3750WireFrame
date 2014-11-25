@@ -212,11 +212,20 @@ function register(){
 }
 
 function logout(){
-    document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-    document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-    window.location.href = "/index.php";
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:3000/users/current/logout",
+        success: function(json) {
+            document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+            document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+            document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+            document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+            window.location.href = "/index.php";
+        },
+        error: function() {
+            alert("Ajax request failed");
+        }
+    });
 }
 
 function showLoginModal(){

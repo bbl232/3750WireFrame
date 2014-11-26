@@ -242,9 +242,11 @@ module.exports = function (userModel,eventModel){
     module.getByToken = function(req, res, next){
         var spl = req.headers.authorization.split("=");
         var tokenSupplied = spl[1]
-        userModel.Token.findOne({token:tokenSupplied}).populate({path:'user user.locations',select:'-passwordHash'}).exec(function(err,token){
-            if(err||token==null) res.send(401,new Message("You are not logged in."))
-            res.send(200,{"user":token.user})
+        userModel.Token.findOne({token:tokenSupplied}).populate({path:'user',select:'-passwordHash'}).exec(function(err,token){
+            userModel.User.populate(token,{path:'user.locations', model:userModel.Location},function(err,newToken){
+                if(err||token==null) res.send(401,new Message("You are not logged in."))
+                res.send(200,{"user":newToken.user})
+            })
         })
     }
 

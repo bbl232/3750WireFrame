@@ -10,7 +10,7 @@
 	</div>
 	<div class='row'>
 		<div class='pull-right'>
-			<button type="button" class="btn btn-success" onclick="newEvent()">Add New Event</button>
+			<button type="button" class="btn btn-success" onclick="createEventModal()">Add New Event</button>
 		</div>
 	</div>
 	<br>

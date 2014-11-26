@@ -437,9 +437,9 @@ function saveRegInfo(userID){
   var message;
     var cookie = getCookie("Appleseed_user_details");
     var parsed = JSON.parse(cookie);
-alert(userID);
+//alert(userID);
   $.ajax({
-    async:false,
+    //async:false,
     type:"PUT",
     url: "http://127.0.0.1:3000/user/"+userID,
     beforeSend: function (request) {
@@ -451,6 +451,8 @@ alert(userID);
       //alert("1");
       //userInfo = JSON.parse(json);
       //return user["id"];
+      window.location = window.location;
+
     },
     statusCode: {
       401: function(json) {
@@ -462,7 +464,6 @@ alert(userID);
       alert("Ajax request failed");
     }
   });
-    window.location = window.location;
   }
   else{
     var bodyReg=document.getElementById('message-modal_body');

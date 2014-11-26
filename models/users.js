@@ -24,7 +24,7 @@ module.exports = function(mongoose,autoIncrement){
     //Defines the schema for user locations
     var locationSchema = new Schema({
             _id:         Number,
-            id:          {type:Number, required:false},
+            id:          Number,
             description: {type:String, required:true, default:"Home"},
             address1:    {type:String, required:true},
             address2:    String,

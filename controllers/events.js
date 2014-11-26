@@ -11,15 +11,31 @@ module.exports = function (userModel,eventModel){
     module.getEvents = function(req, res, next){
         if(req.params.id){
             //get one
+            eventModel.Event.findOne({id:req.params.id}).populate({path:'owner attendees',select:'-passwordHash'}).exec(function(err,event){
+                if(err) res.send(400,new Message("Also nope."))
+                    userModel.User.populate(event,{path:'owner.locations',model: userModel.Location}, function(err,event2){
+                        if(err) res.send(400,new Message("Also nope."))
+                            userModel.User.populate(event2,{path:'attendees.locations', model: userModel.Location},function(err,event3){
+                                if(err) res.send(400,new Message("Also nope."))
 
+                                    res.send(201,new EventList(event3))
+                                })
+                            })
+                        })
         }
         else{
             eventModel.Event.find({}).populate({path:'owner owner.locations attendees attendees.locations', select:'-passwordHash'}).exec(function(err,event){
                 if(err) res.send(400,new Message("No events"))
 
-                res.send(200, new EventList(event));
+                userModel.User.populate(event,{path:'owner.locations',model: userModel.Location}, function(err,event2){
+                    if(err) res.send(400,new Message("Also nope."))
+                    userModel.User.populate(event2,{path:'attendees.locations', model: userModel.Location},function(err,event3){
+                        if(err) res.send(400,new Message("Also nope."))
+
+                        res.send(201,new EventList(event3))
+                    })
+                })
             })
-            //get all
         }
     }
 
@@ -44,12 +60,12 @@ module.exports = function (userModel,eventModel){
 
             eventModel.Event.findOne({id:newEvent.id}).populate({path:'owner attendees',select:'-passwordHash'}).exec(function(err,event){
                 if(err) res.send(400,new Message("Also nope."))
-                userModel.User.populate(event.owner,{path:'user.locations'}, function(err,event){
+                userModel.User.populate(event,{path:'owner.locations',model: userModel.Location}, function(err,event2){
                     if(err) res.send(400,new Message("Also nope."))
-                    userModel.User.populate(event.attendees,{path:'user.locations'},function(err,event){
+                    userModel.User.populate(event2,{path:'attendees.locations', model: userModel.Location},function(err,event3){
                         if(err) res.send(400,new Message("Also nope."))
 
-                        res.send(201,new EventList(event))
+                        res.send(201,new EventList(event3))
                     })
                 })
             })
@@ -57,11 +73,38 @@ module.exports = function (userModel,eventModel){
     }
 
     module.attend = function(req, res, next){
+        var spl = req.headers.authorization.split("=");
+        var tokenSupplied = spl[1]
+        userModel.Token.findOne({token:tokenSupplied}).populate({path:'user user.locations',select:'-passwordHash'}).exec(function(err,token){
+            if(err||token==null) res.send(401,new Message("You are not logged in."))
+            eventModel.Event.find({id:req.params.id}).populate({path:'owner owner.locations attendees attendees.locations', select:'-passwordHash'}).exec(function(err,event){
+                if(err) res.send(404,new Message("Event not found"))
+                event.attendees.push(token.user._id);
+                event.save(function(err){
+                    if(err) res.send(400,new Message("Could not save"))
 
+                    res.send(200,new Message("Current user is now attending this event"))
+                })
+            })
+        })
     }
 
     module.notattend = function(req, res, next){
+        var spl = req.headers.authorization.split("=");
+        var tokenSupplied = spl[1]
+        userModel.Token.findOne({token:tokenSupplied}).populate({path:'user user.locations',select:'-passwordHash'}).exec(function(err,token){
+            if(err||token==null) res.send(401,new Message("You are not logged in."))
+            eventModel.Event.find({id:req.params.id}).populate({path:'owner owner.locations attendees attendees.locations', select:'-passwordHash'}).exec(function(err,event){
+                if(err) res.send(404,new Message("Event not found"))
 
+                event.attendees.splice(event3.attendees.indexof(token.user._id),1);
+                event.save(function(err){
+                if(err) res.send(400,new Message("Could not save"))
+
+                    res.send(200,new Message("Current user is no longer attending this event"))
+                })
+            })
+        })
     }
 
     module.cancel = function(req, res, next){

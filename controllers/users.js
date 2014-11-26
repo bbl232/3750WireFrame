@@ -111,7 +111,7 @@ module.exports = function (userModel,eventModel){
     */
     module.newLocation = function(req, res, next){
         userModel.User.findOne({_id:req.params.uid},function(err,user){
-            if(err) res.send(400,err)
+            if(err || user==null) res.send(404,new Message("User not found"))
 
             var body = JSON.parse(req.body);
             console.log(body.location)

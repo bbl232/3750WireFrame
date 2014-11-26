@@ -136,6 +136,7 @@ function login(uid, upa, hex) {
 			data: data,
 			dataType: "json",
 			success: function(json) {
+                document.cookie = "Appleseed_user_details="+JSON.stringify(json);
 				setAccountCookie(uid);
                 window.location.reload();
 			},
@@ -189,6 +190,7 @@ function staffLogin() {
 			data: data,
 			dataType: "json",
 			success: function(json) {
+                document.cookie = "Appleseed_user_details="+JSON.stringify(json);
 				setAccountCookie(sid);
 				window.location.reload();
 			},
@@ -279,6 +281,7 @@ function logout(){
 			document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
 			document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+            document.cookie = "Appleseed_user_details=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			window.location.href = "/index.php";
 		},
 		error: function() {

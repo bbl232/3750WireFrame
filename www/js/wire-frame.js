@@ -37,18 +37,55 @@ function getCurrentUser() {
 }
 
 /*
-	getCurrentUser() - return the locations for the current user
+	getEvent - return an event object
+		eventID - the ID of the event to look up
 */
-function getUserLocations() {
-	var user = getCurrentUser();
-	var userId = user['id'];
+function getEvent(eventID) {
+	$.ajax({
+		url: "http://127.0.0.1:3000/events/"+eventID,
+		dataType: "json",
+		/*headers:{
+		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
+		},*/
+		success: function(json) {
+			return JSON.parse(json);
+		},
+		statusCode: {
+			201: function(json) {
+				parsed = JSON.parse(json);
+				return parsed;
+			},
+			404: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			401: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			403: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
+}
+
+/*
+	getUserLocations() - return the locations for the specified user
+		userID - the ID of the user
+*/
+function getUserLocations(userId) {
 	var message;
 
 	$.ajax({
-		url: "127.0.0.1:3000/user/"+ userId +"/locations",
+		url: "http://127.0.0.1:3000/user/"+ userId +"/locations",
 		dataType: "json",
 		/*headers:{
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
+		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
 		},*/
 		success: function(json) {
 			return JSON.parse(json);
@@ -100,7 +137,7 @@ function login(uid, upa, hex) {
 			dataType: "json",
 			success: function(json) {
 				setAccountCookie(uid);
-		        	addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+                window.location.reload();
 			},
 			statusCode: {
 				403: function(json) {
@@ -153,7 +190,7 @@ function staffLogin() {
 			dataType: "json",
 			success: function(json) {
 				setAccountCookie(sid);
-				addEvent('wvandenb', '123 Fake Street','11/11/2014','13:30', '3h0m', 10, [{'Apple':2}, {'Cherry':1}]);
+				window.location.reload();
 			},
 			statusCode: {
 				403: function(json) {

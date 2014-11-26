@@ -47,16 +47,17 @@
 					<label>Enter Tree Types and Numbers:</label><br>
 					<div id="treesForm">
 						<div id="trees">
-							<input class="form-control" id="tree1type" placeholder="Type" type="text">
-							<input class="form-control" id="tree1num" placeholder="Number" type="text">
+							<input class="form-control" id="tree0type" placeholder="Type" type="text">
+							<input class="form-control" id="tree0num" placeholder="Number" type="text">
 						</div>
+						<input id="trees-number" type="hidden" value="1">
 						<button type="button" class="btn btn-link" onclick="addEventTree(1)">+ Add Type</button><br>
 					</div>
 					<label>Please describe the event:</label><br><textarea rows="7" id="tree-text" class="form-control"></textarea><br>
 				</form>
 			</div>
-			<div class="modal-footer" id="footer">
-				<button type="button" class="btn btn-primary" id="addEvent" data-dismiss="modal" onclick="addNewEvent(1)">Create</button>
+			<div class="modal-footer" id="footerModal">
+				<button type="button" class="btn btn-primary" id="addEvent" data-dismiss="modal" onclick="addNewEvent()">Create</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div><!-- /.modal-content -->

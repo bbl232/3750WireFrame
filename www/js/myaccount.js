@@ -75,16 +75,16 @@ var userLocations=[];
       for (var i=0;i<userLocations.length;i++){
         addressHtml+="<span class='glyphicon glyphicon-map-marker' style='padding:10px'></span><b>";
         addressHtml+=userLocations[i]['description'];//ex 'home'
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-earphone'></span> Phone Number: ";
         addressHtml+=userLocations[i]['address1'];
 
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-home'></span> Address: ";
         addressHtml+=userLocations[i]['city'];
 
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-send'></span> Postal Code: ";
         addressHtml+=userLocations[i]['postal'];
 
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-globe'></span> Country: ";
         addressHtml+=userLocations[i]['country'];
 
         //pass in i for onclick so we know which to edit

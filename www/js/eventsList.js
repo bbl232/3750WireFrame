@@ -1,49 +1,72 @@
 function showEvents(){
     console.log("show");
     var table = document.getElementById("events_table");
-    var eventsList = getEvents();
+    var eventsList;
     var url = document.URL;
-	var user=getCurrentUser();
-    var id = user.id;
+    var cookie = getCookie("Appleseed_user_details");
+    var parsed = JSON.parse(cookie);
+    var id = parsed['user']['id'];
+    var tr;
 
-    if (eventsListText != ""){
-        eventsList.forEach(function (event){
-               var tr = "<tr>"; //table row
-                tr += "<td>Producer: " + event.owner + "</td>"; // td= table cell
-                tr += "<td>Date: " + event.date + "</td>";
-                tr += "<td>Address: " + event.address + "</td>";
-                tr+="<td>Time: "+event.time+"</td></tr><tr>";
-				//print trees
-                var numTreeTypes = Object.keys(event.trees).length;
-                if(numTreeTypes>1){
-                    var index=1;
-                    tr+="<td>Tree(s):"+Object.keys(event.trees[0]);
-                    for(index;index<numTreeTypes;index++){
-                        tr+=","+Object.keys(event.trees[index]);
-                    }
-                    tr+="</td>"
+    $.ajax({
+        url: "http://127.0.0.1:3000/events",
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+        },
+        success: function(json) {
+            alert(JSON.stringify(json));
+            for (var i=0;i<json['events'].length;i++) {
+                tr = "<tr>"; //table row
+                tr += "<td>Producer: " + json['events'][i]['owner']['firstname'] + " " + json['events'][i]['owner']['lastname'] + "</td>"; // td= table cell
+                tr += "<td>Date: " + json['events'][i]['datetime'] + "</td>";
+                tr += "<td>Address: " + json['events'][i]['location'] + "</td>";
+                tr+="<td>End: "+json['events'][i]['endtime']+"</td></tr><tr>";
+                //print trees
+                tr+="<td>Tree(s): ";
+                /*var l = json['events'][i]['trees'].length
+                for (var j=0;j<l;i++) {
+                    tr+=json['events'][i]['trees']['type'] + "(" + json['events'][i]['trees']['quantity'] + "),";
+                }*/
+                tr+="</td>";
 
-                }else{
-                    tr+="<td>Tree(s):"+Object.keys(event.trees[0])+"</td>";
-                }
-                tr+="<td>Number of volunteers needed "+event.numVolunteers+"</td>";
-                tr+="<td>Number of registered volunteers "+event.numRegVolunteers+"</td>";
-				
-				//They are a volunteer
+                //They are a volunteer
                 if(url.indexOf("volunteer.php") > -1) {
-                    tr+='<td><button type="button" class="btn btn-success" onclick="volunteerEvent('+id+')">Register</button></td>';
+                    tr+='<td><button type="button" class="btn btn-success" onclick="volunteerEvent('+json['events'][i]['id']+')">Register</button></td>';
                 } else if(url.indexOf("eventMgmt.php") > -1) {
-					//creator of event
-                    if (event.owner == id){
-                        tr+='<td><button type="button" class="btn btn-primary" onclick="modifyEvent('+id+')">Modify</button></td>';
+                    //creator of event
+                    if (json['events'][i]['owner']['id'] == id){
+                        tr+='<td><button type="button" class="btn btn-primary" onclick="modifyEvent('+json['events'][i]['id']+')">Modify</button></td>';
                     }
                 }
                 tr += "</tr>";
                 table.innerHTML +=tr;
-        });
-    }
-
+            }
+        },
+        statusCode: {
+            201: function(json) {
+                parsed = JSON.parse(json);
+                return parsed;
+            },
+            404: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            401: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            403: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            }
+        },
+        error: function() {
+            alert("Ajax request failed");
+        }
+    });
 }
+
 //Filter by field type and the data in the field
 //Filter by user bob
 //filter by date 11/11/14

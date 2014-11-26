@@ -100,3 +100,7 @@ function filter_list(field) {
         });
     }
 }
+//popup modal for creating an event and adding it to the database
+function createEventModal(){
+	$('#addEventModal').modal('show');
+}

@@ -391,24 +391,36 @@ function setupNavbar(){
 		numVol - the number of volunteers needed
 		trees - a list of trees that need to be gleaned
 */
-function addEvent(name, address, date, time, duration, numVol, trees) {
-	var eventsListText = getCookie('Appleseed_events');
-	if (eventsListText == "")
-		var eventsList=[];
-	else
-		var eventsList=JSON.parse(eventsListText);
+function addEvent(name,address,date,end,trees) {
+	
 	var newEvent = {};
-	newEvent['creator'] = name;
-	newEvent['address'] = address;
-	newEvent['date'] = date;
-	newEvent['time'] = time;
-	newEvent['duration'] = duration;
-	newEvent['numVolunteers'] = numVol;
-	newEvent['numRegVolunteers'] = 0;
+	newEvent['owner'] = name;
+	newEvent['description'] = address;
+	newEvent['datetime'] = date;
+	newEvent['endtime'] = end;
+	newEvent['attendees']=[];
 	newEvent['trees'] = trees;
+	newEvent['status']="pending";
+	
+	$.ajax({
+		url: "http://127.0.0.1:3000/events/",
+		type: "POST",
+		data: newEvent,
+		dataType: "json",
+		success: function(json) {
+            //success
+        },
+        statusCode: {
+                401: function(json) {
+                    parsed = JSON.parse(json);
+                    alert(parsed["message"]);
+                }       
+        },
+        error: function() {
+            alert("Ajax request failed.");
+        }
+	});
 
-	eventsList.push(newEvent);
-	document.cookie = "Appleseed_events="+JSON.stringify(eventsList);
 }
 
 /*

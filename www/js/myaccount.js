@@ -64,7 +64,7 @@ var userLocations=[];
       <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+userEmail+"</td></tr> \
       <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+userFirst+" "+userLast+"</td></tr> \
       <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+userPhone+"</td></tr><tr> \
-      <button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount()'>Delete Account</button> \
+      <button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount("+userID+")'>Delete Account</button> \
       <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
       var locID;
@@ -527,14 +527,41 @@ function deleteAdr(locID,userID){
 
 }
 
-function deleteAccount(){
+function deleteAccount(userID){
+  var message;
+    var cookie = getCookie("Appleseed_user_details");
+    var parsed = JSON.parse(cookie);
+  $.ajax({
+    type:"DELETE",
+    url: "http://127.0.0.1:3000/user/"+userID,
+    beforeSend: function (request) {
+      request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+    },
+    //dataType: "json",
+    success: function(json) {
 
-  document.cookie = 'User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+        document.cookie = 'User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
 
-  document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
-  document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-;
-  window.location = '/index.php';
+        document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+        document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        window.location = '/index.php';
+      //window.location = window.location;
+
+    },
+    statusCode: {
+      401: function(json) {
+        parsed = JSON.parse(json);
+        alert(parsed["message"]);
+      }
+    },
+    error: function() {
+      alert("Ajax request failed");
+    }
+  });
+
+
+
+
 }
 
 setupAccDetails();

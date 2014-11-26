@@ -25,7 +25,7 @@ module.exports = function (userModel,eventModel){
         if(req.params.id){
             userModel.User.findOne({_id:req.params.id},'-passwordHash').populate('locations').exec(function(err,user){
                 if(err || user==null) res.send(404,new Message("User not found"));
-                res.send(200,user)
+                res.send(200,[].concat(user))
             })
         }
         else{

@@ -16,9 +16,11 @@ var crypt = require('crypto');
 
 var userModel = require('./models/users.js')(mongoose,autoIncrement)
 var eventModel = require('./models/events.js')(mongoose,autoIncrement)
+var fbModel = require('./models/feedback.js')(mongoose,autoIncrement)
 
 var user = require('./controllers/users.js')(userModel,eventModel)
 var even = require('./controllers/events.js')(userModel,eventModel)
+var fb = require('./controllers/feedback.js')(userModel,eventModel,fbModel)
 
 server.pre(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
@@ -67,9 +69,13 @@ server.post("/events/:id/cancel", even.cancel)
 server.post("/events/:id/accept", even.acc)
 server.post("/events/:id/reject", even.reject)
 
-
 server.del("/events/:id", even.delete)
 //Feedback API
+server.get("/feedback", fb.getFeedback)
+server.get("/feedback/:id", fb.getFeedback)
+server.post("/feedback", fb.newFeedback)
+server.del("/feedback/:id", fb.deleteFeedback)
+
 
 server.listen(3000, function(){
       console.log('%s listening at %s', server.name, server.url)

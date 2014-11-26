@@ -18,7 +18,7 @@ module.exports = function (userModel,eventModel){
                             userModel.User.populate(event2,{path:'attendees.locations', model: userModel.Location},function(err,event3){
                                 if(err) res.send(400,new Message("Also nope."))
 
-                                    res.send(201,new EventList(event3))
+                                    res.send(201,new EventList([].concat(event3)))
                                 })
                             })
                         })

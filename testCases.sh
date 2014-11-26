@@ -21,4 +21,5 @@ echo "POST TESTS"
 # curl -i -X DELETE 127.0.0.1:3000/user/1 ;echo -e "\n"
 # curl -i -X DELETE 127.0.0.1:3000/user/1/locations/1 ;echo -e "\n"
 
-curl -i -X POST --data '{"event":{"owner":{"id":0},"description":"Come pick my 4 apple trees!","location":{"id":0},"datetime":"2014-11-18T16:20:27.174Z","endtime":"2014-11-21T16:20:27.174Z","trees":[{"type":"Apple","quantity":2}],"attendees":[],"staffNotes":""}}' 127.0.0.1:3000/events
+#curl -i -X POST --data '{"event":{"owner":{"id":0},"description":"Come pick my 4 apple trees!","location":{"id":0},"datetime":"2014-11-18T16:20:27.174Z","endtime":"2014-11-21T16:20:27.174Z","trees":[{"type":"Apple","quantity":2}],"attendees":[],"staffNotes":""}}' 127.0.0.1:3000/events
+curl -i -X POST --data '{"feedback":{"owner":{"id":0},"subject":"Test Message!","message":"Hello, world!","shouldBeContacted":"false","event":{"id":0}}}' 127.0.0.1:3000/feedback

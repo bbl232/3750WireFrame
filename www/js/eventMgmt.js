@@ -7,8 +7,10 @@
 function setLocationInput() {
 	var locationInputHTML="";
 	var locationInput = document.getElementById("location-input");
-	var user = getCurrentUser();
-	var addresses = getUserLocations(user['id']);
+	//var user = getCurrentUser();
+	var cookie = getCookie("Appleseed_user_details");
+	var user = JSON.parse(cookie);
+	var addresses = getUserLocations(parseInt(user['user']['id']));
 
 	locationInputHTML+='<div class="form-group"><label>Choose a location:</label><select class="form-control" id="location">';
 	for (var i=0;i<addresses.length;i++){

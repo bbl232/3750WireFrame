@@ -219,7 +219,7 @@ function editAddress(id){
 
   for(var i=0;i<userLocations.length;i++){
     if (userLocations[i]==id){
-      //we found the location to edit
+      //we found the location to edit since it matched id that was passed in
       locDesc=userLocations['description'];
       locAddr1=userLocations['address1'];
       locAddr2=userLocations['address2'];
@@ -234,7 +234,7 @@ function editAddress(id){
   bodyReg.innerHTML=" \
   <form id='editaddress-form'> \
     <div class='input-group'> \
-      <span class='input-group-addon'>Description</span><input type='text' class='form-control' name='adrName' id='adrName' value='"+locDesc+"'> \
+      <span class='input-group-addon'>Description</span><input type='text' class='form-control' name='locDesc' id='locDesc' value='"+locDesc+"'> \
     </div><br> \
     <div class='input-group'> \
       <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address 1</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locAddr1+"' readonly> \
@@ -251,7 +251,7 @@ function editAddress(id){
     <div class='input-group'> \
       <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Country</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCountry+"' readonly> \
     </div><br> \
-    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button><br> \
+    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+id","+userID+")'>Save</button><br> \
   </form>";
 
 
@@ -364,18 +364,50 @@ function saveRegInfo(userID){
 
 }
 
-function saveAdrInfo(index){
-  var adrName=$('#adrName').val();
-  var userAdr=$('#userAdr').val();
-  if(adrName !=""&&userAdr!=""){
+/*
+  We pass in id which is the location id of the address we edit
+*/
+function saveAdrInfo(id,userID){
+  var locDesc=$('#locDesc').val();
+  //var userAdr=$('#userAdr').val();
+  if(locDesc !=""){
+    //Now we put /user/{uid}/locations/{id} and pass in jsonObject that contains new description
+    //build json object to edit user details
+    var jsonObj={};
+    jsonObj['location']={};
+    jsonObj['location']['description']=locDesc;
 
-    var userDetails=getCookie("account_details_appleseed");
-    var jsonCookie=JSON.parse(userDetails);
+    var data=JSON.stringify(jsonObj);
 
-    jsonCookie['userAddress'][index]['name']=adrName;
-    jsonCookie['userAddress'][index]['location']=userAdr;
+    var locURL="http://127.0.0.1:3000//user/"+userID+"/locations/"+id;
+    $.ajax({
+      type:"PUT",
+      url: locURL,
+      headers:{"Authorization":"Appleseed token="+},//cookie goes here
+      data: data,
+      dataType: "json",
+      success: function(json) {
+        userInfo = JSON.parse(json);
+        //return user["id"];
+      },
+      statusCode: {
+        401: function(json) {
+          parsed = JSON.parse(json);
+          alert(parsed["message"]);
+        }
+      },
+      error: function() {
+        alert("Ajax request failed");
+      }
+    });
 
-    document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+    //var userDetails=getCookie("account_details_appleseed");
+    //var jsonCookie=JSON.parse(userDetails);
+
+    //jsonCookie['userAddress'][index]['name']=adrName;
+    //jsonCookie['userAddress'][index]['location']=userAdr;
+
+    //document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
     window.location = window.location;
   }
   else{

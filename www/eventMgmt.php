@@ -64,6 +64,18 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade" id="modifyEventModal">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title" id="message-modal_header">Modify Event</h4>
+		</div>
+		<div class="modal-body" id="modifyEventBody"></div>
+		<div class="modal-footer" id="modifyFooterModal"></div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/javascript" src="js/eventMgmt.js"></script>
 <script>
 $( "#datepicker" ).datepicker();

@@ -72,7 +72,83 @@ function addEventTree(numberTrees) {
 	A staff can add a note. TODO
 */
 function modifyEvent(eventID) {
-	var myEvent = getEvent(eventID);
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
+	var body;
+	var footer;
+
+	$.ajax({
+		url: "http://127.0.0.1:3000/event/"+eventID,
+		dataType: "json",
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
+		success: function(json) {
+			var date = new Date(json['events']['datetime']);
+			body = '<label>Date & Time: '+date+'</label><br>';
+			var end = new Date(json['events']['endtime']);
+			body += '<label>End Time: '+end.getHours()+':'+end.getMinutes()+'</label><br>';
+			var locationId = json['events']['location'];
+			body += '<label>Owner: ' + json['events']['owner']['firstname']+ ' '+ json['events']['owner']['lastname'] +'</label><br>';
+			body += '<label>Status: '+json['events']['status']+'</label><br>';
+			body += '<label>Description: '+json['events']['description']+'</label><br>';
+			for(var i=0;i<json['events']['trees'].length;i++) {
+				body += '<label>Tree '+(i+1)+': '+json['events']['trees'][i]['type']+'('+json['events']['trees'][i]['quantity']+')'+'</label><br>';
+			}
+			//body += "<p>"+JSON.stringify(json)+"</p>";
+			footer = '<button type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button> <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel Event</button> <button type="button" class="btn btn-danger" data-dismiss="modal">Delete Event</button> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
+			document.getElementById("modifyEventBody").innerHTML = body;
+			document.getElementById("modifyFooterModal").innerHTML = footer;
+			$('#modifyEventModal').modal('show');
+		},
+		statusCode: {
+			201: function(json) {
+				parsed = JSON.parse(json);
+				return parsed;
+			},
+			404: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			401: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			403: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
+	/*
+
+	<form class="form-inline" role="form">
+		<div id="location-input"></div>
+		<label>Enter Date:</label><input class="form-control" id="datepicker" type="text" /><br>
+		<div class="bootstrap-timepicker">
+			<label>Enter Start Time:</label>
+			<input id="timepicker" type="text" value="10:30 AM" class="form-control">
+			<i class="icon-time"></i>
+		</div>
+		<div class="bootstrap-timepicker">
+			<label>Enter End Time:</label>
+			<input id="timepicker2" type="text" value="11:30 AM" class="form-control">
+			<i class="icon-time"></i>
+		</div>
+		<label>Enter Tree Types and Numbers:</label><br>
+		<div id="treesForm">
+			<div id="trees">
+				<input class="form-control" id="tree0type" placeholder="Type" type="text">
+				<input class="form-control" id="tree0num" placeholder="Number" type="text">
+			</div>
+			<input id="trees-number" type="hidden" value="1">
+			<button type="button" class="btn btn-link" onclick="addEventTree(1)">+ Add Type</button><br>
+		</div>
+		<label>Please describe the event:</label><br><textarea rows="7" id="tree-text" class="form-control"></textarea><br>
+	</form>
 
 	document.getElementById("datepicker").disabled = true;
 	document.getElementById("timepicker").disabled = true;
@@ -95,7 +171,7 @@ function modifyEvent(eventID) {
 	<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
 	footer.innerHTML = footerHTML;
 
-	$('#addEventModal').modal('show');
+	$('#addEventModal').modal('show');*/
 }
 
 /*

@@ -112,19 +112,48 @@ module.exports = function (userModel,eventModel){
     }
 
     module.acc = function(req, res, next){
-
+        eventModel.Event.findOne({id:req.params.id}).populate({path:'owner attendees',select:'-passwordHash'}).exec(function(err,event){
+            if(err) res.send(404,new Message("Event not found"))
+            event.status = "accepted";
+            event.save(function(err){
+                if(err) res.send(404, new Message("Event not found"))
+                res.send(200,new Message("The event was accepted"))
+            })
+        })
     }
 
     module.reject = function(req, res, next){
-
+        eventModel.Event.findOne({id:req.params.id}).populate({path:'owner attendees',select:'-passwordHash'}).exec(function(err,event){
+            if(err) res.send(404,new Message("Event not found"))
+            event.status = "rejected";
+            event.save(function(err){
+                if(err) res.send(404, new Message("Event not found"))
+                    res.send(200,new Message("The event was rejected"))
+            })
+        })
     }
 
     module.updateEvent = function(req, res, next){
+        eventModel.Event.findOne({id:req.params.id}).populate({path:'owner attendees',select:'-passwordHash'}).exec(function(err,event){
+            if(err) res.send(404,new Message("Event not found"))
+            /*
 
+            STUFF!!!
+
+
+            */
+            event.save(function(err){
+                if(err) res.send(404, new Message("Event not found"))
+                res.send(200,new Message("The event was rejected"))
+            })
+        })
     }
 
     module.delete = function(req, res, next){
-
+        eventModel.Event.remove({id:req.params.id},function(err){
+            if(err) res.send(404,new Message("Event not found"))
+            res.send(200,new Message("Event Deleted"))
+        })
     }
     return module;
 }

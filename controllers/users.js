@@ -81,7 +81,7 @@ module.exports = function (userModel,eventModel){
         newUser.emailEnabled = body.user.emailEnabled;
 
         var locationsArray = [];
-        if(body.user.locations){
+        if(body.user.locations != null){
           while(body.user.locations.length > 0){
             var newLoc = new userModel.Location(body.user.locations.shift());
             newLoc.save(function(err){
@@ -209,7 +209,7 @@ module.exports = function (userModel,eventModel){
     module.updatePassword = function(req, res, next){
         var spl = req.headers.authorization.split("=");
         var tokenSupplied = spl[1]
-        userModel.Token.findOne({token:tokenSupplied}).populate('user user.locations').exec(function(err,token){
+        userModel.Token.findOne({token:tokenSupplied}).populate('user').exec(function(err,token){
             var body = JSON.parse(req.body);
             var user = token.user;
             if(user==null){

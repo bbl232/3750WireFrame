@@ -16,10 +16,15 @@ function getCookie(cname) {
 function getCurrentUser() {
 	var user;
 	var message;
+    var cookie = getCookie("Appleseed_user_details");
+    var parsed = JSON.parse(cookie);
 
 	$.ajax({
-		url: "127.0.0.1:3000/users/current",
+		url: "http://127.0.0.1:3000/users/current",
 		dataType: "json",
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
 		success: function(json) {
 			user = JSON.parse(json);
 			return user["user"];
@@ -172,9 +177,9 @@ function login(uid, upa, hex) {
 			data: data,
 			dataType: "json",
 			success: function(json) {
-                document.cookie = "Appleseed_user_details="+JSON.stringify(json);
+				document.cookie = "Appleseed_user_details="+JSON.stringify(json);
 				setAccountCookie(uid);
-                window.location.reload();
+				window.location.reload();
 			},
 			statusCode: {
 				403: function(json) {
@@ -226,7 +231,7 @@ function staffLogin() {
 			data: data,
 			dataType: "json",
 			success: function(json) {
-                document.cookie = "Appleseed_user_details="+JSON.stringify(json);
+				document.cookie = "Appleseed_user_details="+JSON.stringify(json);
 				setAccountCookie(sid);
 				window.location.reload();
 			},
@@ -414,7 +419,7 @@ function addEvent(name,address,date,end,trees) {
 }
 
 /*
-	sendFeedback() - gather the feedback from the fields and 
+	sendFeedback() - gather the feedback from the fields and
 	push the feedback given in the parameters to the
 	feedback list.
 		name - name of feedback submitter
@@ -429,15 +434,15 @@ function sendFeedback() {
 	var email = document.getElementById("feedback-email").value;
 	var contact = document.getElementById("feedback-contact_me").value;
 	var feedback = document.getElementById("feedback-text").value;
-	
+
 	var bodyFeedback = {};
-	bodyFeedback['feedback'] = {}; 
+	bodyFeedback['feedback'] = {};
 	bodyFeedback['feedback']['id'] = 0; //?;
 	bodyFeedback['feedback']['subject'] = "";
 	bodyFeedback['feedback']['message'] = feedback;
-	bodyFeedback['feedback']['shouldBeContacted'] = contact; 
+	bodyFeedback['feedback']['shouldBeContacted'] = contact;
 	bodyFeedback['feedback']['owner']['id'] = idOwner;
-	bodyFeedback['feedback']['event']['id'] = 0; //event id - 0 for now 
+	bodyFeedback['feedback']['event']['id'] = 0; //event id - 0 for now
 
 	feedbackData = JSON.stringify(bodyFeedback);
 
@@ -453,7 +458,7 @@ function sendFeedback() {
                 401: function(json) {
                     parsed = JSON.parse(json);
                     alert(parsed["message"]);
-                }       
+                }
         },
         error: function() {
             alert("Ajax request failed.");

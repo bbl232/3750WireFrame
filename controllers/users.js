@@ -114,9 +114,10 @@ module.exports = function (userModel,eventModel){
             if(err) res.send(400,err)
 
             var body = JSON.parse(req.body);
+            console.log(body.location)
             var newLoc = new userModel.Location(body.location)
             newLoc.save(function(err){
-                if(err) res.send(400,err)
+                if(err) res.send(401,err)
 
                 user.locations.push(newLoc._id)
                 user.save(function(err){

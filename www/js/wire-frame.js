@@ -82,12 +82,15 @@ function getEvents() {
 		eventID - the ID of the event to look up
 */
 function getEvent(eventID) {
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
+
 	$.ajax({
 		url: "http://127.0.0.1:3000/events/"+eventID,
 		dataType: "json",
-		/*headers:{
-		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},*/
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
 		success: function(json) {
 			return JSON.parse(json);
 		},
@@ -121,13 +124,15 @@ function getEvent(eventID) {
 */
 function getUserLocations(userId) {
 	var message;
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
 
 	$.ajax({
 		url: "http://127.0.0.1:3000/user/"+ userId +"/locations",
 		dataType: "json",
-		/*headers:{
-		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c" // TODO cookie for token
-		},*/
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
 		success: function(json) {
 			return JSON.parse(json);
 		},

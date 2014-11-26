@@ -23,11 +23,13 @@ var even = require('./controllers/events.js')(userModel,eventModel)
 server.pre(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     return next();
 });
 server.opts("/.*",function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "authorization");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.send(200);
 })
 //Users API

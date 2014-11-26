@@ -319,9 +319,14 @@ function register(){
 	logout() - log the user out, reset cookies, and refresh the page
 */
 function logout(){
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
 	$.ajax({
 		type: "POST",
 		url: "http://127.0.0.1:3000/users/current/logout",
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
 		success: function(json) {
 			document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";

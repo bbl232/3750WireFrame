@@ -64,8 +64,8 @@ var userLocations=[];
       <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td>"+userEmail+"</td></tr> \
       <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td>"+userFirst+" "+userLast+"</td></tr> \
       <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td>"+userPhone+"</td></tr><tr> \
-      <button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount("+userID+")'>Delete Account</button> \
-      <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
+      <button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount("+userID+")'><span class='glyphicon glyphicon-remove'></span> Delete Account</button> \
+      <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'><span class='glyphicon glyphicon-edit'></span> Edit</button></tr></table>";
 
       var locID;
       //display list of locations below user info
@@ -75,26 +75,26 @@ var userLocations=[];
       for (var i=0;i<userLocations.length;i++){
         addressHtml+="<span class='glyphicon glyphicon-map-marker' style='padding:10px'></span><b>";
         addressHtml+=userLocations[i]['description'];//ex 'home'
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-earphone'></span> Phone Number: ";
         addressHtml+=userLocations[i]['address1'];
 
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-home'></span> Address: ";
         addressHtml+=userLocations[i]['city'];
 
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-send'></span> Postal Code: ";
         addressHtml+=userLocations[i]['postal'];
 
-        addressHtml+="</b><br>";
+        addressHtml+="</b><br><b><span class='glyphicon glyphicon-globe'></span> Country: ";
         addressHtml+=userLocations[i]['country'];
 
         //pass in i for onclick so we know which to edit
         locID=userLocations[i]['id'];
         //pass in location id so we know which to edit on editAddress
-        addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='editAddress("+locID+")'>Edit</button><br><br> \
-        <button type='button' class='btn btn-danger' style='float:right' onclick='deleteAdr("+locID+","+userID+")'>Delete</button><br>";
+        addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='editAddress("+locID+")'><span class='glyphicon glyphicon-edit'></span> Edit</button><br><br> \
+        <button type='button' class='btn btn-danger' style='float:right' onclick='deleteAdr("+locID+","+userID+")'><span class='glyphicon glyphicon-remove'></span> Delete</button><br>";
         addressHtml+="<hr>";
       }
-      addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='addAddressModal("+userID+")'>Add</button><br>";
+      addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='addAddressModal("+userID+")'><span class='glyphicon glyphicon-plus'></span> Add</button><br>";
       var modalBodyAddress=document.getElementById('addressInfo');
       modalBodyAddress.innerHTML=addressHtml;
     },
@@ -151,7 +151,7 @@ function editRegular(){
           <span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span><input type='text' class='form-control' name='userPhone' id='userPhone' value='"+userPhone+"'> \
         </div><br> \
         <div class='input-group'> \
-        <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveRegInfo("+userID+")'>Save</button><br> \
+        <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveRegInfo("+userID+")'><span class='glyphicon glyphicon-save'></span> Save</button><br> \
         </div> \
       </form>";
 
@@ -189,9 +189,7 @@ function editAddress(id){
         request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
       },
       success: function(userInfo) {
-        alert(JSON.stringify(userInfo));
-      //userInfo = JSON.parse(json);
-      //return user["id"];
+
       var userID=userInfo['user']['id'];
       var locations;
       var locURL="http://127.0.0.1:3000/user/"+userID+"/locations";
@@ -254,7 +252,7 @@ function editAddress(id){
                   <div class='input-group'> \
                     <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Country</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCountry+"' readonly> \
                   </div><br> \
-                  <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+id+","+userID+")'>Save</button><br> \
+                  <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+id+","+userID+")'><span class='glyphicon glyphicon-save'></span> Save</button><br> \
                 </form>";
 
 
@@ -371,7 +369,7 @@ window.location = window.location;
     //$('#editDetailsModal').modal('hide');
     var bodyReg=document.getElementById('message-modal_body');
     bodyReg.innerHTML="Error! Please enter something in each box. \
-    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='addAddressModal()'>Ok</button>";
+    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='addAddressModal()'><span class='glyphicon glyphicon-ok'></span> Ok</button>";
     $('#editDetailsModal').modal('show');
 
   }
@@ -429,7 +427,7 @@ function saveRegInfo(userID){
   else{
     var bodyReg=document.getElementById('message-modal_body');
     bodyReg.innerHTML="Error! Please enter something in each box. \
-    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Ok</button>";
+    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'><span class='glyphicon glyphicon-ok'></span> Ok</button>";
     $('#editDetailsModal').modal('show');
   }
 
@@ -484,7 +482,7 @@ window.location = window.location;
   else{
     var bodyReg=document.getElementById('message-modal_body');
     bodyReg.innerHTML="Error! Please enter something in the description box. \
-    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editAddress("+id+")'>Ok</button>";
+    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editAddress("+id+")'><span class='glyphicon glyphicon-ok'></span> Ok</button>";
     $('#editDetailsModal').modal('show');
   }
 

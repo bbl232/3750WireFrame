@@ -26,8 +26,7 @@ function getCurrentUser() {
 			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
 		},
 		success: function(json) {
-			user = JSON.parse(json);
-			return user["user"];
+			return JSON.stringify(json);
 		},
 		statusCode: {
 			401: function(json) {
@@ -319,15 +318,20 @@ function register(){
 	logout() - log the user out, reset cookies, and refresh the page
 */
 function logout(){
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
 	$.ajax({
 		type: "POST",
 		url: "http://127.0.0.1:3000/users/current/logout",
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
 		success: function(json) {
 			document.cookie = "User_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
 			document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-            document.cookie = "Appleseed_user_details=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+			document.cookie = "Appleseed_user_details=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			window.location.href = "/index.php";
 		},
 		error: function() {
@@ -392,7 +396,7 @@ function setupNavbar(){
 		trees - a list of trees that need to be gleaned
 */
 function addEvent(name,address,date,end,trees) {
-	
+
 	var newEvent = {};
 	newEvent['owner'] = name;
 	newEvent['description'] = address;
@@ -401,7 +405,7 @@ function addEvent(name,address,date,end,trees) {
 	newEvent['attendees']=[];
 	newEvent['trees'] = trees;
 	newEvent['status']="pending";
-	
+
 	$.ajax({
 		url: "http://127.0.0.1:3000/events/",
 		type: "POST",
@@ -414,7 +418,7 @@ function addEvent(name,address,date,end,trees) {
                 401: function(json) {
                     parsed = JSON.parse(json);
                     alert(parsed["message"]);
-                }       
+                }
         },
         error: function() {
             alert("Ajax request failed.");

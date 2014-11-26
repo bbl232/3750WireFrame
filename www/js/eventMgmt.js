@@ -310,8 +310,8 @@ function addNewEvent(){
 			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
 		},
 		success: function(json) {
-			alert(JSON.stringify(json));
-			//window.location.reload();
+			//alert(JSON.stringify(json));
+			window.location.reload();
 		},
 		statusCode: {
 			400: function(json) {

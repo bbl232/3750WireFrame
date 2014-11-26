@@ -16,8 +16,8 @@ function getCookie(cname) {
 function getCurrentUser() {
 	var user;
 	var message;
-    var cookie = getCookie("Appleseed_user_details");
-    var parsed = JSON.parse(cookie);
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
 
 	$.ajax({
 		url: "http://127.0.0.1:3000/users/current",
@@ -26,7 +26,7 @@ function getCurrentUser() {
 			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
 		},
 		success: function(json) {
-			user = JSON.parse(json);
+			user = JSON.parse(JSON.parse(json));
 			return user["user"];
 		},
 		statusCode: {
@@ -322,7 +322,7 @@ function logout(){
 			document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
 			document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-            document.cookie = "Appleseed_user_details=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+			document.cookie = "Appleseed_user_details=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			window.location.href = "/index.php";
 		},
 		error: function() {

@@ -194,14 +194,105 @@ function editAddress(id){
   var userInfo;
 
 
-  //first we get current user information, so we can get user id
-  $.ajax({
-    type:"GET",
-    url: "http://127.0.0.1:3000/users/current",
-    dataType: "json",
-    success: function(json) {
-      userInfo = JSON.parse(json);
+  var message;
+      var cookie = getCookie("Appleseed_user_details");
+      var parsed = JSON.parse(cookie);
+
+    $.ajax({
+    //async:false,
+      url: "http://127.0.0.1:3000/users/current",
+      dataType: "json",
+      beforeSend: function (request) {
+        request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+      },
+      success: function(userInfo) {
+        alert(JSON.stringify(userInfo));
+      //userInfo = JSON.parse(json);
       //return user["id"];
+      var userID=userInfo['user']['id'];
+      var locations;
+      var locURL="http://127.0.0.1:3000/user/"+userID+"/locations";
+      //now we make call to /user/{uid}/locations and get back a list of locations
+      $.ajax({
+        type:"GET",
+        url:locURL,
+        dataType: "json",
+        success: function(json) {
+          //alert(id);
+          //locations = JSON.parse(json);
+          //return user["id"];
+          var locations=json;
+
+
+
+                var locDesc;
+                var locAddr1;
+                var locAddr2;
+                var locCity;
+                var locPostal;
+                var locCountry;
+
+
+                var userLocations=[];
+                userLocations=locations['locations'];
+
+                for(var i=0;i<userLocations.length;i++){
+                  //alert(userLocations[i]);
+                  if (userLocations[i]['id']==id){
+                    //we found the location to edit since it matched id that was passed in
+                    locDesc=userLocations[i]['description'];
+                    locAddr1=userLocations[i]['address1'];
+                    locAddr2=userLocations[i]['address2'];
+                    locCity=userLocations[i]['city'];
+                    locPostal=userLocations[i]['postal'];
+                    locCountry=userLocations[i]['country'];
+                  }
+                }
+
+
+                var bodyReg=document.getElementById('message-modal_body');
+                bodyReg.innerHTML=" \
+                <form id='editaddress-form'> \
+                  <div class='input-group'> \
+                    <span class='input-group-addon'>Description</span><input type='text' class='form-control' name='locDesc' id='locDesc' value='"+locDesc+"'> \
+                  </div><br> \
+                  <div class='input-group'> \
+                    <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address 1</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locAddr1+"' readonly> \
+                  </div><br> \
+                  <div class='input-group'> \
+                    <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address 2</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locAddr2+"' readonly> \
+                  </div><br> \
+                  <div class='input-group'> \
+                    <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> City</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCity+"' readonly> \
+                  </div><br> \
+                  <div class='input-group'> \
+                    <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Postal Code</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locPostal+"' readonly> \
+                  </div><br> \
+                  <div class='input-group'> \
+                    <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Country</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCountry+"' readonly> \
+                  </div><br> \
+                  <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+id+","+userID+")'>Save</button><br> \
+                </form>";
+
+
+                /*<table> \
+                <tr><td><label>Name:</label></td><td><form><input type='text' class='form-control' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
+                <tr><td><label>Address:</label></td><td><form><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
+                <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button></tr></table>";*/
+                $('#editDetailsModal').modal('show');
+
+        },
+        statusCode: {
+          401: function(json) {
+            parsed = JSON.parse(json);
+            alert(parsed["message"]);
+          }
+        },
+        error: function() {
+          alert("Ajax request failed");
+        }
+      });
+
     },
     statusCode: {
       401: function(json) {
@@ -214,85 +305,7 @@ function editAddress(id){
     }
   });
 
-  var userID=userInfo['users']['id'];
-  var locations;
-  var locURL="http://127.0.0.1:3000/user/"+userID+"/locations";
-  //now we make call to /user/{uid}/locations and get back a list of locations
-  $.ajax({
-    type:"GET",
-    url:locURL,
-    dataType: "json",
-    success: function(json) {
-      locations = JSON.parse(json);
-      //return user["id"];
-    },
-    statusCode: {
-      401: function(json) {
-        parsed = JSON.parse(json);
-        alert(parsed["message"]);
-      }
-    },
-    error: function() {
-      alert("Ajax request failed");
-    }
-  });
 
-
-
-  var locDesc;
-  var locAddr1;
-  var locAddr2;
-  var locCity;
-  var locPostal;
-  var locCountry;
-
-
-  var userLocations=[];
-  userLocations=locations['locations'];
-
-  for(var i=0;i<userLocations.length;i++){
-    if (userLocations[i]==id){
-      //we found the location to edit since it matched id that was passed in
-      locDesc=userLocations['description'];
-      locAddr1=userLocations['address1'];
-      locAddr2=userLocations['address2'];
-      locCity=userLocations['city'];
-      locPostal=userLocations['postal'];
-      locCountry=userLocations['country'];
-    }
-  }
-
-
-  var bodyReg=document.getElementById('message-modal_body');
-  bodyReg.innerHTML=" \
-  <form id='editaddress-form'> \
-    <div class='input-group'> \
-      <span class='input-group-addon'>Description</span><input type='text' class='form-control' name='locDesc' id='locDesc' value='"+locDesc+"'> \
-    </div><br> \
-    <div class='input-group'> \
-      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address 1</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locAddr1+"' readonly> \
-    </div><br> \
-    <div class='input-group'> \
-      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address 2</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locAddr2+"' readonly> \
-    </div><br> \
-    <div class='input-group'> \
-      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> City</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCity+"' readonly> \
-    </div><br> \
-    <div class='input-group'> \
-      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Postal Code</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locPostal+"' readonly> \
-    </div><br> \
-    <div class='input-group'> \
-      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Country</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCountry+"' readonly> \
-    </div><br> \
-    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+id+","+userID+")'>Save</button><br> \
-  </form>";
-
-
-  /*<table> \
-  <tr><td><label>Name:</label></td><td><form><input type='text' class='form-control' name='adrName' id='adrName' value='"+addName+"'></form></td></tr> \
-  <tr><td><label>Address:</label></td><td><form><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'></form></td></tr> \
-  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button></tr></table>";*/
-  $('#editDetailsModal').modal('show');
 
 }
 
@@ -424,17 +437,18 @@ function saveRegInfo(userID){
   var message;
     var cookie = getCookie("Appleseed_user_details");
     var parsed = JSON.parse(cookie);
-
+alert(userID);
   $.ajax({
+    async:false,
     type:"PUT",
     url: "http://127.0.0.1:3000/user/"+userID,
     beforeSend: function (request) {
       request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
     },
-    //headers:{"Authorization":"Appleseed token="+},//cookie goes here
     data: data,
-    dataType: "json",
+    //dataType: "json",
     success: function(json) {
+      //alert("1");
       //userInfo = JSON.parse(json);
       //return user["id"];
     },
@@ -473,16 +487,22 @@ function saveAdrInfo(id,userID){
     jsonObj['location']['description']=locDesc;
 
     var data=JSON.stringify(jsonObj);
-
-    var locURL="http://127.0.0.1:3000//user/"+userID+"/locations/"+id;
+    var message;
+    var cookie = getCookie("Appleseed_user_details");
+    var parsed = JSON.parse(cookie);
+    var locURL="http://127.0.0.1:3000/user/"+userID+"/locations/"+id;
     $.ajax({
       type:"PUT",
       url: locURL,
-      //headers:{"Authorization":"Appleseed token="+},//cookie goes here
+      beforeSend: function (request) {
+        request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+      },
+
       data: data,
       dataType: "json",
       success: function(json) {
-        userInfo = JSON.parse(json);
+
+        //userInfo = JSON.parse(json);
         //return user["id"];
       },
       statusCode: {

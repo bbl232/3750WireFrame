@@ -5,23 +5,68 @@
 	Finaly it parses all the locations into select option input
 */
 function setLocationInput() {
+	console.log("locations");
 	var locationInputHTML="";
 	var locationInput = document.getElementById("location-input");
-	//var user = getCurrentUser();
+	var message;
 	var cookie = getCookie("Appleseed_user_details");
-	var user = JSON.parse(cookie);
-	var addresses = getUserLocations(parseInt(user['user']['id']));
+	var parsed = JSON.parse(cookie);
 
-	locationInputHTML+='<div class="form-group"><label>Choose a location:</label><select class="form-control" id="location">';
-	for (var i=0;i<addresses.length;i++){
-		locationInputHTML+='<option value=';
-		locationInputHTML+=addresses[i]['id'];
-		locationInputHTML+="'>";
-		locationInputHTML+=addresses[i]['description'];
-		locationInputHTML+="</option>";
-	}
-	locationInputHTML+='</select></div>'
-	locationInput.innerHTML=locationInputHTML;
+	$.ajax({
+		url: "http://127.0.0.1:3000/users/current",
+		dataType: "json",
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
+		success: function(json) {
+			$.ajax({
+				url: "http://127.0.0.1:3000/user/"+ json['user']['id'] +"/locations",
+				dataType: "json",
+				beforeSend: function (request) {
+					request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+				},
+				success: function(json) {
+					alert(JSON.stringify(json));
+					locationInputHTML+='<div class="form-group"><label>Choose a location:</label><select class="form-control" id="location">';
+					for (var i=0;i<json['user']['locations'].length;i++){
+						locationInputHTML+='<option value=';
+						locationInputHTML+=json['user']['locations'][i]['id'];
+						locationInputHTML+="'>";
+						locationInputHTML+=json['user']['locations'][i]['description'];
+						locationInputHTML+="</option>";
+					}
+					locationInputHTML+='</select></div>'
+					locationInput.innerHTML=locationInputHTML;
+				},
+				statusCode: {
+					401: function(json) {
+						parsed = JSON.parse(json);
+						alert(parsed["message"]);
+					},
+					403: function(json) {
+						parsed = JSON.parse(json);
+						alert(parsed["message"]);
+					},
+					404: function(json) {
+						parsed = JSON.parse(json);
+						alert(parsed["message"]);
+					}
+				},
+				error: function() {
+					alert("Ajax request failed");
+				}
+			});
+		},
+		statusCode: {
+			401: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
 }
 
 /*

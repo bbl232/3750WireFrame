@@ -1,18 +1,19 @@
 function showEvents(){
     console.log("show");
     var table = document.getElementById("events_table");
-    var eventsListText = getCookie("Appleseed_events");
+    var eventsList = getEvents();
     var url = document.URL;
-    var id = 0;
+	var user=getCurrentUser();
+    var id = user.id;
 
     if (eventsListText != ""){
-        var eventsList = JSON.parse(eventsListText);
         eventsList.forEach(function (event){
                var tr = "<tr>"; //table row
-                tr += "<td>Producer: " + event.creator + "</td>"; // td= table cell
+                tr += "<td>Producer: " + event.owner + "</td>"; // td= table cell
                 tr += "<td>Date: " + event.date + "</td>";
                 tr += "<td>Address: " + event.address + "</td>";
                 tr+="<td>Time: "+event.time+"</td></tr><tr>";
+				//print trees
                 var numTreeTypes = Object.keys(event.trees).length;
                 if(numTreeTypes>1){
                     var index=1;
@@ -27,16 +28,18 @@ function showEvents(){
                 }
                 tr+="<td>Number of volunteers needed "+event.numVolunteers+"</td>";
                 tr+="<td>Number of registered volunteers "+event.numRegVolunteers+"</td>";
+				
+				//They are a volunteer
                 if(url.indexOf("volunteer.php") > -1) {
                     tr+='<td><button type="button" class="btn btn-success" onclick="volunteerEvent('+id+')">Register</button></td>';
                 } else if(url.indexOf("eventMgmt.php") > -1) {
-                    if (event.creator == getCookie("User_id_appleseed")){
+					//creator of event
+                    if (event.owner == id){
                         tr+='<td><button type="button" class="btn btn-primary" onclick="modifyEvent('+id+')">Modify</button></td>';
                     }
                 }
                 tr += "</tr>";
                 table.innerHTML +=tr;
-                id++;
         });
     }
 
@@ -69,7 +72,7 @@ function filter_list(field) {
             tr="";
             if (event[field]==data || data=="") {//filter by data
                 var tr = "<tr>"; //table row
-                tr += "<td>Producer: " + event.creator + "</td>"; // td= table cell
+                tr += "<td>Producer: " + event.owner + "</td>"; // td= table cell
                 tr += "<td>Date: " + event.date + "</td>";
                 tr += "<td>Address: " + event.address + "</td>";
                 tr+="<td>Time: "+event.time+"</td>";
@@ -97,33 +100,3 @@ function filter_list(field) {
         });
     }
 }
-
-/*
-function volunteerEvent(){
-    var date = document.getElementById("datepicker").value;
-    var eventsListText = getCookie("Appleseed_events");
-    var eventsList = JSON.parse(eventsListText);
-
-    var count=0;
-    var theEvent;
-    var dateEvent;
-
-        eventsList.forEach(function (event) {
-            if(event.date=date){
-                count++;
-                dateEvent+=event;
-                theEvent=event;
-            }
-        });
-        console.log(count);
-        if(count>1){
-            //Ask user which time, since apparently they are on the same day
-
-        }else if (count==1){
-            //Success, get current user's name and add them to event, increase num volunteers
-            theEvent.numRegVolunteers++;//this isnt working, not global?
-        }else{
-            //fail
-        }
-
-}*/

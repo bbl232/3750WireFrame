@@ -35,6 +35,42 @@ function getCurrentUser() {
 		}
 	});
 }
+/*
+	getEvents - return a list of event object
+*/
+function getEvents() {
+	$.ajax({
+		url: "http://127.0.0.1:3000/event",
+		dataType: "json",
+		/*headers:{
+		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
+		},*/
+		success: function(json) {
+			return JSON.parse(json);
+		},
+		statusCode: {
+			201: function(json) {
+				parsed = JSON.parse(json);
+				return parsed;
+			},
+			404: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			401: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			403: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
+}
 
 /*
 	getEvent - return an event object
@@ -136,6 +172,7 @@ function login(uid, upa, hex) {
 			data: data,
 			dataType: "json",
 			success: function(json) {
+                document.cookie = "Appleseed_user_details="+JSON.stringify(json);
 				setAccountCookie(uid);
                 window.location.reload();
 			},
@@ -189,6 +226,7 @@ function staffLogin() {
 			data: data,
 			dataType: "json",
 			success: function(json) {
+                document.cookie = "Appleseed_user_details="+JSON.stringify(json);
 				setAccountCookie(sid);
 				window.location.reload();
 			},
@@ -279,6 +317,7 @@ function logout(){
 			document.cookie = "Staff_id_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			document.cookie = 'account_details_appleseed=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
 			document.cookie = "Appleseed_events=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+            document.cookie = "Appleseed_user_details=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 			window.location.href = "/index.php";
 		},
 		error: function() {
@@ -363,15 +402,51 @@ function addEvent(name, address, date, time, duration, numVol, trees) {
 }
 
 /*
-	sendFeedback() - gather the feedback from the fields and call
-	addFeedback().
+	sendFeedback() - gather the feedback from the fields and 
+	push the feedback given in the parameters to the
+	feedback list.
+		name - name of feedback submitter
+		email - email of feedback submitter
+		contact - whether the user wants to be contacted back
+		feedback - the actual feedback
 */
 function sendFeedback() {
+	var user = getCurrentUser();
+	var idOwner = user['id'];
 	var name = document.getElementById("feedback-name").value;
 	var email = document.getElementById("feedback-email").value;
-	var contact = document.getElementById("feedback-contact_me").checked;
+	var contact = document.getElementById("feedback-contact_me").value;
 	var feedback = document.getElementById("feedback-text").value;
-	addFeedback(name,email,contact,feedback);
+	
+	var bodyFeedback = {};
+	bodyFeedback['feedback'] = {}; 
+	bodyFeedback['feedback']['id'] = 0; //?;
+	bodyFeedback['feedback']['subject'] = "";
+	bodyFeedback['feedback']['message'] = feedback;
+	bodyFeedback['feedback']['shouldBeContacted'] = contact; 
+	bodyFeedback['feedback']['owner']['id'] = idOwner;
+	bodyFeedback['feedback']['event']['id'] = 0; //event id - 0 for now 
+
+	feedbackData = JSON.stringify(bodyFeedback);
+
+	$.ajax({
+		url: "http://127.0.0.1:3000/feedback/",
+		type: "POST",
+		data: feedbackData,
+		dataType: "json",
+		success: function(json) {
+            //success
+        },
+        statusCode: {
+                401: function(json) {
+                    parsed = JSON.parse(json);
+                    alert(parsed["message"]);
+                }       
+        },
+        error: function() {
+            alert("Ajax request failed.");
+        }
+	});
 }
 
 /*
@@ -400,32 +475,6 @@ function setAccountCookie(sid) {
 	account_details['userPhone'] = "519-123-1234";
 	document.cookie = "account_details_appleseed="+JSON.stringify(account_details);
 }
-
-/*
-	addFeedback() - push the feedback given in the parameters to the
-	feedback list.
-		name - name of feedback submitter
-		email - email of feedback submitter
-		contact - whether the user wants to be contacted back
-		feedback - the actual feedback
-*/
-function addFeedback(name, email, contact, feedback) {
-	var newFeedback = {};
-
-	var feedbackListText = getCookie('Appleseed_feedback');
-	if (feedbackListText == "")
-		var feedbackList = [];
-	else
-		var feedbackList = JSON.parse(feedbackListText);
-	newFeedback['name'] = name;
-	newFeedback['email'] = email;
-	newFeedback['contact'] = contact;
-	newFeedback['feedback'] = feedback;
-
-	feedbackList.push(newFeedback);
-	document.cookie = "Appleseed_feedback="+JSON.stringify(feedbackList);
-}
-
 
 //Set up tooltips, popovers, and set up the navbar on load
 $(function () {

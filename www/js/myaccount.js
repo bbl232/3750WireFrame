@@ -47,9 +47,6 @@ var userLocations=[];
       request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
     },
     success: function(userInfo) {
-      //alert(JSON.stringify(userInfo));
-      //user=json;
-      //userInfo=JSON.parse(user);
 
        userID=userInfo['user']['id'];
        userFirst=userInfo['user']['firstname'];
@@ -59,9 +56,7 @@ var userLocations=[];
        userPhone=userInfo['user']['phone'];
 
       userLocations=userInfo['user']['locations'];
-      //user = JSON.parse(json);
-      //alert("!");
-      //return user["user"];
+
       var bodyReg=document.getElementById('regularInfo');
 
       //Populate user info page without locations
@@ -74,8 +69,7 @@ var userLocations=[];
 
       var locID;
       //display list of locations below user info
-      //alert("1");
-      //alert(JSON.stringify(userLocations));
+
       var addressHtml="";
       addressHtml+="<h4>Addresses:</h4><hr>"
       for (var i=0;i<userLocations.length;i++){
@@ -97,10 +91,10 @@ var userLocations=[];
         locID=userLocations[i]['id'];
         //pass in location id so we know which to edit on editAddress
         addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='editAddress("+locID+")'>Edit</button><br><br> \
-        <button type='button' class='btn btn-danger' style='float:right' onclick='deleteAdr("+i+")'>Delete</button><br>";
+        <button type='button' class='btn btn-danger' style='float:right' onclick='deleteAdr("+locID+","+userID+")'>Delete</button><br>";
         addressHtml+="<hr>";
       }
-      addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='addAddressModal()'>Add</button><br>";
+      addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='addAddressModal("+userID+")'>Add</button><br>";
       var modalBodyAddress=document.getElementById('addressInfo');
       modalBodyAddress.innerHTML=addressHtml;
     },
@@ -120,8 +114,6 @@ var userLocations=[];
 }
 
 function editRegular(){
-  //var userDetails=getCookie("account_details_appleseed");
-  //var jsonCookie=JSON.parse(userDetails);
   //first we get current user information, this function can be replaced to function call in wireframe
   var message;
       var cookie = getCookie("Appleseed_user_details");
@@ -184,19 +176,10 @@ function editRegular(){
 }
 
 function editAddress(id){
-  //var userDetails=getCookie("account_details_appleseed");
-  //var jsonCookie=JSON.parse(userDetails);
-  //var addresses=[];
-  //addresses=jsonCookie['userAddress'];
-  ///var addName=addresses[index]['name'];
-  //var addLoc=addresses[index]['location'];
-
-  var userInfo;
-
-
-  var message;
-      var cookie = getCookie("Appleseed_user_details");
-      var parsed = JSON.parse(cookie);
+    var userInfo;
+    var message;
+    var cookie = getCookie("Appleseed_user_details");
+    var parsed = JSON.parse(cookie);
 
     $.ajax({
     //async:false,
@@ -309,7 +292,7 @@ function editAddress(id){
 
 }
 
-function addAddressModal(){
+function addAddressModal(userID){
 
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML="\
@@ -332,21 +315,14 @@ function addAddressModal(){
     <div class='input-group'> \
       <span class='input-group-addon'>Country</span><input type='text' class='form-control' name='adrCountry' id='adrCountry' value=''> \
     </div><br> \
-    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='addAddress()'>Add Address</button><br> \
+    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='addAddress("+userID+")'>Add Address</button><br> \
   </form>";
-  /*<table> \
-  <h5>New Address</h5> \
-  <tr><td>Address Type:</td><td><form><input type='text' class='form-control' name='adrType' id='adrType' value='Ex. Cell, Home...'></form></td></tr> \
-  <tr><td>Address:</td><td><form><input type='text' class='form-control' name='userLoc' id='userLoc' value=''></form></td></tr> \
-  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='addAddress()'>Add Address</button></tr></table>";*/
+
   $('#editDetailsModal').modal('show');
 
 }
 
-function addAddress(){
-  //var userDetails=getCookie("account_details_appleseed");
-  //var jsonCookie=JSON.parse(userDetails);
-  //var addresses=[];
+function addAddress(userID){
   var adrDesc=$('#adrDesc').val();
   var locAdr1=$('#locAdr1').val();
   var locAdr2=$('#locAdr2').val();
@@ -354,7 +330,7 @@ function addAddress(){
   var adrPostal=$('#adrPostal').val();
   var adrCountry=$('#adrCountry').val();
 
-  if(adrType !=""&&locAdr1!=""&&locAdr2!=""&&adrCity!=""&&adrPostal!=""&&adrCountry!=""){
+  if(adrDesc !=""&&locAdr1!=""&&adrCity!=""&&adrPostal!=""&&adrCountry!=""){
 
 
     var jsonObj={};
@@ -373,11 +349,10 @@ function addAddress(){
     $.ajax({
       type:"POST",
       url: locURL,
-      //headers:{"Authorization":"Appleseed token="+},//cookie goes here
       data: data,
       dataType: "json",
       success: function(json) {
-        userInfo = JSON.parse(json);
+window.location = window.location;
         //return user["id"];
       },
       statusCode: {
@@ -391,16 +366,6 @@ function addAddress(){
       }
     });
 
-
-
-
-    //addresses=jsonCookie['userAddress'];
-    //var adrLength=addresses.length;
-    //jsonCookie['userAddress'][adrLength]={};
-    //jsonCookie['userAddress'][adrLength]['name']=adrType;
-    //jsonCookie['userAddress'][adrLength]['location']=userLoc;
-    //document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
-    window.location = window.location;
   }
   else{
     //$('#editDetailsModal').modal('hide');
@@ -437,9 +402,7 @@ function saveRegInfo(userID){
   var message;
     var cookie = getCookie("Appleseed_user_details");
     var parsed = JSON.parse(cookie);
-//alert(userID);
   $.ajax({
-    //async:false,
     type:"PUT",
     url: "http://127.0.0.1:3000/user/"+userID,
     beforeSend: function (request) {
@@ -448,9 +411,7 @@ function saveRegInfo(userID){
     data: data,
     //dataType: "json",
     success: function(json) {
-      //alert("1");
-      //userInfo = JSON.parse(json);
-      //return user["id"];
+
       window.location = window.location;
 
     },
@@ -500,8 +461,9 @@ function saveAdrInfo(id,userID){
       },
 
       data: data,
-      dataType: "json",
+      //dataType: "json",
       success: function(json) {
+window.location = window.location;
 
         //userInfo = JSON.parse(json);
         //return user["id"];
@@ -517,14 +479,7 @@ function saveAdrInfo(id,userID){
       }
     });
 
-    //var userDetails=getCookie("account_details_appleseed");
-    //var jsonCookie=JSON.parse(userDetails);
 
-    //jsonCookie['userAddress'][index]['name']=adrName;
-    //jsonCookie['userAddress'][index]['location']=userAdr;
-
-    //document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
-    window.location = window.location;
   }
   else{
     var bodyReg=document.getElementById('message-modal_body');
@@ -536,12 +491,39 @@ function saveAdrInfo(id,userID){
 
 }
 
-function deleteAdr(index){
-  var userDetails=getCookie("account_details_appleseed");
-  var jsonCookie=JSON.parse(userDetails);
-  jsonCookie['userAddress'].splice(index,1);
-  document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
-  window.location = window.location;
+function deleteAdr(locID,userID){
+  //var userDetails=getCookie("account_details_appleseed");
+  //var jsonCookie=JSON.parse(userDetails);
+  //jsonCookie['userAddress'].splice(index,1);
+  //document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
+  //window.location = window.location;
+
+  var message;
+    var cookie = getCookie("Appleseed_user_details");
+    var parsed = JSON.parse(cookie);
+  $.ajax({
+    type:"DELETE",
+    url: "http://127.0.0.1:3000/user/"+userID+"/locations/"+locID,
+    beforeSend: function (request) {
+      request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+    },
+    //dataType: "json",
+    success: function(json) {
+
+      window.location = window.location;
+
+    },
+    statusCode: {
+      401: function(json) {
+        parsed = JSON.parse(json);
+        alert(parsed["message"]);
+      }
+    },
+    error: function() {
+      alert("Ajax request failed");
+    }
+  });
+
 
 }
 

@@ -59,7 +59,7 @@ require("includes/header.php");
 		</div>
 			<div class="modal-body" id="register_body">
 				<form class="form-inline" role="form">
-					<label>First Name:</label><input class="form-control" id="register-first" type="text" /><br>
+					<div class="form-group"><label>First Name:</label><input class="form-control" id="register-first" type="text" /><br></div>
 					<label>Last Name:</label><input class="form-control" id="register-last" type="text" /><br>
 					<label>Email Address:</label><input class="form-control" id="register-email" type="text" /><br>
 					<label>Phone Number:</label><input class="form-control" id="register-phone" type="text" /><br>

@@ -16,6 +16,7 @@ module.exports = function (userModel,eventModel){
         this.token = token;
         this.user = user;
     }
+    var crypt = require('crypto')
     /*
         This works as of 11:59 AM, Tuesday Nov 25.
         Author: Bill Vandenberk
@@ -28,7 +29,7 @@ module.exports = function (userModel,eventModel){
             })
         }
         else{
-            userModel.User.find().populate('locations').exec(function(err,user){
+            userModel.User.find({},'-passwordHash').populate('locations').exec(function(err,user){
                 if(err || user==null) res.send(400,err);
                 res.send(200,new UserList(user))
 

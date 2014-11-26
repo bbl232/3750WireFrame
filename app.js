@@ -22,9 +22,14 @@ var even = require('./controllers/events.js')(userModel,eventModel)
 
 server.pre(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Headers", "*");
     return next();
 });
+server.opts("/.*",function(req,res,next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "authorization");
+    res.send(200);
+})
 //Users API
 //GET
 server.get("/users", user.getUsers) //get a list of users

@@ -35,6 +35,42 @@ function getCurrentUser() {
 		}
 	});
 }
+/*
+	getEvents - return a list of event object
+*/
+function getEvents() {
+	$.ajax({
+		url: "http://127.0.0.1:3000/event",
+		dataType: "json",
+		/*headers:{
+		"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
+		},*/
+		success: function(json) {
+			return JSON.parse(json);
+		},
+		statusCode: {
+			201: function(json) {
+				parsed = JSON.parse(json);
+				return parsed;
+			},
+			404: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			401: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			},
+			403: function(json) {
+				parsed = JSON.parse(json);
+				alert(parsed["message"]);
+			}
+		},
+		error: function() {
+			alert("Ajax request failed");
+		}
+	});
+}
 
 /*
 	getEvent - return an event object

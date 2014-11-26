@@ -114,7 +114,6 @@ module.exports = function (userModel,eventModel){
             if(err || user==null) res.send(404,new Message("User not found"))
 
             var body = JSON.parse(req.body);
-            console.log(body.location)
             var newLoc = new userModel.Location(body.location)
             newLoc.save(function(err){
                 if(err) res.send(401,err)

@@ -108,7 +108,16 @@ module.exports = function (userModel,eventModel){
     }
 
     module.cancel = function(req, res, next){
-
+        /*Not implemented yet*/
+        eventModel.Event.findOne({id:req.params.id}).populate({path:'owner attendees',select:'-passwordHash'}).exec(function(err,event){
+            if(err) res.send(404,new Message("Event not found"))
+            event.status = "cancelled";
+            event.save(function(err){
+                if(err) res.send(404, new Message("Event not found"))
+                res.send(200,new Message("The event was accepted"))
+            })
+        })
+        //res.send(404,new Message("Not Yet Implemented"))
     }
 
     module.acc = function(req, res, next){
@@ -134,17 +143,27 @@ module.exports = function (userModel,eventModel){
     }
 
     module.updateEvent = function(req, res, next){
+        var body = JSON.parse(req.body);
+        var postEvent = body.event;
         eventModel.Event.findOne({id:req.params.id}).populate({path:'owner attendees',select:'-passwordHash'}).exec(function(err,event){
             if(err) res.send(404,new Message("Event not found"))
-            /*
+            event.description = postEvent.description || event.description;
+            event.attendees = postEvent.attendees || event.attendees;
+            event.endtime = postEvent.endtime || event.endtime;
+            event.trees = postEvent.trees || event.trees;
+            event.staffNotes = postEvent.staffNotes || event.staffNotes;
 
-            STUFF!!!
-
-
-            */
             event.save(function(err){
-                if(err) res.send(404, new Message("Event not found"))
-                res.send(200,new Message("The event was rejected"))
+                if(err) res.send(400, new Message("Event not saved"))
+                    if(err) res.send(400,new Message("Could not populate."))
+                    userModel.User.populate(event,{path:'owner.locations',model: userModel.Location}, function(err,event2){
+                        if(err) res.send(400,new Message("Could not populate."))
+                        userModel.User.populate(event2,{path:'attendees.locations', model: userModel.Location},function(err,event3){
+                            if(err) res.send(400,new Message("Also nope."))
+
+                            res.send(201,new EventList(event3))
+                        })
+                    })
             })
         })
     }

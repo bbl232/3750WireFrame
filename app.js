@@ -56,7 +56,9 @@ server.post("/users/authenticate", user.login) //generate a token for user
 
 //Events API
 server.get("/events", even.getEvents)
-server.get("/event/:id", even.getEvents)
+server.get("/events/:id", even.getEvents)
+
+server.put("/events/:id", even.updateEvent)
 
 server.post("/events", even.newEvent)
 server.post("/events/:id/attend", even.attend)
@@ -65,9 +67,8 @@ server.post("/events/:id/cancel", even.cancel)
 server.post("/events/:id/accept", even.acc)
 server.post("/events/:id/reject", even.reject)
 
-server.put("/event/:id", even.updateEvent)
 
-server.del("/event/:id", even.delete)
+server.del("/events/:id", even.delete)
 //Feedback API
 
 server.listen(3000, function(){

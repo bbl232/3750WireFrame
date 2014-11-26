@@ -6,15 +6,25 @@ var server = restify.createServer({name:'unicom-appleseed-api'})
 server
   .use(restify.fullResponse())
   .use(restify.bodyParser())
-  .use(function(req, res, next){
-      res.setHeader('Access-Control-Allow-Origin','*');
-      next();
-  })
 
-// var evenModel = require('./models/events.js')
+var mongoose = require('mongoose')
+var connection = mongoose.createConnection("mongodb://localhost/test");
+mongoose.connect("mongodb://localhost/test");
+var autoIncrement = require('mongoose-auto-increment');
+autoIncrement.initialize(connection);
+var crypt = require('crypto');
 
-var user = require('./controllers/users.js')
-var even = require('./controllers/events.js')
+var userModel = require('./models/users.js')(mongoose,autoIncrement)
+var eventModel = require('./models/events.js')(mongoose,autoIncrement)
+
+var user = require('./controllers/users.js')(userModel,eventModel)
+var even = require('./controllers/events.js')(userModel,eventModel)
+
+server.pre(function(req,res,next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    return next();
+});
 //Users API
 //GET
 server.get("/users", user.getUsers) //get a list of users

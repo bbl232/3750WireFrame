@@ -1,3 +1,5 @@
+/* getFeedback() - Returns list of all feedback.
+*/
 function getFeedback(){
     var feedbackList;
     $.ajax({
@@ -10,14 +12,25 @@ function getFeedback(){
         success: function(json) {
             feedbackList = JSON.parse(json);
         },
+        statusCode: {
+                403: function(json) {
+                    parsed = JSON.parse(json);
+                    alert(parsed["message"]);
+                },
+                401: function(json) {
+                    parsed = JSON.parse(json);
+                    alert(parsed["message"]);
+                }       
+        },
         error: function() {
-            //alert("Ajax request failed. Unable to get feedback.");
+            //alert("Ajax request failed.");
         }
     });
 
     return feedbackList;
 }
 
+/*  showFeedback() - Populates the table with feedback*/
 function showFeedback(){
     var feedbackList = getFeedback();
     var table = document.getElementById("feedback-table");
@@ -39,6 +52,9 @@ function showFeedback(){
     }
 }
 
+/* removeFeedback() - Deletes feedback item
+            id - id of feedback
+*/
 function removeFeedback(id){
     $.ajax({
         url: "http://127.0.0.1:3000/feedback/"+id,
@@ -46,9 +62,19 @@ function removeFeedback(id){
         dataType: "json",
         success: function(json) {
 
-        }, 
+        },
+        statusCode: {
+            401: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            },
+            403: function(json) {
+                parsed = JSON.parse(json);
+                alert(parsed["message"]);
+            }       
+        },
         error: function() {
-            alert("Ajax request failed. Unable to delete feedback.");
+            alert("Ajax request failed.");
         }   
     });
 }

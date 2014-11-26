@@ -209,7 +209,7 @@ exports.delLocation = function(req, res, next){
 
 /*
 
-THE REST OF THIS STUFF NEEDS AUTH IMPLEMENTED
+The AUTH stuff works for getting tokens and users from tokens, but is not enforced yet.
 
 */
 exports.updatePassword = function(req, res, next){

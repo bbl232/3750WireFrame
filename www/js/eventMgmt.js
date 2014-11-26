@@ -19,43 +19,16 @@ function setLocationInput() {
 			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
 		},
 		success: function(json) {
-			$.ajax({
-				url: "http://127.0.0.1:3000/user/"+ json['user']['id'] +"/locations",
-				dataType: "json",
-				beforeSend: function (request) {
-					request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
-				},
-				success: function(json) {
-					alert(JSON.stringify(json));
-					locationInputHTML+='<div class="form-group"><label>Choose a location:</label><select class="form-control" id="location">';
-					for (var i=0;i<json['user']['locations'].length;i++){
-						locationInputHTML+='<option value=';
-						locationInputHTML+=json['user']['locations'][i]['id'];
-						locationInputHTML+="'>";
-						locationInputHTML+=json['user']['locations'][i]['description'];
-						locationInputHTML+="</option>";
-					}
-					locationInputHTML+='</select></div>'
-					locationInput.innerHTML=locationInputHTML;
-				},
-				statusCode: {
-					401: function(json) {
-						parsed = JSON.parse(json);
-						alert(parsed["message"]);
-					},
-					403: function(json) {
-						parsed = JSON.parse(json);
-						alert(parsed["message"]);
-					},
-					404: function(json) {
-						parsed = JSON.parse(json);
-						alert(parsed["message"]);
-					}
-				},
-				error: function() {
-					alert("Ajax request failed");
-				}
-			});
+			locationInputHTML+='<div class="form-group"><label>Choose a location:</label><select class="form-control" id="location">';
+			for (var i=0;i<json['user']['locations'].length;i++){
+				locationInputHTML+='<option value=';
+				locationInputHTML+=json['user']['locations'][i]['id'];
+				locationInputHTML+="'>";
+				locationInputHTML+=json['user']['locations'][i]['description'];
+				locationInputHTML+="</option>";
+			}
+			locationInputHTML+='</select></div>'
+			locationInput.innerHTML=locationInputHTML;
 		},
 		statusCode: {
 			401: function(json) {
@@ -215,9 +188,10 @@ function saveEvent(eventID) {
 	buildBodyRequest() - build a JSON string to create an event
 */
 function builBodyRequest() {
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
 	var numberTrees = parseInt(document.getElementById("trees-number").value);
-	var user = getCurrentUser();
-	var idOwner = user['id'];
+	var idOwner = parsed['user']['id'];
 	var description = document.getElementById("tree-text").value;
 	var idLocation = parseInt(document.getElementById("location").value);
 	var date = document.getElementById("datepicker").value;
@@ -248,17 +222,20 @@ function builBodyRequest() {
 */
 function addNewEvent(){
 	var bodyRequest = builBodyRequest();
+	var cookie = getCookie("Appleseed_user_details");
+	var parsed = JSON.parse(cookie);
 
 	$.ajax({
 		url: "http://127.0.0.1:3000/events",
 		type: "POST",
 		data: bodyRequest,
 		dataType: "json",
-		/*headers:{
-			"Authorization": "AppleSeed token=IIjjCqQNuuO1iwkB6v7kiV6Z44c"
-		},*/
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
 		success: function(json) {
-			window.location.reload();
+			alert(JSON.stringify(json));
+			//window.location.reload();
 		},
 		statusCode: {
 			400: function(json) {

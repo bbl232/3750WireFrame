@@ -7,6 +7,7 @@ module.exports = function(mongoose,autoIncrement){
         firstname: {type:String, required:true},
         lastname:  {type:String, required:true},
         email:     {type:String, required:true},
+        passwordHash: {type:String, required:true},
         roles:     {type:[String], default:["normal"]},
         phone:     Number,
         locations: [{type:Number, ref:'Location'}], //Array of references to locations
@@ -37,9 +38,17 @@ module.exports = function(mongoose,autoIncrement){
     locationSchema.plugin(autoIncrement.plugin, 'Location');
     locationSchema.plugin(autoIncrement.plugin, {model:'Location', field:'id'});
 
+    var tokenSchema = new Schema({
+        //_id:    Number,
+        token:  {type:String, required:true},
+        user:   {type:Number, ref:'User'},
+        expires: {type:String, default:new Date(+new Date + 6048e5).toISOString()},
+    })
+
     var models = {
         User : mongoose.model('User', userSchema),
         Location : mongoose.model('Location', locationSchema),
+        Token : mongoose.model('Token', tokenSchema)
     }
     return models
 }

@@ -10,12 +10,17 @@ function UserList(list){
     this.users=list;
 }
 
+function TokenUser(token,user){
+    this.token = token;
+    this.user = user;
+}
+
 var mongoose = require('mongoose')
 var connection = mongoose.createConnection("mongodb://localhost/test");
 mongoose.connect("mongodb://localhost/test");
 var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(connection);
-
+var crypt = require('crypto');
 var userModel = require('../models/users.js')(mongoose,autoIncrement)
 
 
@@ -25,7 +30,7 @@ var userModel = require('../models/users.js')(mongoose,autoIncrement)
 */
 exports.getUsers = function(req, res, next){
     if(req.params.id){
-        userModel.User.findOne({_id:req.params.id}).populate('locations').exec(function(err,user){
+        userModel.User.findOne({_id:req.params.id},'-passwordHash').populate('locations').exec(function(err,user){
             if(err || user==null) res.send(404,new Message("User not found"));
             res.send(200,user)
         })
@@ -34,6 +39,7 @@ exports.getUsers = function(req, res, next){
         userModel.User.find().populate('locations').exec(function(err,user){
             if(err || user==null) res.send(400,err);
             res.send(200,new UserList(user))
+
         })
     }
 }
@@ -74,6 +80,7 @@ exports.newUser = function(req, res, next){
     newUser.firstname = body.user.firstname;
     newUser.lastname = body.user.lastname;
     newUser.email = body.user.email;
+    newUser.passwordHash = body.user.passwordHash;
     newUser.roles = body.user.roles;
     newUser.phone = body.user.phone;
     newUser.userNotes = body.user.userNotes;
@@ -206,13 +213,59 @@ THE REST OF THIS STUFF NEEDS AUTH IMPLEMENTED
 
 */
 exports.updatePassword = function(req, res, next){
-    res.send(201,new Message("updatePassword"))
+    var spl = req.headers.authorization.split("=");
+    var tokenSupplied = spl[1]
+    userModel.Token.findOne({token:tokenSupplied}).populate('user user.locations').exec(function(err,token){
+        var body = JSON.parse(req.body);
+        var user = token.user;
+        if(user==null){
+            res.send(401,new Message("You are not logged in"))
+        }
+        console.log(user);
+        if(user.passwordHash == body.oldPasswordHash){
+            user.passwordHash = body.newPasswordHash;
+            user.save(function(err){
+                if(err) res.send(400, new Message("Could not save user."))
+                res.send(200,new Message("Password Changed"))
+            })
+        }
+        else{
+            res.send(403,new Message("Old password does not match"))
+        }
+    })
+    //res.send(201,new Message("updatePassword"))
 }
 
 exports.logout = function(req, res, next){
-    res.send(201,new Message("logout"))
+    var spl = req.headers.authorization.split("=");
+    var tokenSupplied = spl[1]
+    userModel.Token.remove({token:tokenSupplied},function(err,token){
+        if(err) res.send(401,new Message("You are not logged in."))
+        res.send(200)
+    })
+}
+
+exports.getByToken = function(req, res, next){
+    var spl = req.headers.authorization.split("=");
+    var tokenSupplied = spl[1]
+    userModel.Token.findOne({token:tokenSupplied}).populate({path:'user user.locations',select:'-passwordHash'}).exec(function(err,token){
+        if(err||token==null) res.send(401,new Message("You are not logged in."))
+        res.send(200,{"user":token.user})
+    })
 }
 
 exports.login = function(req, res, next){
-    res.send(201,new Message("login"))
+    /*Find user, generate unique token, send back tocken, store token in db*/
+    var body = JSON.parse(req.body)
+    userModel.User.findOne({email:body.email,passwordHash:body.passwordHash},function(err,user){
+        if(err||user==null) res.send(403, new Message("Incorrect email or password"))
+
+        var tok = crypt.createHash('sha256').update(user.email+user.passwordHash).digest('hex');
+        var tokenSave = new userModel.Token({token:tok,user:user._id})
+        tokenSave.save(function(err){
+            if(err) res.send(401, new Message("Could not save token"))
+            res.send(200,new TokenUser(tok,user))
+        })
+    })
+    //res.send(201,new Message("login"))
 }

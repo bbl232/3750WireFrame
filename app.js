@@ -28,6 +28,7 @@ server.del("/user/:id", user.delUser) //delete a specific user
 server.del("/user/:uid/locations/:id", user.delLocation) //delete a location from a user
 
 //special endpoints
+server.get("/users/current", user.getByToken) //update user's password
 server.post("/users/current/changePassword", user.updatePassword) //update user's password
 server.post("/users/current/logout", user.logout) //remove users token
 server.post("/users/authenticate", user.login) //generate a token for user

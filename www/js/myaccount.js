@@ -125,21 +125,7 @@ function editRegular(){
   var userPhone=userInfo['user']['phone'];
 
   var bodyReg=document.getElementById('message-modal_body');
-  /*bodyReg.innerHTML=" \
-  <form id='editRegular-form'> \
-    <div class='input-group'> \
-      <span class='glyphicon glyphicon-user' style='padding:10px'></span><input type='text' class='form-control' name='userName' id='userName' value='"+jsonCookie['userID']+"'> \
-    </div><br> \
-    <div class='input-group'> \
-      <span class='glyphicon glyphicon-envelope' style='padding:10px'></span><input type='text' class='form-control' name='userEmail' id='userEmail' value='"+jsonCookie['userEmail']+"'> \
-    </div><br> \
-    <div class='input-group'> \
-      <span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span><input type='text' class='form-control' name='userPhone' id='userPhone' value='"+jsonCookie['userPhone']+"'> \
-    </div><br> \
-    <div class='input-group'> \
-    <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveRegInfo()'>Save</button><br> \
-    </div> \
-  </form>";*/
+
   bodyReg.innerHTML=" \
   <form id='editRegular-form'> \
     <div class='input-group'> \
@@ -159,15 +145,11 @@ function editRegular(){
     </div> \
   </form>";
 
-  /*<table> \
-  <tr><td><span class='glyphicon glyphicon-user' style='padding:10px'></span></td><td><input type='text' class='form-control' name='userName' id='userName' value='"+jsonCookie['userID']+"'></form></td></tr> \
-  <tr><td><span class='glyphicon glyphicon-envelope' style='padding:10px'></span></td><td><form><input type='text' class='form-control' name='userEmail' id='userEmail' value='"+jsonCookie['userEmail']+"'></form></td></tr> \
-  <tr><td><span class='glyphicon glyphicon-phone-alt' style='padding:10px'></span></td><td><form><input type='text' class='form-control' name='userPhone' id='userPhone' value='"+jsonCookie['userPhone']+"'></form></td></tr> \
-  <tr><button type='button' class='btn btn-default' data-dismiss='modal' style='float:right' onclick='saveRegInfo()'>Save</button></tr></table>";*/
 
   $('#editDetailsModal').modal('show');
 
 }
+
 function editAddress(index){
   var userDetails=getCookie("account_details_appleseed");
   var jsonCookie=JSON.parse(userDetails);
@@ -249,6 +231,7 @@ function returnHome(){
   document.location="index.php";
 }
 
+//Here is where we save the changes the user made in the edit personal info modal
 function saveRegInfo(userID){
   var userEmail=$('#userEmail').val();
   var userPhone=$('#userPhone').val();
@@ -269,6 +252,7 @@ function saveRegInfo(userID){
   $.ajax({
     type:"PUT",
     url: "127.0.0.1:3000/user/"+userID,
+    headers:{"Authorization: Appleseed token="+},//cookie goes here
     data: data,
     dataType: "json",
     success: function(json) {
@@ -285,13 +269,6 @@ function saveRegInfo(userID){
       alert("Ajax request failed");
     }
   });
-    //var userDetails=getCookie("account_details_appleseed");
-    //var jsonCookie=JSON.parse(userDetails);
-    //jsonCookie['userID']=userName;
-    //jsonCookie['userEmail']=userEmail;
-    //jsonCookie['userPhone']=userPhone;
-    //document.cookie = "User_id_appleseed="+userName;
-    //document.cookie="account_details_appleseed="+JSON.stringify(jsonCookie);
     window.location = window.location;
   }
   else{

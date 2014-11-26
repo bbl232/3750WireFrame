@@ -16,10 +16,15 @@ function getCookie(cname) {
 function getCurrentUser() {
 	var user;
 	var message;
+    var cookie = getCookie("Appleseed_user_details");
+    var parsed = JSON.parse(cookie);
 
 	$.ajax({
-		url: "127.0.0.1:3000/users/current",
+		url: "http://127.0.0.1:3000/users/current",
 		dataType: "json",
+		beforeSend: function (request) {
+			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
+		},
 		success: function(json) {
 			user = JSON.parse(json);
 			return user["user"];
@@ -136,9 +141,9 @@ function login(uid, upa, hex) {
 			data: data,
 			dataType: "json",
 			success: function(json) {
-                document.cookie = "Appleseed_user_details="+JSON.stringify(json);
+				document.cookie = "Appleseed_user_details="+JSON.stringify(json);
 				setAccountCookie(uid);
-                window.location.reload();
+				window.location.reload();
 			},
 			statusCode: {
 				403: function(json) {

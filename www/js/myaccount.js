@@ -23,7 +23,7 @@ function setupAccDetails(){
   //first we get current user information, this function can be replaced to function call in wireframe
   $.ajax({
     type:"GET",
-    url: "127.0.0.1:3000/users/current",
+    url: "http://127.0.0.1:3000/users/current",
     dataType: "json",
     success: function(json) {
       userInfo = JSON.parse(json);
@@ -61,7 +61,7 @@ function setupAccDetails(){
   <button type='button' class='btn btn-danger' data-dismiss='modal' style='float:right' onclick='deleteAccount()'>Delete Account</button> \
   <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='editRegular()'>Edit</button></tr></table>";
 
-
+  var locID;
   //display list of locations below user info
   var addressHtml="";
   addressHtml+="<h4>Addresses:</h4><hr>"
@@ -81,9 +81,9 @@ function setupAccDetails(){
     addressHtml+=userLocations[i]['country'];
 
     //pass in i for onclick so we know which to edit
-
-    //////////// instead of passing in i, pass in location id so we know which to edit
-    addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='editAddress("+i+")'>Edit</button><br><br> \
+    locID=userLocations[i]['id'];
+    //pass in location id so we know which to edit on editAddress
+    addressHtml+="<button type='button' class='btn btn-primary' style='float:right' onclick='editAddress("+locID+")'>Edit</button><br><br> \
     <button type='button' class='btn btn-danger' style='float:right' onclick='deleteAdr("+i+")'>Delete</button><br>";
     addressHtml+="<hr>";
   }
@@ -99,7 +99,7 @@ function editRegular(){
   //first we get current user information, this function can be replaced to function call in wireframe
   $.ajax({
     type:"GET",
-    url: "127.0.0.1:3000/users/current",
+    url: "http://127.0.0.1:3000/users/current",
     dataType: "json",
     success: function(json) {
       userInfo = JSON.parse(json);
@@ -150,22 +150,106 @@ function editRegular(){
 
 }
 
-function editAddress(index){
-  var userDetails=getCookie("account_details_appleseed");
-  var jsonCookie=JSON.parse(userDetails);
-  var addresses=[];
-  addresses=jsonCookie['userAddress'];
-  var addName=addresses[index]['name'];
-  var addLoc=addresses[index]['location'];
+function editAddress(id){
+  //var userDetails=getCookie("account_details_appleseed");
+  //var jsonCookie=JSON.parse(userDetails);
+  //var addresses=[];
+  //addresses=jsonCookie['userAddress'];
+  ///var addName=addresses[index]['name'];
+  //var addLoc=addresses[index]['location'];
+
+  var userInfo;
+
+
+  //first we get current user information, so we can get user id
+  $.ajax({
+    type:"GET",
+    url: "http://127.0.0.1:3000/users/current",
+    dataType: "json",
+    success: function(json) {
+      userInfo = JSON.parse(json);
+      //return user["id"];
+    },
+    statusCode: {
+      401: function(json) {
+        parsed = JSON.parse(json);
+        alert(parsed["message"]);
+      }
+    },
+    error: function() {
+      alert("Ajax request failed");
+    }
+  });
+
+  var userID=userInfo['users']['id'];
+  var locations;
+  var locURL="http://127.0.0.1:3000/user/"+userID+"/locations";
+  //now we make call to /user/{uid}/locations and get back a list of locations
+  $.ajax({
+    type:"GET",
+    url:locURL,
+    dataType: "json",
+    success: function(json) {
+      locations = JSON.parse(json);
+      //return user["id"];
+    },
+    statusCode: {
+      401: function(json) {
+        parsed = JSON.parse(json);
+        alert(parsed["message"]);
+      }
+    },
+    error: function() {
+      alert("Ajax request failed");
+    }
+  });
+
+
+
+  var locDesc;
+  var locAddr1;
+  var locAddr2;
+  var locCity;
+  var locPostal;
+  var locCountry;
+
+
+  var userLocations=[];
+  userLocations=locations['locations'];
+
+  for(var i=0;i<userLocations.length;i++){
+    if (userLocations[i]==id){
+      //we found the location to edit
+      locDesc=userLocations['description'];
+      locAddr1=userLocations['address1'];
+      locAddr2=userLocations['address2'];
+      locCity=userLocations['city'];
+      locPostal=userLocations['postal'];
+      locCountry=userLocations['country'];
+    }
+  }
+
 
   var bodyReg=document.getElementById('message-modal_body');
   bodyReg.innerHTML=" \
   <form id='editaddress-form'> \
     <div class='input-group'> \
-      <span class='input-group-addon'>Name</span><input type='text' class='form-control' name='adrName' id='adrName' value='"+addName+"'> \
+      <span class='input-group-addon'>Description</span><input type='text' class='form-control' name='adrName' id='adrName' value='"+locDesc+"'> \
     </div><br> \
     <div class='input-group'> \
-      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+addLoc+"'> \
+      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address 1</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locAddr1+"' readonly> \
+    </div><br> \
+    <div class='input-group'> \
+      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Address 2</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locAddr2+"' readonly> \
+    </div><br> \
+    <div class='input-group'> \
+      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> City</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCity+"' readonly> \
+    </div><br> \
+    <div class='input-group'> \
+      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Postal Code</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locPostal+"' readonly> \
+    </div><br> \
+    <div class='input-group'> \
+      <span class='input-group-addon'><span class='glyphicon glyphicon-map-marker'></span> Country</span><input type='text' class='form-control' name='userAdr' id='userAdr' value='"+locCountry+"' readonly> \
     </div><br> \
     <button type='button' class='btn btn-primary' data-dismiss='modal' style='float:right' onclick='saveAdrInfo("+index+")'>Save</button><br> \
   </form>";
@@ -251,8 +335,8 @@ function saveRegInfo(userID){
 
   $.ajax({
     type:"PUT",
-    url: "127.0.0.1:3000/user/"+userID,
-    headers:{"Authorization: Appleseed token="+},//cookie goes here
+    url: "http://127.0.0.1:3000/user/"+userID,
+    headers:{"Authorization":"Appleseed token="+},//cookie goes here
     data: data,
     dataType: "json",
     success: function(json) {

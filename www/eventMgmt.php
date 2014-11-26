@@ -10,7 +10,7 @@
 	</div>
 	<div class='row'>
 		<div class='pull-right'>
-			<button type="button" class="btn btn-success" onclick="createEventModal()">Add New Event</button>
+			<button type="button" class="btn btn-success" onclick="newEvent()">Add New Event</button>
 		</div>
 	</div>
 	<br>
@@ -60,6 +60,18 @@
 				<button type="button" class="btn btn-primary" id="addEvent" data-dismiss="modal" onclick="addNewEvent()">Create</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="modifyEventModal">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title" id="message-modal_header">Modify Event</h4>
+		</div>
+		<div class="modal-body" id="modifyEventBody"></div>
+		<div class="modal-footer" id="modifyFooterModal"></div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

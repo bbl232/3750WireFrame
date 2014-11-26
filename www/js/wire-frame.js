@@ -26,8 +26,7 @@ function getCurrentUser() {
 			request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
 		},
 		success: function(json) {
-			user = JSON.parse(JSON.parse(json));
-			return user["user"];
+			return JSON.stringify(json);
 		},
 		statusCode: {
 			401: function(json) {
@@ -398,7 +397,7 @@ function setupNavbar(){
 		trees - a list of trees that need to be gleaned
 */
 function addEvent(name,address,date,end,trees) {
-	
+
 	var newEvent = {};
 	newEvent['owner'] = name;
 	newEvent['description'] = address;
@@ -407,7 +406,7 @@ function addEvent(name,address,date,end,trees) {
 	newEvent['attendees']=[];
 	newEvent['trees'] = trees;
 	newEvent['status']="pending";
-	
+
 	$.ajax({
 		url: "http://127.0.0.1:3000/events/",
 		type: "POST",
@@ -420,7 +419,7 @@ function addEvent(name,address,date,end,trees) {
                 401: function(json) {
                     parsed = JSON.parse(json);
                     alert(parsed["message"]);
-                }       
+                }
         },
         error: function() {
             alert("Ajax request failed.");

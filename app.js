@@ -16,18 +16,22 @@ var crypt = require('crypto');
 
 var userModel = require('./models/users.js')(mongoose,autoIncrement)
 var eventModel = require('./models/events.js')(mongoose,autoIncrement)
+var fbModel = require('./models/feedback.js')(mongoose,autoIncrement)
 
 var user = require('./controllers/users.js')(userModel,eventModel)
 var even = require('./controllers/events.js')(userModel,eventModel)
+var fb = require('./controllers/feedback.js')(userModel,eventModel,fbModel)
 
 server.pre(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     return next();
 });
 server.opts("/.*",function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "authorization");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.send(200);
 })
 //Users API
@@ -54,7 +58,9 @@ server.post("/users/authenticate", user.login) //generate a token for user
 
 //Events API
 server.get("/events", even.getEvents)
-server.get("/event/:id", even.getEvents)
+server.get("/events/:id", even.getEvents)
+
+server.put("/events/:id", even.updateEvent)
 
 server.post("/events", even.newEvent)
 server.post("/events/:id/attend", even.attend)
@@ -63,10 +69,13 @@ server.post("/events/:id/cancel", even.cancel)
 server.post("/events/:id/accept", even.acc)
 server.post("/events/:id/reject", even.reject)
 
-server.put("/event/:id", even.updateEvent)
-
-server.del("/event/:id", even.delete)
+server.del("/events/:id", even.delete)
 //Feedback API
+server.get("/feedback", fb.getFeedback)
+server.get("/feedback/:id", fb.getFeedback)
+server.post("/feedback", fb.newFeedback)
+server.del("/feedback/:id", fb.deleteFeedback)
+
 
 server.listen(3000, function(){
       console.log('%s listening at %s', server.name, server.url)

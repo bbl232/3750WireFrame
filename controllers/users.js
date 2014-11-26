@@ -25,7 +25,7 @@ module.exports = function (userModel,eventModel){
         if(req.params.id){
             userModel.User.findOne({_id:req.params.id},'-passwordHash').populate('locations').exec(function(err,user){
                 if(err || user==null) res.send(404,new Message("User not found"));
-                res.send(200,user)
+                res.send(200,[].concat(user))
             })
         }
         else{
@@ -81,7 +81,7 @@ module.exports = function (userModel,eventModel){
         newUser.emailEnabled = body.user.emailEnabled;
 
         var locationsArray = [];
-        if(body.user.locations){
+        if(body.user.locations != null){
           while(body.user.locations.length > 0){
             var newLoc = new userModel.Location(body.user.locations.shift());
             newLoc.save(function(err){
@@ -111,10 +111,9 @@ module.exports = function (userModel,eventModel){
     */
     module.newLocation = function(req, res, next){
         userModel.User.findOne({_id:req.params.uid},function(err,user){
-            if(err) res.send(400,err)
+            if(err || user==null) res.send(404,new Message("User not found"))
 
             var body = JSON.parse(req.body);
-            console.log(body.location)
             var newLoc = new userModel.Location(body.location)
             newLoc.save(function(err){
                 if(err) res.send(401,err)
@@ -209,7 +208,7 @@ module.exports = function (userModel,eventModel){
     module.updatePassword = function(req, res, next){
         var spl = req.headers.authorization.split("=");
         var tokenSupplied = spl[1]
-        userModel.Token.findOne({token:tokenSupplied}).populate('user user.locations').exec(function(err,token){
+        userModel.Token.findOne({token:tokenSupplied}).populate('user').exec(function(err,token){
             var body = JSON.parse(req.body);
             var user = token.user;
             if(user==null){

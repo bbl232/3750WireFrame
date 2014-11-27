@@ -38,9 +38,9 @@ require("includes/header.php");
 			<h4 class="modal-title">Login</h4>
 		</div>
 		<div class="modal-body" id="login_body">
-			<form class="form-inline" role="form">
-				<label>Email Address:</label><input class="form-control" id="login-email" type="text" /><br>
-				<label>Password:</label><input class="form-control" id="login-password" type="text" /><br>
+			<form class="form-vertical" role="form">
+				<div class="row"><div class="col-xs-4"><label>Email Address:</label></div><div class="col-xs-8"><input class="form-control" id="login-email" type="text" /></div></div>
+				<div class="row"><div class="col-xs-4"><label>Password:</label></div><div class="col-xs-8"><input class="form-control" id="login-password" type="text" /></div></div>
 			</form>
 		</div>
 		<div class="modal-footer">
@@ -58,17 +58,17 @@ require("includes/header.php");
 			<h4 class="modal-title">Register</h4>
 		</div>
 			<div class="modal-body" id="register_body">
-				<form class="form-inline" role="form">
-					<div class="form-group"><label>First Name:</label><input class="form-control" id="register-first" type="text" /><br></div>
-					<label>Last Name:</label><input class="form-control" id="register-last" type="text" /><br>
-					<label>Email Address:</label><input class="form-control" id="register-email" type="text" /><br>
-					<label>Phone Number:</label><input class="form-control" id="register-phone" type="text" /><br>
-					<label>Street Address:</label><input class="form-control" id="register-address" type="text" /><br>
-					<label>City:</label><input class="form-control" id="register-city" type="text" /><br>
-					<label>Postal Code:</label><input class="form-control" id="register-postal" type="text" /><br>
-					<label>Country:</label><input class="form-control" id="register-country" type="text" /><br>
-					<label>Password:</label><input class="form-control" id="register-password" type="text" /><br>
-					<label>Confrim Password:</label><input class="form-control" id="register-confirm" type="text" /><br>
+				<form class="form-vertical" role="form">
+					<div class="row"><div class="col-xs-4"><label>First Name:</label></div><div class="col-xs-8"><input class="form-control" id="register-first" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Last Name:</label></div><div class="col-xs-8"><input class="form-control" id="register-last" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Email Address:</label></div><div class="col-xs-8"><input class="form-control" id="register-email" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Phone Number:</label></div><div class="col-xs-8"><input class="form-control" id="register-phone" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Street Address:</label></div><div class="col-xs-8"><input class="form-control" id="register-address" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>City:</label></div><div class="col-xs-8"><input class="form-control" id="register-city" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Postal Code:</label></div><div class="col-xs-8"><input class="form-control" id="register-postal" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Country:</label></div><div class="col-xs-8"><input class="form-control" id="register-country" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Password:</label></div><div class="col-xs-8"><input class="form-control" id="register-password" type="text" /></div></div>
+					<div class="row"><div class="col-xs-4"><label>Confrim Password:</label></div><div class="col-xs-8"><input class="form-control" id="register-confirm" type="text" /></div></div>
 				</form>
 			</div>
 			<div class="modal-footer">

@@ -15,7 +15,7 @@ function showEvents(){
             request.setRequestHeader("Authorization", "AppleSeed token="+parsed['token']);
         },
         success: function(json) {
-            alert(JSON.stringify(json));
+            //alert(JSON.stringify(json));
             for (var i=0;i<json['events'].length;i++) {
                 tr = "<tr>"; //table row
                 tr += "<td>Producer: " + json['events'][i]['owner']['firstname'] + " " + json['events'][i]['owner']['lastname'] + "</td>"; // td= table cell
